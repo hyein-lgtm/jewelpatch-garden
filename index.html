@@ -176,6 +176,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
 <script>
 (function(){
 "use strict";
@@ -415,14 +416,15 @@ function frame(){
     pd.glowRing.material.opacity=(on?0.7:0.32)+Math.sin(t*2.2+pd.i)*0.08;pd.beam.material.opacity=on?1:0.65;pd.crown.rotation.z=t*0.6});
   const pa=gGeo.attributes.position.array;for(let i=0;i<GN;i++){pa[i*3+1]-=gs[i]*dt*0.6;pa[i*3]+=Math.sin(t*0.7+i)*dt*0.06;if(pa[i*3+1]<0)pa[i*3+1]=12}gGeo.attributes.position.needsUpdate=true;
   if(burstT<1.2){burstT+=dt;for(let i=0;i<BN;i++){bp[i*3]+=bv[i*3]*dt;bp[i*3+1]+=bv[i*3+1]*dt;bp[i*3+2]+=bv[i*3+2]*dt;bv[i*3+1]-=2.2*dt}bGeo.attributes.position.needsUpdate=true;bMat.opacity=Math.max(0,1-burstT/1.2)}
-  others.forEach(o=>{const a=o.av;const dx=o.tx-a.position.x,dz=o.tz-a.position.z;a.position.x+=dx*Math.min(1,dt*8);a.position.z+=dz*Math.min(1,dt*8);let dr=o.tr-a.rotation.y;dr=Math.atan2(Math.sin(dr),Math.cos(dr));a.rotation.y+=dr*Math.min(1,dt*10);animAvatar(a,Math.hypot(dx,dz)>0.05,dt)});
-  if(ROOM&&entered&&t-lastSent>0.12){const key=[P.x.toFixed(2),P.z.toFixed(2),P.ry.toFixed(2),myHeart,near?near.p.id:''].join();if(key!==sentKey){sentKey=key;lastSent=t;sendPresence()}}
+  others.forEach(o=>{const a=o.av;const dx=o.tx-a.position.x,dz=o.tz-a.position.z;a.position.x+=dx*Math.min(1,dt*2.6);a.position.z+=dz*Math.min(1,dt*2.6);let dr=o.tr-a.rotation.y;dr=Math.atan2(Math.sin(dr),Math.cos(dr));a.rotation.y+=dr*Math.min(1,dt*10);animAvatar(a,Math.hypot(dx,dz)>0.05,dt)});
+  if(ROOM&&entered&&t-lastSent>SEND_GAP){const key=[P.x.toFixed(2),P.z.toFixed(2),P.ry.toFixed(2),myHeart,near?near.p.id:''].join();if(key!==sentKey){sentKey=key;lastSent=t;sendPresence()}}
   renderer.render(scene,camera);requestAnimationFrame(frame)}
 function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w<h?64:52;camera.updateProjectionMatrix()}
 addEventListener('resize',resize);resize();
 
 /* ---------- room ---------- */
-let ROOM=null;const others=new Map();let myHeart=0;
+let ROOM=null;const others=new Map();let myHeart=0;let SEND_GAP=0.9;
+const SB_URL='https://qmoyqzzdhkhyogdoyvvd.supabase.co',SB_KEY='sb_publishable_FLWglxhvJRH0b3p3h3LqRg_5z0Hnrij';
 function sendPresence(){if(!ROOM)return;ROOM.presence({x:+P.x.toFixed(2),z:+P.z.toFixed(2),r:+P.ry.toFixed(2),c:me.color,n:me.name.slice(0,10),h:myHeart,v:near?near.p.id:''}).catch(()=>{})}
 function setVisitors(n,live){$('#vis').classList.toggle('live',!!live);$('#visTxt').textContent=live?(n>1?`지금 ${n}명 구경 중`:'지금은 나 혼자 구경 중'):'혼자 둘러보는 중'}
 function onPeers(ch){const seen=new Set();let count=0;
@@ -432,8 +434,15 @@ function onPeers(ch){const seen=new Set();let count=0;
     o.tx=Math.max(-22,Math.min(22,s.x));o.tz=Math.max(-22,Math.min(22,s.z));o.tr=+s.r||0;o.v=STYLES.some(q=>q.id===s.v)?s.v:'';
     if(s.h&&s.h!==o.h){o.h=s.h;popHeart(o.av)}});
   others.forEach((o,k)=>{if(!seen.has(k)){scene.remove(o.av);others.delete(k)}});setVisitors(Math.max(count,entered?1:0),true)}
-(async function(){try{if(!window.claude||!window.claude.use)return;const room=await window.claude.use('room');if(!room)return;ROOM=room;
-  room.onPeers(onPeers,()=>{ROOM=null;setVisitors(1,false);others.forEach(o=>scene.remove(o.av));others.clear()});if(entered)sendPresence()}catch(e){}})();
+(function(){try{if(!window.supabase||!window.supabase.createClient)return;
+  const sb=window.supabase.createClient(SB_URL,SB_KEY,{realtime:{params:{eventsPerSecond:5}}});
+  const myId=(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)).slice(0,12);
+  const ch=sb.channel('jewelpatch-garden',{config:{presence:{key:myId}}});
+  ch.on('presence',{event:'sync'},()=>{const st=ch.presenceState();const peers=Object.entries(st).map(([k,arr])=>({peer:k,sameTab:k===myId,presence:arr[arr.length-1]||{}}));
+    SEND_GAP=peers.length>30?3:peers.length>12?1.6:0.9;onPeers({peers})});
+  ch.subscribe(st=>{if(st==='SUBSCRIBED'){ROOM={presence:o=>ch.track(o)};setVisitors(1,true);if(entered)sendPresence()}
+    else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'||st==='CLOSED'){ROOM=null;setVisitors(1,false)}});
+}catch(e){}})();
 
 /* ---------- sheets ---------- */
 function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;t.style.opacity=1;clearTimeout(toast._t);toast._t=setTimeout(()=>{t.style.opacity=0;setTimeout(()=>t.hidden=true,300)},2200)}
