@@ -199,7 +199,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 <div class="hud-top">
   <div class="brand"><span>WBL · Jewelpatch Garden</span><b>주얼패치 정원 팝업</b></div>
   <div class="tr">
-    <div class="chip" id="vis"><span class="dot"></span><span id="visTxt">혼자 둘러보는 중</span></div>
+    <div class="chip" id="vis"><span class="dot"></span><span id="visTxt">실시간 연결 확인 중…</span></div>
     <button class="chip studiobtn" id="studioBtn">레이어드 체험</button>
     <button class="chip shopbtn" id="shopBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>전체 주얼패치</button>
   </div>
@@ -513,22 +513,24 @@ addEventListener('resize',resize);resize();
 let ROOM=null;const others=new Map();let myHeart=0;let SEND_GAP=0.9;
 const SB_URL='https://qmoyqzzdhkhyogdoyvvd.supabase.co',SB_KEY='sb_publishable_FLWglxhvJRH0b3p3h3LqRg_5z0Hnrij';
 function sendPresence(){if(!ROOM)return;ROOM.presence({x:+P.x.toFixed(2),z:+P.z.toFixed(2),r:+P.ry.toFixed(2),c:me.color,n:me.name.slice(0,10),h:myHeart,v:near?near.p.id:''}).catch(()=>{})}
+function setStatusText(t,live){$('#vis').classList.toggle('live',!!live);$('#visTxt').textContent=t}
 function setVisitors(n,live){$('#vis').classList.toggle('live',!!live);$('#visTxt').textContent=live?(n>1?`지금 ${n}명 구경 중`:'지금은 나 혼자 구경 중'):'혼자 둘러보는 중'}
 function onPeers(ch){const seen=new Set();let count=0;
-  ch.peers.forEach(p=>{const s=p.presence||{};if(typeof s.x!=='number'||typeof s.z!=='number')return;count++;if(p.sameTab)return;seen.add(p.peer);
+  ch.peers.forEach(p=>{const s=p.presence||{};if(s.w||typeof s.x==='number')count++;if(typeof s.x!=='number'||typeof s.z!=='number')return;if(p.sameTab)return;seen.add(p.peer);
     let o=others.get(p.peer);const nm=String(s.n||'방문자').slice(0,10),ci=Math.abs(+s.c|0)%COLORS.length;
     if(!o||o.n!==nm||o.c!==ci){if(o)scene.remove(o.av);const av=makeAvatar(ci,nm,false);av.position.set(s.x,0,s.z);o={av,n:nm,c:ci,h:s.h};others.set(p.peer,o)}
     o.tx=Math.max(-22,Math.min(22,s.x));o.tz=Math.max(-22,Math.min(22,s.z));o.tr=+s.r||0;o.v=STYLES.some(q=>q.id===s.v)?s.v:'';
     if(s.h&&s.h!==o.h){o.h=s.h;popHeart(o.av)}});
   others.forEach((o,k)=>{if(!seen.has(k)){scene.remove(o.av);others.delete(k)}});setVisitors(Math.max(count,entered?1:0),true)}
-(function(){try{if(!window.supabase||!window.supabase.createClient)return;
+(function(){try{if(!window.supabase||!window.supabase.createClient){setStatusText('혼자 보기 · 실시간 연결 안 됨',false);return}
   const sb=window.supabase.createClient(SB_URL,SB_KEY,{realtime:{params:{eventsPerSecond:5}}});
   const myId=(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)).slice(0,12);
   const ch=sb.channel('jewelpatch-garden',{config:{presence:{key:myId}}});
   ch.on('presence',{event:'sync'},()=>{const st=ch.presenceState();const peers=Object.entries(st).map(([k,arr])=>({peer:k,sameTab:k===myId,presence:arr[arr.length-1]||{}}));
     SEND_GAP=peers.length>30?3:peers.length>12?1.6:0.9;onPeers({peers})});
-  ch.subscribe(st=>{if(st==='SUBSCRIBED'){ROOM={presence:o=>ch.track(o)};setVisitors(1,true);if(entered)sendPresence()}
-    else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'||st==='CLOSED'){ROOM=null;setVisitors(1,false)}});
+  setStatusText('실시간 연결 중…',false);
+  ch.subscribe(st=>{if(st==='SUBSCRIBED'){ROOM={presence:o=>ch.track(o)};setVisitors(1,true);if(entered)sendPresence();else ch.track({w:1})}
+    else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'||st==='CLOSED'){ROOM=null;setStatusText('실시간 끊김 · '+st,false)}});
 }catch(e){}})();
 
 /* ---------- sheets ---------- */
