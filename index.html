@@ -908,21 +908,21 @@ function cutFlower(x,z,no,pi,s,h,noStem){s=s||0.5;h=h==null?0.62:h;if(!noStem){s
 function ringCuts(id,x,z,r,n,s,h,start){const cs=zoneCuts(id);if(!cs.length)return;for(let i=0;i<n;i++){const t=i/n*Math.PI*2+(start||0);const c=cs[i%cs.length];cutFlower(x+Math.cos(t)*r,z+Math.sin(t)*r,c[0],c[1],s,h)}}
 /* per-zone arrangement: an inner bed facing the plaza (seen from the path) + two side plots by the shop */
 const ZONE_FILL={
-  pearl:(x,z,a)=>{bed(x,z,1.25,ZM.gravel,'bedW');ringCuts('pearl',x,z,0.78,7,0.5,0.6,a);for(let i=0;i<6;i++){const r=Math.sqrt(Math.random())*0.4,t=Math.random()*6.28;pearlFlower(x+Math.cos(t)*r,z+Math.sin(t)*r,0.9)}for(let i=0;i<8;i++){const t=i/8*6.28;rose(x+Math.cos(t)*1.2,z+Math.sin(t)*1.2,1,0.3,true)}},
-  flower:(x,z,a)=>{[[0.42,0],[-0.42,0],[0,0.42],[0,-0.42]].forEach(([dx,dz])=>bed(x+dx,z+dz,0.62,ZM.sage,'bedClover'));ringCuts('flower',x,z,0.8,7,0.46,0.58,a);const cs=zoneCuts('flower');{const c=cs[7%cs.length];cutFlower(x,z,c[0],c[1],0.5,0.8)}for(let i=0;i<8;i++){const r=0.85+Math.random()*0.3,t=Math.random()*6.28;clover(x+Math.cos(t)*r,z+Math.sin(t)*r,1)}},
-  romantic:(x,z,a)=>{const rot=Math.atan2(-Math.cos(a),-Math.sin(a));heartBed(x,z,0.95,rot);const cs=zoneCuts('romantic');const pts=heartShape(1).getSpacedPoints(cs.length*2);pts.slice(0,-1).forEach((p,i)=>{if(i%2)return;const c=cs[(i/2)%cs.length];const px=p.x*0.95,pz=-p.y*0.95;cutFlower(x+px*Math.cos(rot)-pz*Math.sin(rot),z+px*Math.sin(rot)+pz*Math.cos(rot),c[0],c[1],0.46,0.66)})},
-  flutter:(x,z,a)=>{bed(x,z,1.2,ZM.gravel,'bedW');starStones(x,z,1.1);const cs=zoneCuts('flutter').filter(c=>![7297,7296,7343].includes(c[0]));cs.forEach((c,i)=>{const t=i/cs.length*Math.PI*2+a;cutFlower(x+Math.cos(t)*0.75,z+Math.sin(t)*0.75,c[0],c[1],0.5,0.7)})},
-  sparkle:(x,z,a)=>{const cs=zoneCuts('sparkle');for(let i=0;i<4;i++){const t=i/4*6.28+0.4,cx=x+Math.cos(t)*0.8,cz=z+Math.sin(t)*0.8,s=0.8+Math.random()*0.3;cloudBush(cx,cz,s);const c=cs[i%cs.length];if(c)cutFlower(cx,cz,c[0],c[1],0.48,0.55*s+0.05,true)}for(let i=0;i<5;i++){const t=Math.random()*6.28,r=0.3+Math.random()*0.9;crystal(x+Math.cos(t)*r,z+Math.sin(t)*r,0.9+Math.random()*0.5)}},
-  metal:(x,z,a)=>{bed(x,z,1.15,ZM.stone,'bedStone');const cs=zoneCuts('metal');[[0,0,0.55],[0.62,0.3,0.42],[-0.58,0.34,0.36],[0.15,-0.62,0.46],[-0.5,-0.4,0.3]].forEach(([dx,dz,h],i)=>{zput('plinth',ZG.disc,ZM.stone,zm(x+dx,h/2,z+dz,0,0,0,0.24,h,0.24));const c=cs[i%cs.length];if(c)cutFlower(x+dx,z+dz,c[0],c[1],0.42,h-0.05,true)})},
+  pearl:(x,z,a)=>{bed(x,z,1.25,ZM.gravel,'bedW');for(let i=0;i<14;i++){const r=Math.sqrt(Math.random())*1.05,t=Math.random()*6.28;pearlFlower(x+Math.cos(t)*r,z+Math.sin(t)*r,0.9+Math.random()*0.4)}for(let i=0;i<6;i++){const t=i/6*6.28;rose(x+Math.cos(t)*1.2,z+Math.sin(t)*1.2,1,0.32,true)}},
+  flower:(x,z,a)=>{[[0.42,0],[-0.42,0],[0,0.42],[0,-0.42]].forEach(([dx,dz])=>bed(x+dx,z+dz,0.62,ZM.sage,'bedClover'));for(let i=0;i<16;i++){const r=Math.sqrt(Math.random())*0.95,t=Math.random()*6.28;(i%3?clover:daisy)(x+Math.cos(t)*r,z+Math.sin(t)*r,1+Math.random()*0.3,null,i%7===0)}},
+  romantic:(x,z,a)=>{heartBed(x,z,0.95,Math.atan2(-Math.cos(a),-Math.sin(a)))},
+  flutter:(x,z,a)=>{bed(x,z,1.2,ZM.gravel,'bedW');starStones(x,z,1.1)},
+  sparkle:(x,z,a)=>{for(let i=0;i<4;i++){const t=i/4*6.28+0.4;cloudBush(x+Math.cos(t)*0.8,z+Math.sin(t)*0.8,0.8+Math.random()*0.3)}for(let i=0;i<5;i++){const t=Math.random()*6.28,r=0.3+Math.random()*0.9;crystal(x+Math.cos(t)*r,z+Math.sin(t)*r,0.9+Math.random()*0.5)}},
+  metal:(x,z,a)=>{bed(x,z,1.15,ZM.stone,'bedStone');goldPlinths(x,z,1.2)},
   set:(x,z,a)=>{bed(x,z,1.1,ZM.gravel,'bedW');giftStack(x-0.35,z,1);giftStack(x+0.5,z+0.25,0.7)},
   tool:(x,z,a)=>{bed(x,z,1.1,ZM.gravel,'bedW');[[0,0],[0.55,0.3],[-0.5,0.25]].forEach(([dx,dz],i)=>{zput('ceramicHeart',ZG.heartSolid,ZM.roseIv,zm(x+dx,0.32,z+dz,-0.3,i,0,0.26,0.26,0.4))});for(let i=0;i<6;i++){const t=i/6*6.28;clover(x+Math.cos(t)*1.0,z+Math.sin(t)*1.0,1)}}};
 const SIDE_FILL={
-  pearl:(x,z)=>{ringCuts('pearl',x,z,0.45,3,0.44,0.55,Math.random()*6);for(let i=0;i<4;i++){const t=Math.random()*6.28,r=0.6+Math.random()*0.3;pearlFlower(x+Math.cos(t)*r,z+Math.sin(t)*r,1)}},
-  flower:(x,z)=>{ringCuts('flower',x,z,0.45,4,0.44,0.55,Math.random()*6);for(let i=0;i<5;i++){const t=Math.random()*6.28,r=0.65+Math.random()*0.25;clover(x+Math.cos(t)*r,z+Math.sin(t)*r,1.1)}},
-  romantic:(x,z)=>{ringCuts('romantic',x,z,0.42,3,0.44,0.55,Math.random()*6);for(let i=0;i<5;i++){const t=Math.random()*6.28,r=0.62+Math.random()*0.25;rose(x+Math.cos(t)*r,z+Math.sin(t)*r,1.1,null,i%3===0)}},
-  flutter:(x,z)=>{ringCuts('flutter',x,z,0.42,3,0.44,0.55,Math.random()*6);for(let i=0;i<4;i++){const t=Math.random()*6.28,r=0.65+Math.random()*0.2;daisy(x+Math.cos(t)*r,z+Math.sin(t)*r,1)}},
-  sparkle:(x,z)=>{cloudBush(x,z,1.05);const c=zoneCuts('sparkle')[Math.floor(Math.random()*3)];if(c)cutFlower(x,z,c[0],c[1],0.46,0.62,true)},
-  metal:(x,z)=>{const cs=zoneCuts('metal');[[0,0,0.45],[0.45,0.2,0.32]].forEach(([dx,dz,h],i)=>{zput('plinth',ZG.disc,ZM.stone,zm(x+dx,h/2,z+dz,0,0,0,0.22,h,0.22));const c=cs[(i*3+Math.floor(Math.random()*4))%cs.length];if(c)cutFlower(x+dx,z+dz,c[0],c[1],0.4,h-0.05,true)})},
+  pearl:(x,z)=>{for(let i=0;i<7;i++){const t=Math.random()*6.28,r=Math.random()*0.8;pearlFlower(x+Math.cos(t)*r,z+Math.sin(t)*r,1.1)}},
+  flower:(x,z)=>{for(let i=0;i<9;i++){const t=Math.random()*6.28,r=Math.random()*0.85;(i%2?daisy:clover)(x+Math.cos(t)*r,z+Math.sin(t)*r,1.15)}},
+  romantic:(x,z)=>{for(let i=0;i<8;i++){const t=Math.random()*6.28,r=Math.random()*0.85;rose(x+Math.cos(t)*r,z+Math.sin(t)*r,1.15,null,i%3===0)}},
+  flutter:(x,z)=>{for(let i=0;i<6;i++){const t=Math.random()*6.28,r=Math.random()*0.8;daisy(x+Math.cos(t)*r,z+Math.sin(t)*r,1)}},
+  sparkle:(x,z)=>{cloudBush(x,z,1.05)},
+  metal:(x,z)=>{goldPlinths(x,z,0.8)},
   set:(x,z)=>{for(let i=0;i<5;i++){const t=Math.random()*6.28,r=Math.random()*0.7;daisy(x+Math.cos(t)*r,z+Math.sin(t)*r,1)}},
   tool:(x,z)=>{for(let i=0;i<6;i++){const t=Math.random()*6.28,r=Math.random()*0.8;clover(x+Math.cos(t)*r,z+Math.sin(t)*r,1.1)}}};
 const ZONE_BEDS=[];
