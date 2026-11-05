@@ -610,15 +610,15 @@ renderer.outputEncoding=THREE.sRGBEncoding;
 const scene=new THREE.Scene();
 const camera=new THREE.PerspectiveCamera(42,1,0.1,240);
 function gradTex(stops,h){const c=document.createElement('canvas');c.width=4;c.height=h||512;const g=c.getContext('2d');const gr=g.createLinearGradient(0,0,0,c.height);stops.forEach(s=>gr.addColorStop(s[0],s[1]));g.fillStyle=gr;g.fillRect(0,0,4,c.height);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t}
-scene.background=gradTex([[0,'#BFD3DD'],[0.45,'#DCE5E6'],[0.75,'#F0ECE3'],[1,'#F4EFE6']]);
+scene.background=gradTex([[0,'#D3DBDB'],[0.45,'#E6E7E1'],[0.75,'#F1ECE3'],[1,'#F5F0E7']]);
 scene.fog=new THREE.Fog('#EEE9E0',38,90);
 scene.add(new THREE.HemisphereLight('#FFF6EE','#CFC4BC',0.56));
 const sun=new THREE.DirectionalLight('#FFF0E0',0.5);sun.position.set(-12,20,10);scene.add(sun);
 const GRAD=(()=>{const d=new Uint8Array([150,150,150,255, 215,215,215,255, 255,255,255,255]);const t=new THREE.DataTexture(d,3,1,THREE.RGBAFormat);t.minFilter=t.magFilter=THREE.NearestFilter;t.needsUpdate=true;return t})();
 /* WBL showroom palette: ivory · warm beige · sage. Any saturated pink/purple/yellow/blue is folded into warm neutrals; greens become sage. Product images are never touched. */
 function NEUc(c){const k=new THREE.Color(c),h={};k.getHSL(h);const deg=h.h*360;
-  if(deg>=65&&deg<=165&&h.s>0.08){k.setHSL(h.h,Math.min(h.s*0.85,0.36),Math.min(h.l*0.97,0.9))}
-  else if(h.s>0.06){k.setHSL(h.h,Math.min(h.s*0.72,0.46),Math.min(h.l*0.97,0.92))}
+  if(deg>=65&&deg<=165&&h.s>0.08){k.setHSL(h.h,Math.min(h.s*0.7,0.26),Math.min(h.l*0.97,0.9))}
+  else if(h.s>0.06){k.setHSL(h.h,Math.min(h.s*0.6,0.3),Math.min(h.l*0.97,0.92))}
   else k.setHSL(h.h,h.s,Math.min(h.l,0.95));return k}
 const NEU=c=>'#'+NEUc(c).getHexString();
 const LC=c=>NEUc(c).convertSRGBToLinear();
@@ -655,13 +655,13 @@ function tagHit(obj,data){obj.traverse(m=>{if(m.isMesh||m.isSprite){m.userData.h
 let floor;
 (function(){
   const c=document.createElement('canvas');c.width=c.height=1024;const g=c.getContext('2d');
-  g.fillStyle='#BCCF9F';g.fillRect(0,0,1024,1024);let sd=3;const rnd=()=>{sd=(sd*16807)%2147483647;return sd/2147483647};
+  g.fillStyle='#C3CBAC';g.fillRect(0,0,1024,1024);let sd=3;const rnd=()=>{sd=(sd*16807)%2147483647;return sd/2147483647};
   for(let i=0;i<900;i++){g.fillStyle=rnd()<.5?'rgba(255,255,240,.10)':'rgba(120,150,110,.08)';g.beginPath();g.arc(rnd()*1024,rnd()*1024,6+rnd()*26,0,Math.PI*2);g.fill()}
-  const cols=['#F2D3D3','#FFF3CF','#FFFFFF','#DCE0F0','#F6DCC8'];for(let i=0;i<900;i++){g.fillStyle=cols[i%5];g.globalAlpha=.55;g.beginPath();g.arc(rnd()*1024,rnd()*1024,1.6+rnd()*1.6,0,Math.PI*2);g.fill()}g.globalAlpha=1;
+  const cols=['#F3EEE4','#FFFFFF','#E9E4D3','#F3EEE4','#EDE3D6'];for(let i=0;i<380;i++){g.fillStyle=cols[i%5];g.globalAlpha=.55;g.beginPath();g.arc(rnd()*1024,rnd()*1024,1.6+rnd()*1.6,0,Math.PI*2);g.fill()}g.globalAlpha=1;
   const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(3,3);
   floor=new THREE.Mesh(new THREE.CircleGeometry(27,80),new THREE.MeshToonMaterial({map:t,gradientMap:GRAD}));floor.rotation.x=-Math.PI/2;scene.add(floor);
   const sand=new THREE.Mesh(new THREE.RingGeometry(26.6,29,80),T('#F3E3C8'));sand.rotation.x=-Math.PI/2;sand.position.y=-0.04;scene.add(sand);
-  const sea=new THREE.Mesh(new THREE.CircleGeometry(160,48),new THREE.MeshBasicMaterial({color:new THREE.Color('#B8D2D2').convertSRGBToLinear()}));sea.rotation.x=-Math.PI/2;sea.position.y=-0.25;scene.add(sea);
+  const sea=new THREE.Mesh(new THREE.CircleGeometry(160,48),new THREE.MeshBasicMaterial({color:new THREE.Color('#C3D2CF').convertSRGBToLinear()}));sea.rotation.x=-Math.PI/2;sea.position.y=-0.25;scene.add(sea);
   const foam=new THREE.Mesh(new THREE.RingGeometry(28.8,29.6,80),new THREE.MeshBasicMaterial({color:LC('#F4FBFB'),transparent:true,opacity:.8}));foam.rotation.x=-Math.PI/2;foam.position.y=-0.2;scene.add(foam);
   // paths: plaza + ring + spokes
   const pc=document.createElement('canvas');pc.width=pc.height=256;const pg=pc.getContext('2d');pg.fillStyle='#EDE6DA';pg.fillRect(0,0,256,256);
@@ -706,21 +706,21 @@ let archSign=null;
 const swayers=[];
 (function(){
   let sd=11;const rnd=()=>{sd=(sd*16807)%2147483647;return sd/2147483647};
-  const trunkM=T('#B89A86');const leafCols=['#9CC08C','#B2CF94','#8DB383','#F0C0C8','#F5D2D8','#C1D69A'];
+  const trunkM=T('#B89A86');const leafCols=['#A3B894','#B4C4A0','#96AC8A','#E8DCCF','#EFE5DA','#BCC9A6'];
   const sph=new THREE.SphereGeometry(1,16,12);
   function tree(x,z,s,blossom){const g=new THREE.Group();g.position.set(x,0,z);const tr=new THREE.Mesh(new THREE.CylinderGeometry(0.16*s,0.24*s,1.3*s,10),trunkM);tr.position.y=0.65*s;g.add(tr);
     const col=blossom?leafCols[3+Math.floor(rnd()*2)]:leafCols[[0,1,2,5][Math.floor(rnd()*4)]];
     [[0,1.75,0,1.0],[0.55,1.45,0.2,0.7],[-0.5,1.5,-0.15,0.72],[0.05,2.35,0.05,0.62]].forEach(([dx,dy,dz,r])=>{const b=new THREE.Mesh(sph,T(col));b.position.set(dx*s,dy*s,dz*s);b.scale.setScalar(r*s);g.add(b)});
     scene.add(g);blob(1.2*s,x,z);obstacles.push({x,z,r:0.7*s});swayers.push(g)}
   function bush(x,z,s,col){const b=new THREE.Mesh(sph,T(col||'#B3CFA2'));b.position.set(x,0.35*s,z);b.scale.set(0.75*s,0.55*s,0.75*s);scene.add(b);
-    if(rnd()<.6){const fc=['#F7C6D0','#FFF0B8','#FFFFFF','#E4D7F5'][Math.floor(rnd()*4)];for(let i=0;i<5;i++){const f=new THREE.Mesh(new THREE.SphereGeometry(0.08,8,6),T(fc));const a=rnd()*Math.PI*2;f.position.set(x+Math.cos(a)*0.55*s,0.55*s+rnd()*0.2,z+Math.sin(a)*0.55*s);scene.add(f)}}}
+    if(rnd()<.6){const fc=['#FFFFFF','#F3ECDD','#FFFFFF','#EADFCF'][Math.floor(rnd()*4)];for(let i=0;i<5;i++){const f=new THREE.Mesh(new THREE.SphereGeometry(0.08,8,6),T(fc));const a=rnd()*Math.PI*2;f.position.set(x+Math.cos(a)*0.55*s,0.55*s+rnd()*0.2,z+Math.sin(a)*0.55*s);scene.add(f)}}}
   // outer ring of trees between shops & along the shore
   for(let i=0;i<46;i++){const a=rnd()*Math.PI*2;const r=20+rnd()*5.5;const sa=((a-(-Math.PI/2+Math.PI/8))%(Math.PI/4)+Math.PI/4)%(Math.PI/4);
-    if(r<23.5&&Math.abs(sa-Math.PI/8)>Math.PI/8-0.18)continue;tree(Math.cos(a)*r,Math.sin(a)*r,0.85+rnd()*0.45,rnd()<0.35)}
+    if(r<23.5&&Math.abs(sa-Math.PI/8)>Math.PI/8-0.18)continue;tree(Math.cos(a)*r,Math.sin(a)*r,0.85+rnd()*0.45,rnd()<0.15)}
   // bushes along ring path edges
   for(let i=0;i<40;i++){const a=i/40*Math.PI*2+0.04;if(Math.abs(Math.sin(a*2))<0.12)continue;const r=i%2?13.8:10.2;bush(Math.cos(a)*r,Math.sin(a)*r,0.7+rnd()*0.35)}
   // flower meadow patches (instanced)
-  const fGeo=new THREE.SphereGeometry(0.09,6,5);['#F1B9C0','#F6DE95','#FFFFFF','#BFC9E8','#F3BFA0'].forEach((col,ci)=>{const N=MOBILE?40:60;const im=new THREE.InstancedMesh(fGeo,T(col),N);const m=new THREE.Matrix4();
+  const fGeo=new THREE.SphereGeometry(0.09,6,5);['#FFFFFF','#F1EADB'].forEach((col,ci)=>{const N=MOBILE?18:28;const im=new THREE.InstancedMesh(fGeo,T(col),N);const m=new THREE.Matrix4();
     for(let i=0;i<N;i++){let x,z;do{const a=rnd()*Math.PI*2,r=6.4+rnd()*4.2;x=Math.cos(a)*r;z=Math.sin(a)*r}while(Math.abs(x)<1.4||Math.abs(z)<1.4);m.makeTranslation(x,0.09,z);im.setMatrixAt(i,m)}scene.add(im)});
   // lamps at spoke ends & plaza
   const postM=T('#F5EFE6'),lampM=glow('#FFE7BE',0.9);
@@ -761,7 +761,8 @@ const bMat=new THREE.PointsMaterial({size:0.32,map:STAR,color:'#FFF6E6',transpar
 function burst(x,y,z){for(let i=0;i<BN;i++){bp[i*3]=x;bp[i*3+1]=y;bp[i*3+2]=z;const a=Math.random()*Math.PI*2,e=Math.random()*Math.PI-Math.PI/2,s=1.2+Math.random()*2;bv[i*3]=Math.cos(a)*Math.cos(e)*s;bv[i*3+1]=Math.sin(e)*s+1.4;bv[i*3+2]=Math.sin(a)*Math.cos(e)*s}burstT=0}
 
 /* ---------- shops: one showroom per style ---------- */
-const SHOPCOL={pearl:['#F6F0E6','#8FB0C9'],flower:['#FBEFE6','#E59A8C'],romantic:['#FBF1EE','#DE9AAA'],flutter:['#F5F1F7','#A99BC9'],sparkle:['#F2F5F6','#7FB3B4'],metal:['#FBF4E4','#D9B45E'],set:['#FBF0E6','#C98A62'],tool:['#F2F4EA','#93AE76']};
+const ZONES={pearl:['펄 존','화이트 클래식'],flower:['플라워·클로버 존','싱그러운 가든'],romantic:['하트 존','로맨틱 무드'],flutter:['스타·나비 존','반짝이는 포인트'],sparkle:['클라우드 크리스탈 존','몽글하고 맑은'],metal:['골드 미니멀 존','차분한 쇼룸'],set:['기프트 존','세트 컬렉션'],tool:['케어 존','이혈 케어 툴']};
+const SHOPCOL={pearl:['#F7F3EC','#B9C1C3'],flower:['#F6F1E8','#A9B79C'],romantic:['#F8F1EC','#CFAEA8'],flutter:['#F6F1E8','#CDBB98'],sparkle:['#F5F4F0','#B3C2C3'],metal:['#F7F1E4','#C7B489'],set:['#F7F0E6','#C7A88E'],tool:['#F3F3EA','#9FAE94']};
 const RANKN=no=>(META.rank[no]!==undefined?META.rank[no]:99);
 const PEDS=[];const STANDS=[];const R_SHOP=17;
 function stripeTex(a,b){const c=document.createElement('canvas');c.width=128;c.height=16;const g=c.getContext('2d');for(let i=0;i<8;i++){g.fillStyle=i%2?a:b;g.fillRect(i*16,0,16,16)}const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t}
@@ -789,7 +790,7 @@ STYLES.forEach((st,i)=>{
   // potted plants
   [-1.95,1.95].forEach(dx=>{const pot=new THREE.Mesh(new THREE.CylinderGeometry(0.28,0.22,0.42,14),T('#E7C6AE'));pot.position.set(dx,0.43,0.95);g.add(pot);
     const pl=new THREE.Mesh(new THREE.SphereGeometry(0.42,14,10),T('#A9C79C'));pl.position.set(dx,0.92,0.95);g.add(pl)});
-  const sign=labelSprite(st.name,st.en,{size:30,subSize:15,scale:0.78,border:roof});sign.position.set(0,5.3,-0.4);g.add(sign);
+  const zn=ZONES[st.id]||[st.name,st.en];const sign=labelSprite(zn[0],st.name+' · '+zn[1],{size:30,subSize:14,scale:0.78,border:roof});sign.position.set(0,5.3,-0.4);g.add(sign);
   scene.add(g);g.updateMatrixWorld(true);
   tagHit(body,{kind:'shop',id:st.id});tagHit(roofM,{kind:'shop',id:st.id});tagHit(sign,{kind:'shop',id:st.id});
   const toWorld=(lx,lz)=>new THREE.Vector3(lx,0,lz).applyMatrix4(g.matrixWorld);
@@ -831,7 +832,7 @@ const PROPS={
     const s1=new THREE.Mesh(ext(starShape(0.42),0.12),glow('#FFE7A6',0.35));s1.position.y=1.35;g.add(s1);const s2=new THREE.Mesh(ext(starShape(0.2),0.08),glow('#E4D7F5',0.3));s2.position.set(0.45,0.75,0);g.add(s2);return g},
   sparkle:()=>{const g=new THREE.Group();const cm=new THREE.MeshStandardMaterial({color:LC('#D6EBF7'),roughness:0.08,metalness:0.2,transparent:true,opacity:0.85,emissive:LC('#C9E3F2'),emissiveIntensity:0.3});
     [[0,0.55,0.55,0],[0.42,0.3,0.32,0.4],[-0.38,0.28,0.3,-0.3]].forEach(([x,y,r,z])=>{const m=new THREE.Mesh(new THREE.OctahedronGeometry(r,0),cm);m.position.set(x,y,0);m.rotation.z=z;m.scale.y=1.5;g.add(m)});return g},
-  metal:()=>{const g=new THREE.Group();const gm=M('#E3C27E',{metalness:0.8,roughness:0.25});const sm=M('#E4E6EA',{metalness:0.85,roughness:0.2});
+  metal:()=>{const g=new THREE.Group();const gm=new THREE.MeshToonMaterial({color:new THREE.Color('#DCC48F').convertSRGBToLinear(),gradientMap:GRAD});const sm=new THREE.MeshToonMaterial({color:new THREE.Color('#E6E7EA').convertSRGBToLinear(),gradientMap:GRAD});
     const d=new THREE.Mesh(new THREE.SphereGeometry(0.45,24,16,0,Math.PI*2,0,Math.PI/2),gm);g.add(d);const o=new THREE.Mesh(new THREE.SphereGeometry(0.25,20,14),sm);o.position.set(0.55,0.25,0.1);g.add(o);
     const b=new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.06,0.9,12),gm);b.position.set(-0.45,0.45,0);b.rotation.z=0.2;g.add(b);return g},
   set:()=>{const g=new THREE.Group();[['#F7C6D0',0.7,0],['#E4D7F5',0.5,0.62],['#FFF0B8',0.34,1.06]].forEach(([c,w,y],i)=>{const b=softBox(w,w*0.85,w,0.06,T(c));b.position.y=y+w*0.42;b.rotation.y=i*0.4;g.add(b);
@@ -843,7 +844,7 @@ PEDS.forEach(pd=>{const mk=PROPS[pd.p.id];if(!mk)return;[-1,1].forEach(k=>{const
   const v=new THREE.Vector3(k*2.65,0,2.55).applyMatrix4(pd.g.matrixWorld);obstacles.push({x:v.x,z:v.z,r:0.45});tagHit(pr,{kind:'shop',id:pd.p.id})})});
 
 /* ---------- guide character: Pearlie ---------- */
-const guide=new THREE.Group();guide.position.set(2.5,0,6.9);guide.rotation.y=-0.5;
+const guide=new THREE.Group();guide.position.set(-2.1,0,7.1);guide.rotation.y=-0.5;
 (function(){const body=new THREE.Mesh(new THREE.SphereGeometry(0.62,28,22),PEARL);body.position.y=0.7;body.scale.y=0.95;guide.add(body);
   [-0.2,0.2].forEach(x=>{const e=new THREE.Mesh(new THREE.SphereGeometry(0.06,10,8),T('#3C2C2E'));e.position.set(x,0.82,0.57);e.scale.z=0.5;guide.add(e);
     const ch=new THREE.Mesh(new THREE.CircleGeometry(0.1,14),new THREE.MeshBasicMaterial({color:LC('#F5A9B5'),transparent:true,opacity:.75}));ch.position.set(x*1.6,0.68,0.55);ch.rotation.y=x*1.4;guide.add(ch)});
@@ -863,6 +864,90 @@ function shortNm(n){return n.replace(/^\[[^\]]+\]\s*/,'').replace(/\s*이혈테�
 function setBubble(){const t=TIPS()[tipI%4];if(bubble){guide.remove(bubble);bubble.material.map.dispose()}bubble=labelSprite(t[0],t[1],{size:22,subSize:14,scale:0.62,border:'rgba(220,189,126,.8)'});bubble.position.y=2.6;guide.add(bubble);tagHit(bubble,{kind:'guide'});bubbleT=0}
 setBubble();
 function guideTap(){const it=PICKS[pickI%PICKS.length];pickI++;if(it){burst(guide.position.x,1.6,guide.position.z);openProductCard(it.no,'guide')}tipI=1;setBubble()}
+
+/* ---------- brand theme zones: product motifs reinterpreted as garden objects (no product images) ---------- */
+const ZB={};const _q=new THREE.Quaternion(),_e=new THREE.Euler(),_p=new THREE.Vector3(),_s=new THREE.Vector3();
+function zm(x,y,z,rx,ry,rz,sx,sy,sz){_e.set(rx||0,ry||0,rz||0);_q.setFromEuler(_e);_p.set(x,y,z);_s.set(sx,sy==null?sx:sy,sz==null?sx:sz);return new THREE.Matrix4().compose(_p,_q,_s)}
+function zput(key,geo,mat,m){(ZB[key]||(ZB[key]={geo,mat,ms:[]})).ms.push(m)}
+function zflush(){Object.values(ZB).forEach(b=>{const im=new THREE.InstancedMesh(b.geo,b.mat,b.ms.length);b.ms.forEach((m,i)=>im.setMatrixAt(i,m));im.instanceMatrix.needsUpdate=true;scene.add(im)})}
+const ZG={petal:new THREE.SphereGeometry(1,10,6),ball:new THREE.SphereGeometry(1,14,10),stem:new THREE.CylinderGeometry(0.02,0.026,1,5),disc:new THREE.CylinderGeometry(1,1,1,28),
+  heartLeaf:new THREE.ShapeGeometry(heartShape(1),10),heartSolid:ext(heartShape(1),0.35),star:ext(starShape(1),0.12),rose:new THREE.TorusGeometry(1,0.42,8,18),cube:new THREE.BoxGeometry(1,1,1)};
+ZG.heartLeaf.rotateX(-Math.PI/2);ZG.heartLeaf.translate(0,0,-1);
+const ZM={white:T('#FFFFFF'),cream:T('#F3ECDD'),sage:T('#A9B79C'),sageD:T('#8FA184'),stem:T('#9DAE8F'),rose:T('#D8B5AE'),roseIv:T('#EFE4D8'),beige:T('#E4D8C6'),stone:T('#EDE6DA'),gravel:T('#E9E2D6'),
+  cloud:new THREE.MeshToonMaterial({color:LC('#FBF9F5'),gradientMap:GRAD}),gold:new THREE.MeshToonMaterial({color:new THREE.Color('#D9C089').convertSRGBToLinear(),gradientMap:GRAD,emissive:new THREE.Color('#3A2E14'),emissiveIntensity:0.25}),pearl:PEARL,crystal:new THREE.MeshStandardMaterial({color:LC('#E6EEF0'),roughness:0.08,metalness:0.15,transparent:true,opacity:0.85})};
+const ZONE_HITS=[];
+
+function stemAt(x,z,h){zput('stem',ZG.stem,ZM.stem,zm(x,h/2,z,0,0,0,1,h,1))}
+function daisy(x,z,s,h){h=h||0.42*s;stemAt(x,z,h);for(let i=0;i<9;i++){const a=i/9*Math.PI*2;zput('petalW',ZG.petal,ZM.white,zm(x+Math.cos(a)*0.15*s,h,z+Math.sin(a)*0.15*s,0,-a,0,0.14*s,0.035*s,0.06*s))}
+  zput('goldC',ZG.ball,ZM.gold,zm(x,h+0.02*s,z,0,0,0,0.06*s))}
+function clover(x,z,s,h,gold){h=h||0.3*s;stemAt(x,z,h);for(let i=0;i<4;i++){const a=i*Math.PI/2+0.4;zput(gold?'cloverG':'cloverS',ZG.heartLeaf,gold?ZM.gold:ZM.sage,zm(x,h,z,0,a,0,0.13*s))}
+  if(!gold&&Math.random()<0.45)zput('pearlS',ZG.ball,ZM.pearl,zm(x,h+0.03*s,z,0,0,0,0.045*s))}
+function rose(x,z,s,h,ivory){h=h||0.45*s;stemAt(x,z,h);const m=ivory?ZM.roseIv:ZM.rose,k=ivory?'roseI':'roseP';
+  zput(k,ZG.rose,m,zm(x,h,z,Math.PI/2,0,0,0.09*s,0.09*s,0.06*s));zput(k+'c',ZG.ball,m,zm(x,h+0.04*s,z,0,0,0,0.065*s));
+  zput('leafR',ZG.petal,ZM.sageD,zm(x+0.07*s,h*0.45,z,0,0.6,0.5,0.09*s,0.02*s,0.045*s))}
+function pearlFlower(x,z,s,h){h=h||0.46*s;stemAt(x,z,h);zput('pearlC',ZG.ball,ZM.pearl,zm(x,h,z,0,0,0,0.075*s));
+  for(let i=0;i<6;i++){const a=i/6*Math.PI*2;zput('pearlP',ZG.ball,ZM.pearl,zm(x+Math.cos(a)*0.12*s,h-0.01,z+Math.sin(a)*0.12*s,0,0,0,0.055*s))}
+  zput('goldDot',ZG.ball,ZM.gold,zm(x,h+0.06*s,z,0,0,0,0.025*s))}
+function cloudBush(x,z,s){[[0,0.3,0,0.42],[0.34,0.24,0.08,0.3],[-0.32,0.22,-0.05,0.3],[0.06,0.52,0.02,0.28],[-0.1,0.2,0.3,0.24]].forEach(([dx,dy,dz,r])=>zput('cloud',ZG.ball,ZM.cloud,zm(x+dx*s,dy*s,z+dz*s,0,0,0,r*s)))}
+function crystal(x,z,s){zput('crys',new THREE.OctahedronGeometry(1,0),ZM.crystal,zm(x,0.25*s,z,0,Math.random()*3,0.2,0.12*s,0.3*s,0.12*s))}
+function bed(x,z,r,mat,key){zput(key||'bed',ZG.disc,mat||ZM.gravel,zm(x,0.03,z,0,0,0,r,0.06,r))}
+function heartBed(x,z,s,rot){const sh=heartShape(1);const pts=sh.getSpacedPoints(26);pts.forEach(p=>{const c=Math.cos(rot),sn=Math.sin(rot);const px=p.x*s,pz=-p.y*s;rose(x+px*c-pz*sn,z+px*sn+pz*c,1.05,0.34,Math.random()<0.3)});
+  zput('heartTopi',ZG.heartSolid,ZM.sage,zm(x,0.5,z,0,rot,0,0.3,0.3,0.4));zput('heartTopiPot',ZG.disc,ZM.stone,zm(x,0.1,z,0,0,0,0.2,0.2,0.2));zput('stem',ZG.stem,ZM.stem,zm(x,0.24,z,0,0,0,1.6,0.3,1.6))}
+function starStones(x,z,s){for(let i=0;i<6;i++){const a=i/6*Math.PI*2+0.3,r=i%2?0.95*s:0.55*s;zput('starStone',ZG.star,ZM.stone,zm(x+Math.cos(a)*r,0.04,z+Math.sin(a)*r,-Math.PI/2,0,a,0.26*s,0.26*s,0.5))}
+  zput('starStoneG',ZG.star,ZM.gold,zm(x,0.06,z,-Math.PI/2,0,0.2,0.32*s,0.32*s,0.6))}
+function goldPlinths(x,z,s){[[0,0,0.5,0.24],[0.6,0.25,0.35,0.16],[-0.55,0.3,0.28,0.13]].forEach(([dx,dz,h,r])=>{zput('plinth',ZG.disc,ZM.stone,zm(x+dx*s,h/2,z+dz*s,0,0,0,0.26*s,h,0.26*s));zput('goldBall',ZG.ball,ZM.gold,zm(x+dx*s,h+r,z+dz*s,0,0,0,r))})}
+function giftStack(x,z,s){[['#EFE7D6',0.5,0],['#E2DACB',0.36,0.43],['#F6F2EA',0.24,0.74]].forEach(([c,w,y],i)=>{const b=softBox(w*s,w*0.82*s,w*s,0.04,T(c));b.position.set(x,y*s+w*0.41*s,z);b.rotation.y=i*0.5;scene.add(b);
+  const r=new THREE.Mesh(new THREE.BoxGeometry(w*s+0.02,w*0.83*s,0.06),ZM.sage);r.position.copy(b.position);r.rotation.y=b.rotation.y;scene.add(r)})}
+
+/* real product cut-outs used as the garden's 'flowers' — images untouched, each one opens its product card */
+const CMAT={};function cutMat(no,pi){const k=no+'_'+pi;return CMAT[k]||(CMAT[k]=new THREE.SpriteMaterial({map:imgTex(CUTS[no][pi]),transparent:true,depthWrite:false}))}
+const ZCUTS={};function zoneCuts(id){if(ZCUTS[id])return ZCUTS[id];const out=[];ITEMS.filter(x=>x.style===id&&CUTS[x.no]).forEach(x=>CUTS[x.no].forEach((_,pi)=>out.push([x.no,pi])));return ZCUTS[id]=out}
+const CUT_SPRITES=[];
+function cutFlower(x,z,no,pi,s,h,noStem){s=s||0.5;h=h==null?0.62:h;if(!noStem){stemAt(x,z,h);zput('leafC',ZG.petal,ZM.sage,zm(x+0.06,h*0.42,z,0,Math.random()*3,0.5,0.1,0.022,0.05));zput('leafC',ZG.petal,ZM.sage,zm(x-0.06,h*0.3,z,0,Math.random()*3,-0.5,0.09,0.02,0.045))}
+  const sp=new THREE.Sprite(cutMat(no,pi));sp.scale.set(s,s,1);sp.position.set(x,h+s*0.42,z);scene.add(sp);sp.userData.hit={kind:'prod',no};hitMeshes.push(sp);CUT_SPRITES.push({sp,base:sp.position.y,ph:Math.random()*6});return sp}
+function ringCuts(id,x,z,r,n,s,h,start){const cs=zoneCuts(id);if(!cs.length)return;for(let i=0;i<n;i++){const t=i/n*Math.PI*2+(start||0);const c=cs[i%cs.length];cutFlower(x+Math.cos(t)*r,z+Math.sin(t)*r,c[0],c[1],s,h)}}
+/* per-zone arrangement: an inner bed facing the plaza (seen from the path) + two side plots by the shop */
+const ZONE_FILL={
+  pearl:(x,z,a)=>{bed(x,z,1.25,ZM.gravel,'bedW');ringCuts('pearl',x,z,0.78,7,0.5,0.6,a);for(let i=0;i<6;i++){const r=Math.sqrt(Math.random())*0.4,t=Math.random()*6.28;pearlFlower(x+Math.cos(t)*r,z+Math.sin(t)*r,0.9)}for(let i=0;i<8;i++){const t=i/8*6.28;rose(x+Math.cos(t)*1.2,z+Math.sin(t)*1.2,1,0.3,true)}},
+  flower:(x,z,a)=>{[[0.42,0],[-0.42,0],[0,0.42],[0,-0.42]].forEach(([dx,dz])=>bed(x+dx,z+dz,0.62,ZM.sage,'bedClover'));ringCuts('flower',x,z,0.8,7,0.46,0.58,a);const cs=zoneCuts('flower');{const c=cs[7%cs.length];cutFlower(x,z,c[0],c[1],0.5,0.8)}for(let i=0;i<8;i++){const r=0.85+Math.random()*0.3,t=Math.random()*6.28;clover(x+Math.cos(t)*r,z+Math.sin(t)*r,1)}},
+  romantic:(x,z,a)=>{const rot=Math.atan2(-Math.cos(a),-Math.sin(a));heartBed(x,z,0.95,rot);const cs=zoneCuts('romantic');const pts=heartShape(1).getSpacedPoints(cs.length*2);pts.slice(0,-1).forEach((p,i)=>{if(i%2)return;const c=cs[(i/2)%cs.length];const px=p.x*0.95,pz=-p.y*0.95;cutFlower(x+px*Math.cos(rot)-pz*Math.sin(rot),z+px*Math.sin(rot)+pz*Math.cos(rot),c[0],c[1],0.46,0.66)})},
+  flutter:(x,z,a)=>{bed(x,z,1.2,ZM.gravel,'bedW');starStones(x,z,1.1);const cs=zoneCuts('flutter').filter(c=>![7297,7296,7343].includes(c[0]));cs.forEach((c,i)=>{const t=i/cs.length*Math.PI*2+a;cutFlower(x+Math.cos(t)*0.75,z+Math.sin(t)*0.75,c[0],c[1],0.5,0.7)})},
+  sparkle:(x,z,a)=>{const cs=zoneCuts('sparkle');for(let i=0;i<4;i++){const t=i/4*6.28+0.4,cx=x+Math.cos(t)*0.8,cz=z+Math.sin(t)*0.8,s=0.8+Math.random()*0.3;cloudBush(cx,cz,s);const c=cs[i%cs.length];if(c)cutFlower(cx,cz,c[0],c[1],0.48,0.55*s+0.05,true)}for(let i=0;i<5;i++){const t=Math.random()*6.28,r=0.3+Math.random()*0.9;crystal(x+Math.cos(t)*r,z+Math.sin(t)*r,0.9+Math.random()*0.5)}},
+  metal:(x,z,a)=>{bed(x,z,1.15,ZM.stone,'bedStone');const cs=zoneCuts('metal');[[0,0,0.55],[0.62,0.3,0.42],[-0.58,0.34,0.36],[0.15,-0.62,0.46],[-0.5,-0.4,0.3]].forEach(([dx,dz,h],i)=>{zput('plinth',ZG.disc,ZM.stone,zm(x+dx,h/2,z+dz,0,0,0,0.24,h,0.24));const c=cs[i%cs.length];if(c)cutFlower(x+dx,z+dz,c[0],c[1],0.42,h-0.05,true)})},
+  set:(x,z,a)=>{bed(x,z,1.1,ZM.gravel,'bedW');giftStack(x-0.35,z,1);giftStack(x+0.5,z+0.25,0.7)},
+  tool:(x,z,a)=>{bed(x,z,1.1,ZM.gravel,'bedW');[[0,0],[0.55,0.3],[-0.5,0.25]].forEach(([dx,dz],i)=>{zput('ceramicHeart',ZG.heartSolid,ZM.roseIv,zm(x+dx,0.32,z+dz,-0.3,i,0,0.26,0.26,0.4))});for(let i=0;i<6;i++){const t=i/6*6.28;clover(x+Math.cos(t)*1.0,z+Math.sin(t)*1.0,1)}}};
+const SIDE_FILL={
+  pearl:(x,z)=>{ringCuts('pearl',x,z,0.45,3,0.44,0.55,Math.random()*6);for(let i=0;i<4;i++){const t=Math.random()*6.28,r=0.6+Math.random()*0.3;pearlFlower(x+Math.cos(t)*r,z+Math.sin(t)*r,1)}},
+  flower:(x,z)=>{ringCuts('flower',x,z,0.45,4,0.44,0.55,Math.random()*6);for(let i=0;i<5;i++){const t=Math.random()*6.28,r=0.65+Math.random()*0.25;clover(x+Math.cos(t)*r,z+Math.sin(t)*r,1.1)}},
+  romantic:(x,z)=>{ringCuts('romantic',x,z,0.42,3,0.44,0.55,Math.random()*6);for(let i=0;i<5;i++){const t=Math.random()*6.28,r=0.62+Math.random()*0.25;rose(x+Math.cos(t)*r,z+Math.sin(t)*r,1.1,null,i%3===0)}},
+  flutter:(x,z)=>{ringCuts('flutter',x,z,0.42,3,0.44,0.55,Math.random()*6);for(let i=0;i<4;i++){const t=Math.random()*6.28,r=0.65+Math.random()*0.2;daisy(x+Math.cos(t)*r,z+Math.sin(t)*r,1)}},
+  sparkle:(x,z)=>{cloudBush(x,z,1.05);const c=zoneCuts('sparkle')[Math.floor(Math.random()*3)];if(c)cutFlower(x,z,c[0],c[1],0.46,0.62,true)},
+  metal:(x,z)=>{const cs=zoneCuts('metal');[[0,0,0.45],[0.45,0.2,0.32]].forEach(([dx,dz,h],i)=>{zput('plinth',ZG.disc,ZM.stone,zm(x+dx,h/2,z+dz,0,0,0,0.22,h,0.22));const c=cs[(i*3+Math.floor(Math.random()*4))%cs.length];if(c)cutFlower(x+dx,z+dz,c[0],c[1],0.4,h-0.05,true)})},
+  set:(x,z)=>{for(let i=0;i<5;i++){const t=Math.random()*6.28,r=Math.random()*0.7;daisy(x+Math.cos(t)*r,z+Math.sin(t)*r,1)}},
+  tool:(x,z)=>{for(let i=0;i<6;i++){const t=Math.random()*6.28,r=Math.random()*0.8;clover(x+Math.cos(t)*r,z+Math.sin(t)*r,1.1)}}};
+const ZONE_BEDS=[];
+PEDS.forEach(pd=>{const a=Math.atan2(pd.z,pd.x),id=pd.p.id;
+  const ix=Math.cos(a)*8.6,iz=Math.sin(a)*8.6;(ZONE_FILL[id]||(()=>{}))(ix,iz,a);obstacles.push({x:ix,z:iz,r:1.25});ZONE_BEDS.push({x:ix,z:iz,id});
+  const post=new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.05,0.9,6),T('#D8CCBA'));const px=Math.cos(a)*10.05,pz=Math.sin(a)*10.05;post.position.set(px,0.45,pz);scene.add(post);
+  const zl=labelSprite((ZONES[id]||[pd.p.name])[0],'',{size:20,scale:0.5,bg:'rgba(251,248,242,.95)',border:'rgba(185,175,155,.6)'});zl.position.set(px,1.05,pz);scene.add(zl);
+  const hit=new THREE.Mesh(new THREE.CylinderGeometry(1.3,1.3,1.4,12),new THREE.MeshBasicMaterial({visible:false}));hit.position.set(ix,0.7,iz);scene.add(hit);hit.userData.hit={kind:'shop',id};hitMeshes.push(hit);zl.userData.hit={kind:'shop',id};hitMeshes.push(zl);
+  [-1,1].forEach(k=>{const b=a+k*0.31,sx=Math.cos(b)*15.6,sz=Math.sin(b)*15.6;bed(sx,sz,1.0,ZM.beige,'bedSide');(SIDE_FILL[id]||(()=>{}))(sx,sz);obstacles.push({x:sx,z:sz,r:1})})});
+zflush();
+
+/* butterflies: soft wayfinding — one leads toward where you are heading, a few drift by the flower zones */
+function makeFly(sc,no){const g=new THREE.Group();const sp=new THREE.Sprite(cutMat(no,0));const s=0.55*(sc||1);sp.scale.set(s,s,1);g.add(sp);g.userData={sp,s};scene.add(g);sp.userData.hit={kind:'prod',no};hitMeshes.push(sp);return g}
+const guideFly=makeFly(1,CUTS[7343]?7343:7297);guideFly.visible=false;const gfPos=new THREE.Vector3(0,1.6,6);
+const AMB=[0,1,2].map(i=>{const zb=ZONE_BEDS.find(b=>b.id===['flower','pearl','romantic'][i])||ZONE_BEDS[i];const f=makeFly(0.85,[7297,7296,7343][i]);f.userData.c=zb;f.userData.ph=i*2.1;return f});
+function zonesTick(t,dt){
+  AMB.forEach((f,i)=>{const u=f.userData;const a=t*0.35+u.ph;f.position.set(u.c.x+Math.cos(a)*1.4,1.0+Math.sin(t*1.3+i)*0.25,u.c.z+Math.sin(a*1.2)*1.2);u.sp.scale.x=u.s*(0.55+0.45*Math.abs(Math.cos(t*7+i)))});
+  guideFly.visible=entered;if(!entered)return;
+  let gx,gz;const fin=route&&route.length?route[route.length-1]:target;
+  if(fin){const dx=fin.x-P.x,dz=fin.z-P.z,d=Math.hypot(dx,dz)||1;const lead=Math.min(2.6,d);gx=P.x+dx/d*lead;gz=P.z+dz/d*lead}
+  else{const nd=DESTS[(tourIdx+1+DESTS.length)%DESTS.length];const dx=nd.x-P.x,dz=nd.z-P.z,d=Math.hypot(dx,dz)||1;
+    if(d>3.5){gx=P.x+dx/d*1.8+Math.sin(t*0.8)*0.3;gz=P.z+dz/d*1.8+Math.cos(t*0.7)*0.3}else{gx=P.x+Math.cos(t*0.6)*1.2;gz=P.z+Math.sin(t*0.6)*1.2}}
+  const ox=gfPos.x,oz=gfPos.z;gfPos.x+=(gx-gfPos.x)*Math.min(1,dt*1.8);gfPos.z+=(gz-gfPos.z)*Math.min(1,dt*1.8);gfPos.y=1.7+Math.sin(t*2.2)*0.15;
+  guideFly.position.copy(gfPos);const mv=Math.atan2(gfPos.x-ox,gfPos.z-oz);const gu=guideFly.userData;gu.sp.scale.x=gu.s*(0.55+0.45*Math.abs(Math.cos(t*7)));
+  CUT_SPRITES.forEach(c=>{c.sp.position.y=c.base+Math.sin(t*1.1+c.ph)*0.025})}
 
 /* ---------- hidden gifts: discover more patches ---------- */
 const shownNos=new Set(PEDS.flatMap(p=>p.list.map(x=>x.no)));
@@ -977,15 +1062,15 @@ function openProductCard(no,from){const it=ITEMS.find(x=>x.no===+no);if(!it)retu
 
 /* ---------- dock: tour without joystick ---------- */
 let near=null,nearStudio=false,tourIdx=-1,barKey='',hintShown=store.get('hint1',0);
-const DESTS=[{kind:'studio',name:'내 귀 꾸미기',sub:'광장 · 레이어드 미러',x:0,z:4.6},...PEDS.map(pd=>({kind:'shop',pd,name:pd.p.name,sub:pd.p.en+' 쇼룸 · '+byStyle(pd.p.id).length+'종',x:pd.fx,z:pd.fz}))];
+const DESTS=[{kind:'studio',name:'내 귀 꾸미기',sub:'광장 · 레이어드 미러',x:0,z:4.6},...PEDS.map(pd=>({kind:'shop',pd,name:(ZONES[pd.p.id]||[pd.p.name])[0],sub:pd.p.name+' · '+byStyle(pd.p.id).length+'종',x:pd.fx,z:pd.fz}))];
 function goDest(i){tourIdx=(i+DESTS.length)%DESTS.length;const d=DESTS[tourIdx];if(d.kind==='studio')plan(d.x,d.z,0);else walkTo(d.pd);pending=null;barKey=''}
 function openDestPicker(){if(!entered)return;sheet('Village Map','어디로 갈까요?',`<div class="dest">${DESTS.map((d,i)=>{const pd=d.pd;const top=pd&&pd.list[0];const img=d.kind==='studio'?(CUTS[7661]||[])[0]:top&&CUTS[top.no]?CUTS[top.no][0]:top?top.th:'';
-    return `<button data-dest="${i}" style="--c:${pd?(SHOPCOL[pd.p.id]||['#eee','#ddd'])[0]:'#F3E3E0'}">${img?`<img src="${img}" alt="">`:''}<b>${esc(d.name)}</b><small>${d.kind==='studio'?'진짜 크기로 붙여보기':byStyle(pd.p.id).length+'종'}</small></button>`}).join('')}</div><p class="note">누르면 캐릭터가 그 가게 앞까지 걸어가요.</p>`);
+    return `<button data-dest="${i}" style="--c:${pd?(SHOPCOL[pd.p.id]||['#eee','#ddd'])[0]:'#F3E3E0'}">${img?`<img src="${img}" alt="">`:''}<b>${esc(d.name)}</b><small>${d.kind==='studio'?'진짜 크기로 붙여보기':esc(pd.p.name)+' · '+byStyle(pd.p.id).length+'종'}</small></button>`}).join('')}</div><p class="note">누르면 캐릭터가 그 가게 앞까지 걸어가요.</p>`);
   document.querySelectorAll('[data-dest]').forEach(b=>b.onclick=()=>{closeSheet();goDest(+b.dataset.dest)})}
 function watchers(id){let n=0;others.forEach(o=>{if(o.v===id)n++});return n}
 function renderBar(){const b=$('#bar');if(!entered||!$('#sheet').hidden||!$('#studio').hidden){b.hidden=true;return}
   let title,sub,act='',actTxt='';
-  if(near){const w=watchers(near.p.id);title=near.p.name+' 쇼룸';sub=w?`지금 ${w}명이 같이 보고 있어요`:'진열된 패치를 눌러 자세히 보세요';act='shop';actTxt='전체 '+byStyle(near.p.id).length+'종'}
+  if(near){const w=watchers(near.p.id);title=(ZONES[near.p.id]||[near.p.name+' 쇼룸'])[0];sub=w?`지금 ${w}명이 같이 보고 있어요`:'진열된 패치를 눌러 자세히 보세요';act='shop';actTxt='전체 '+byStyle(near.p.id).length+'종'}
   else if(nearStudio){title='내 귀 꾸미기';sub='진짜 패치를 내 귀에 붙여봐요';act='studio';actTxt='시작하기'}
   else{const d=DESTS[(tourIdx+1+DESTS.length)%DESTS.length];title=target?'이동 중…':'어디로 갈까요?';sub=target?'':'여기를 누르면 가고 싶은 가게로 데려다줘요';act='';}
   b.innerHTML=`<button class="dk-arr" id="dkPrev" aria-label="이전 장소">‹</button><button class="dk-mid" id="dkMid" type="button"><b>${esc(title)}</b>${sub?`<small>${esc(sub)}</small>`:''}</button>${act?`<button class="dk-act" id="dkAct">${actTxt}</button>`:''}<button class="dk-arr" id="dkNext" aria-label="다음 장소">›</button>`;
@@ -1027,6 +1112,7 @@ function frame(){
     else if(gf.open){gf.spr.position.y=1.15+Math.sin(t*1.5+i)*0.05}else{gf.g.rotation.y=Math.sin(t*1.2+i)*0.12}});
   butterflies.forEach((b,i)=>{const u=b.userData;const a=t*0.5+u.ph;b.position.set(u.cx+Math.cos(a)*2.2,1.2+Math.sin(t*2+u.ph)*0.4,u.cz+Math.sin(a*1.3)*1.6);b.scale.x=0.42*(0.55+0.45*Math.abs(Math.sin(t*9+i)))});
   swayers.forEach((g,i)=>{g.rotation.z=Math.sin(t*0.8+i)*0.015});
+  zonesTick(t,dt);
   themeSpin.forEach((g,i)=>{g.rotation.y+=dt*0.6});
   if(archSign)archSign.visible=!entered||Math.hypot(camera.position.x,camera.position.z-14.6)>7;
   guide.position.y=Math.abs(Math.sin(t*2.2))*0.06;guide.rotation.y=-0.5+Math.sin(t*0.7)*0.25;bubbleT+=dt;if(bubbleT>6){tipI++;if(tipI%4===1)pickI++;setBubble()}
@@ -1161,7 +1247,7 @@ function lines(){return lookProducts().map(it=>{const v=optOf(it.no);return {it,
 /* Price math mirrors the Cafe24 benefit: 판매가 × 수량, 5% when 2+ pieces, 1원 단위 내림 (prices are multiples of 100, so 5% is always whole won). */
 function bill(){const ls=lines();const n=ls.reduce((a,l)=>a+l.qty,0);const base=ls.reduce((a,l)=>a+l.price*l.qty,0);
   const ok=n>=PROMO.min&&base>=PROMO.minAmt;const on=PROMO.live&&ok;const disc=on?Math.floor(base*PROMO.rate):0;return {ls,n,base,disc,final:base-disc,on,low:PROMO.live&&n>=PROMO.min&&!ok}}
-/* The 5% is a Cafe24 discount code (one per day, 주얼패치 분류 · 최소 주문금액 3만원). Cafe24 validates it at checkout; the garden only shows today's code and copies it. */
+/* The 5% is a Cafe24 discount code (one per week, 주얼패치 분류 · 최소 주문금액 3만원). Cafe24 validates it at checkout; the garden only shows today's code and copies it. */
 function cartTarget(l){return l.v?`${l.it.no}:${l.v[0]}:${l.qty}`:null}
 function cartUrl(){const parts=lines().map(cartTarget).filter(Boolean);return CART_URL+'#c='+parts.join(',')+'&s='+SID}
 function copyCode(){const c=PROMO.code;if(!c)return;const done=()=>toast(`할인코드 ${c} 를 복사했어요 · 결제 단계 '할인코드'에 붙여넣어 주세요`);
@@ -1171,8 +1257,8 @@ function promoHTML(b){if(!PROMO.live)return'';const pv=PROMO.preview?'<small cla
   if(b.low)return `<div class="promo hint"><b>주얼패치 가든 단독 혜택 🌷</b><span>레이어드 합계 ${won(PROMO.minAmt)} 이상부터 추가 5% 할인코드를 드려요</span>${pv}</div>`;
   if(b.n<PROMO.min)return `<div class="promo hint"><b>주얼패치 가든 단독 혜택 🌷</b><span>주얼패치 1개만 더 레이어드하면 추가 5% 할인!</span>${pv}</div>`;
   return `<div class="promo on"><b>🎁 주얼패치 가든 단독 혜택 적용!</b><span>나만의 이어룩 추가 5% 할인</span>
-    <div class="pcode"><span>오늘의 가든 할인코드</span><b>${esc(PROMO.code||'')}</b><button type="button" data-copy>복사</button></div>
-    <small class="pc-how">결제 단계 ‘할인코드’에 입력하면 적용돼요 · 오늘 자정까지 · 보유 쿠폰과 함께 쓸 수 있어요</small>${pv}</div>`}
+    <div class="pcode"><span>이번 주 가든 할인코드</span><b>${esc(PROMO.code||'')}</b><button type="button" data-copy>복사</button></div>
+    <small class="pc-how">결제 단계 ‘할인코드’에 입력하면 적용돼요 · ${esc(PROMO.until||'이번 주 일요일까지')} · 보유 쿠폰과 함께 쓸 수 있어요</small>${pv}</div>`}
 function sumHTML(b){return b.on?`<div class="psum"><div class="r"><span>기존 판매가</span><s>${won(b.base)}</s></div><div class="r disc"><span>레이어드 추가 할인 5%</span><span>−${won(b.disc)}</span></div><div class="r fin"><span>최종 구매가<small> (코드 입력 시)</small></span><strong>${won(b.final)}</strong></div></div>`
   :`<div class="psum"><div class="r fin"><span>총 ${b.n}개</span><strong>${won(b.final)}</strong></div></div>`}
 function lineCtl(l){const vs=VARIANTS[l.it.no]||[];return `<div class="lctl">${vs.length>1?`<select data-opt="${l.it.no}" aria-label="${esc(shortName(l.it.name))} 옵션">${vs.map(v=>`<option value="${v[0]}"${l.v&&v[0]===l.v[0]?' selected':''}>${esc(v[1]||'기본')}</option>`).join('')}</select>`:`<small>${esc(l.v&&l.v[1]?l.v[1]:'단일 옵션')}</small>`}
@@ -1311,10 +1397,10 @@ $('#skipStudio').onclick=()=>{$('#entry').hidden=true;stOpen()};
 $('#studioBtn').onclick=()=>{$('#entry').hidden=true;closeSheet();stOpen()};
 try{const io=new IntersectionObserver(es=>es.forEach(e=>$('#rsSticky').classList.toggle('off',e.isIntersecting)),{root:document.querySelector('.rs-in'),threshold:0.3});io.observe($('#rsBuy'))}catch(e){}
 
-/* today's garden code: Supabase only exposes the row for today's KST date, so future codes never ship with the page */
+/* this week's garden code: Supabase only exposes the row whose period covers today (KST), so future codes never ship with the page */
 (function(){if(typeof SB_URL==='undefined'||!window.fetch)return;
-  fetch(SB_URL+'/rest/v1/jp_codes?select=code',{headers:{apikey:SB_KEY}}).then(r=>r.ok?r.json():[]).then(rows=>{const c=rows&&rows[0]&&rows[0].code;if(!c)return;
-    PROMO.code=String(c).slice(0,20);PROMO.live=true;PROMO.preview=false;try{if(!$('#studio').hidden){$('#result').hidden?renderLook():renderBill()}}catch(e){}}).catch(()=>{})})();
+  fetch(SB_URL+'/rest/v1/jp_codes?select=code,end_day',{headers:{apikey:SB_KEY}}).then(r=>r.ok?r.json():[]).then(rows=>{const c=rows&&rows[0]&&rows[0].code;if(!c)return;
+    PROMO.code=String(c).slice(0,20);const e=new Date(String(rows[0].end_day||'')+'T00:00:00');if(!isNaN(e))PROMO.until=`${e.getMonth()+1}/${e.getDate()}(${'일월화수목금토'[e.getDay()]})까지`;PROMO.live=true;PROMO.preview=false;try{if(!$('#studio').hidden){$('#result').hidden?renderLook():renderBill()}}catch(e){}}).catch(()=>{})})();
 
 /* ---------- entry ---------- */
 function showEntry(){const h=$('#heroEar');if(h&&!h.dataset.done){h.dataset.done=1;const pr=[[7661,650,935,8],[7777,724,878,3],[7660,800,262,5],[7343,905,300,4],[7345,968,470,7]];
