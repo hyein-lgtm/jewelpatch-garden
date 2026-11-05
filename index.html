@@ -167,18 +167,20 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .cchips::-webkit-scrollbar{display:none}
 .cchip{flex:none;border:1px solid var(--s-line);background:#fff;border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:500;color:var(--s-sub)}
 .cchip[aria-pressed="true"]{background:var(--s-sage-t);border-color:var(--s-sage);color:var(--s-ink);font-weight:700;box-shadow:inset 0 -2px 0 var(--s-sage)}
-.st-body{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:24px;align-items:start}
+.st-body{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);grid-template-areas:'left right' 'left look';gap:16px 24px;align-items:start}
+.st-left{grid-area:left}.st-right{grid-area:right}.st-body>.lookbox{grid-area:look}
 @media (max-width:820px){.st-body{grid-template-columns:minmax(0,1fr);gap:14px}}
 .st-left{display:flex;flex-direction:column;gap:10px;min-width:0}
-.sit{font-size:17px;line-height:1.5;font-weight:700;letter-spacing:-.02em;margin:0;text-wrap:balance}
+.sit{font-size:17px;line-height:1.5;font-weight:700;letter-spacing:-.02em;margin:0 0 10px;text-wrap:balance}
 .sit b{color:var(--s-sage-d)}
 .sit.free{font-weight:600;color:var(--s-sub);font-size:15px}
 .stagewrap{position:relative;width:100%;max-width:420px;align-self:center}
-.stage{position:relative;width:100%;aspect-ratio:865/957;border-radius:18px;overflow:auto;user-select:none;-webkit-user-select:none;background:var(--s-ivory);scrollbar-width:none;overscroll-behavior:contain}
+.stage{position:relative;width:100%;aspect-ratio:550/805;border-radius:18px;overflow:auto;user-select:none;-webkit-user-select:none;background:var(--s-ivory);scrollbar-width:none;overscroll-behavior:contain}
 .stage::-webkit-scrollbar{display:none}
+.stage:not(.zoom){overflow:hidden}
 @media (max-width:820px){.stagewrap{max-width:min(100%,54vh)}}
-.zoomer{position:relative;width:100%;aspect-ratio:865/957;touch-action:none}
-.stage.zoom .zoomer{width:220%;touch-action:pan-x pan-y}
+.zoomer{position:relative;width:157.3%;aspect-ratio:865/957;touch-action:none}
+.stage.zoom .zoomer{width:300%;touch-action:pan-x pan-y}
 .zoomer svg.ear{position:absolute;inset:0;width:100%;height:100%}
 .zoomer .layer{position:absolute;inset:0}
 .pp{position:absolute;width:40px;height:40px;transform:translate(-50%,-50%);cursor:grab;touch-action:none;z-index:2;border-radius:50%}
@@ -224,19 +226,28 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
   .cchip{padding:7px 12px;font-size:13px}
   .sit{font-size:15px}
   .st-left{gap:8px}
-  .tray{grid-template-columns:none;grid-auto-flow:column;grid-template-rows:repeat(2,auto);grid-auto-columns:76px;overflow-x:auto;overflow-y:hidden;max-height:none;scroll-snap-type:x proximity;padding-bottom:4px}
-  .pc{scroll-snap-align:start;min-height:86px}
+  .tray{flex:1;min-height:0;max-height:none;overflow-y:auto;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:2px 2px 8px}
+  .pc{padding:5px 3px}.pc img{width:40px;height:40px}.pc span{font-size:10px}.pc small{font-size:9.5px}
   .st-right h3{font-size:14px}
-  .st-body{display:flex;flex-direction:column;gap:10px}
-  .st-body>*,.st-left>*,.st-right>*{min-width:0;max-width:100%}
-  .tray,.st-right .tabs,.cchips{width:100%;box-sizing:border-box}
+  .st-body{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-areas:'left right' 'look look';gap:10px;align-items:stretch}
+  .st-left,.st-right{height:clamp(340px,calc(100dvh - 300px),600px);min-height:0}
+  .st-left{display:flex;flex-direction:column;gap:6px;overflow-y:auto;scrollbar-width:none}
+  .st-right{display:flex;flex-direction:column;gap:6px;border-left:1px solid var(--s-line);padding-left:8px}
+  .st-right h3{display:none}
+  .st-right .tabs{flex:none;margin:0;gap:5px;padding-bottom:2px}
+  .st-right .tabs button{padding:5px 9px;font-size:11.5px}
   .st-in{overflow-x:hidden}
-  .st-left,.st-right{display:contents}
-  .stagewrap{position:sticky;top:calc(-12px - env(safe-area-inset-top,0px));z-index:6;max-width:none;width:auto;align-self:stretch;margin-inline:calc(-1*max(14px,env(safe-area-inset-left,0px))) calc(-1*max(14px,env(safe-area-inset-right,0px)));background:#fff;padding:6px max(14px,env(safe-area-inset-right,0px)) 8px max(14px,env(safe-area-inset-left,0px));box-shadow:0 10px 18px -14px rgba(0,0,0,.3)}
-  .stagewrap .stage{max-width:min(100%,42vh);margin:0 auto}
-  .stagewrap .ruler{top:14px;left:max(22px,calc(env(safe-area-inset-left,0px) + 8px))}.stagewrap .zbtn{top:14px;right:max(22px,calc(env(safe-area-inset-right,0px) + 8px))}
-  .stagewrap .selbar{position:absolute;left:12px;right:12px;bottom:12px;z-index:5;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding:5px;box-shadow:0 8px 20px rgba(0,0,0,.25);scrollbar-width:none}
-  .stagewrap .selbar button{flex:none;padding:6px 10px;font-size:12px}.stagewrap .selbar .sz{flex:none;max-width:9em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .stagewrap{max-width:none}
+  .stagewrap .ruler{top:6px;left:6px;padding:3px 5px;font-size:9.5px}.stagewrap .zbtn{top:6px;right:6px;padding:4px 8px;font-size:11px}
+  .hint{font-size:10.5px;bottom:6px;white-space:normal;width:86%;text-align:center}
+  .realnote{font-size:10.5px}
+  .legend2{gap:5px}.lg2{font-size:12px;gap:4px}.lg2 i{width:16px;height:16px;line-height:16px;font-size:10px}
+  .fill{width:100%;padding:9px 10px;font-size:12.5px}
+  .ctrl{justify-content:center}.ctrl button{padding:5px 10px;font-size:11.5px}
+  .sit{font-size:14px}
+  .guide3{margin-bottom:8px}
+  .selbar{position:fixed;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(78px + env(safe-area-inset-bottom,0px));z-index:14;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding:5px;box-shadow:0 8px 24px rgba(0,0,0,.3);scrollbar-width:none}
+  .selbar button{flex:none;padding:6px 10px;font-size:12px}.selbar .sz{flex:none;max-width:8em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .ctrl{justify-content:space-between}
   .legend2{gap:8px}.lg2{font-size:13px}.fill{padding:9px 12px;font-size:13px}
   .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:13;align-items:center;gap:10px;background:#fff;border-top:1px solid var(--s-line);box-shadow:0 -6px 20px rgba(0,0,0,.08);
@@ -310,9 +321,9 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
     <div class="st-h"><div><span class="en">Layered Ear Studio</span><h2>레이어드 미러</h2></div><button class="x" id="stClose" aria-label="닫기">×</button></div>
     <ol class="guide3" aria-label="이용 방법"><li><i>1</i>고민 고르기</li><li><i>2</i>귀에 패치 붙이기</li><li><i>3</i>한 번에 장바구니 담기</li></ol>
     <div class="concern"><h3>지금 나의 고민은?</h3><div class="cchips" id="cchips" role="group" aria-label="고민 선택"></div></div>
+    <p class="sit" id="sit"></p>
     <div class="st-body">
       <div class="st-left">
-        <p class="sit" id="sit"></p>
         <div class="stagewrap"><div class="stage" id="stage"><div class="zoomer" id="zoomer"><svg class="ear" id="earSvg" viewBox="153 223 865 957" aria-hidden="true"></svg><div class="layer" id="aps"></div><div class="layer" id="layer"></div></div></div>
           <div class="ruler" aria-hidden="true"><span id="rulerTxt">5mm</span><i id="rulerBar"></i></div>
           <button class="zbtn" id="zBtn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5M11 8.5v5M8.5 11h5"/></svg><span>확대</span></button>
@@ -326,8 +337,8 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
         <h3>패치 고르기</h3>
         <div class="tabs" id="stTabs" role="tablist"></div>
         <div class="tray" id="tray"></div>
-        <div class="lookbox" id="lookbox"></div>
       </div>
+      <div class="lookbox" id="lookbox"></div>
     </div>
     <div class="howto">
       <div><span class="en">How to apply</span><h3>주얼패치 부착 TIP</h3></div>
@@ -662,10 +673,17 @@ function onPeers(ch){const seen=new Set();let count=0;
 
 /* ---------- sheets ---------- */
 function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;t.style.opacity=1;clearTimeout(toast._t);toast._t=setTimeout(()=>{t.style.opacity=0;setTimeout(()=>t.hidden=true,300)},2200)}
-function sheet(eyebrow,title,body){$('#sheetIn').innerHTML=`<div class="grab"></div><div class="sh-head"><div><div class="eyebrow">${eyebrow}</div><h2>${title}</h2></div><button class="x" id="xBtn" aria-label="닫기">×</button></div>${body}`;
+function sheet(eyebrow,title,body){$('#sheetIn').innerHTML=`<div class="grab" title="아래로 내리면 닫혀요"></div><div class="sh-head"><div><div class="eyebrow">${eyebrow}</div><h2>${title}</h2></div><button class="x" id="xBtn" aria-label="닫기">×</button></div>${body}`;
   $('#sheet').hidden=false;$('#joy').style.visibility='hidden';$('#xBtn').onclick=closeSheet;$('#sheetIn').scrollTop=0;barKey=''}
 function closeSheet(){if($('#sheet').hidden)return;$('#sheet').hidden=true;$('#joy').style.visibility='';barKey='';if(!entered)$('#entry').hidden=false;canvas.focus({preventScroll:true})}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+(function(){const el=$('#sheetIn');let y0=null,dy=0,drag=false;
+  el.addEventListener('touchstart',e=>{if(el.scrollTop<=0){y0=e.touches[0].clientY;dy=0;drag=false}else y0=null},{passive:true});
+  el.addEventListener('touchmove',e=>{if(y0===null)return;dy=e.touches[0].clientY-y0;if(dy>6&&el.scrollTop<=0){drag=true;if(e.cancelable)e.preventDefault();el.style.transition='none';el.style.transform=`translateY(${dy}px)`}},{passive:false});
+  el.addEventListener('touchend',()=>{if(y0===null)return;el.style.transition='transform .22s ease';if(drag&&dy>80){el.style.transform='translateY(100%)';setTimeout(()=>{closeSheet();el.style.transform='';el.style.transition=''},200)}else el.style.transform='';y0=null;drag=false});
+  let acc=0,accT=0;el.addEventListener('wheel',e=>{const n=performance.now();if(n-accT>400)acc=0;accT=n;if(el.scrollTop<=0&&e.deltaY<0){acc-=e.deltaY;if(acc>320){acc=0;closeSheet()}}},{passive:true});
+  canvas.addEventListener('pointerdown',()=>{if(!$('#sheet').hidden)closeSheet()});
+})();
 const priceHTML=p=>`<div class="pr won">${p.list>p.sell?`<em>${off(p)}%</em>`:''}<strong>${won(p.sell)}</strong>${p.list>p.sell?`<s>${won(p.list)}</s>`:''}</div>`;
 const NOTE='<p class="note">구매하기를 누르면 WBL 공식몰 상품 페이지가 새 탭에서 열리고, 결제는 공식몰에서 진행돼요. 가격은 11월 5일 공식몰 기준이며 바뀔 수 있어요. 주얼패치는 전국 올리브영·오프뷰티 매장에서도 만날 수 있어요.</p>';
 const card=p=>{const tag=(p.name.match(/^\[([^\]]+)\]/)||[])[1];const nm=p.name.replace(/^\[[^\]]+\]\s*/,'');
@@ -699,6 +717,7 @@ function saveLook(){store.set('look3',look)}
 let zoom=false;
 function wOf(p){const a=ASP[p.no+'_'+p.pi]||1;return p.mm*MM*Math.max(1,a)/Math.max(1,a)*(a>=1?1:a)}
 function pxW(p,Z){const a=ASP[p.no+'_'+p.pi]||1;const big=p.mm*MM*Z;return a>=1?big:big*a}
+function fitStage(){if(zoom)return;const st=$('#stage'),z=$('#zoomer');st.scrollLeft=(470-VX)/VW*z.clientWidth;st.scrollTop=0}
 function stRender(){const Z=$('#zoomer').clientWidth||300;
   const L=$('#layer');L.innerHTML='';look.forEach(p=>{const d=document.createElement('div');d.className='pp'+(p.k===sel?' sel':'');d.dataset.k=p.k;d.style.left=(p.x*100)+'%';d.style.top=(p.y*100)+'%';
     const im=document.createElement('img');im.src=CUTS[p.no][p.pi];im.alt=shortName(ITEMS.find(x=>x.no===p.no).name)+' '+p.mm+'mm';im.draggable=false;im.style.width=pxW(p,Z)+'px';im.style.transform=`translate(-50%,-50%) rotate(${p.r}deg)`;d.appendChild(im);L.appendChild(d)});
@@ -718,7 +737,7 @@ function renderConcern(){const c=curC();
   const fb=$('#fillBtn');if(fb)fb.onclick=()=>{const cp=curPts();look=look.filter(p=>!cp.some(q=>Math.hypot(p.x-q.x,(p.y-q.y)*VH/VW)<0.03));
     (REC[c.id]||[]).forEach((no,i)=>{if(!CUTS[no]||!cp[i])return;look.push({k:++uid,no,pi:0,x:cp[i].x,y:cp[i].y,mm:mmOf(no,0).slice(-1)[0],r:0})});sel=null;saveLook();stRender();toast(`${c.n} 추천 패치를 붙였어요. 마음에 드는 패치로 바꿔보세요`)}}
 function stOpen(no){$('#studio').hidden=false;$('#bar').hidden=true;$('#joy').style.visibility='hidden';
-  $('#earSvg').innerHTML=EARSVG;renderConcern();renderTray();if(no)addPiece(no,0);requestAnimationFrame(stRender);stRender();barKey=''}
+  $('#earSvg').innerHTML=EARSVG;renderConcern();renderTray();if(no)addPiece(no,0);requestAnimationFrame(()=>{stRender();fitStage()});stRender();barKey=''}
 function stClose(){if($('#studio').hidden)return;$('#studio').hidden=true;$('#mbar').hidden=true;sel=null;$('#joy').style.visibility='';barKey='';if(!entered&&$('#sheet').hidden)$('#entry').hidden=false;canvas.focus({preventScroll:true})}
 $('#clrBtn').onclick=()=>{look=[];sel=null;saveLook();stRender()};
 function renderTray(){const styles=STYLES.filter(s=>pieceList.some(p=>p.it.style===s.id));
@@ -754,8 +773,8 @@ function renderLook(){const nos=[...new Set(look.map(p=>p.no))];const box=$('#lo
     if(b.dataset.mm){p.mm=+b.dataset.mm}const a=b.dataset.act;if(a==='rot')p.r=(p.r+20)%360;
     if(a==='front'){look=look.filter(q=>q!==p).concat(p)}if(a==='del'){look=look.filter(q=>q!==p);sel=null}saveLook();stRender()});
   $('#zBtn').onclick=()=>{zoom=!zoom;stage.classList.toggle('zoom',zoom);$('#zBtn').setAttribute('aria-pressed',zoom);$('#zBtn').querySelector('span').textContent=zoom?'원래 크기':'확대';
-    requestAnimationFrame(()=>{const p=look.find(q=>q.k===sel);const zw=zm.clientWidth,zh=zm.clientHeight;const fx=p?p.x:0.6,fy=p?p.y:0.45;stage.scrollLeft=fx*zw-stage.clientWidth/2;stage.scrollTop=fy*zh-stage.clientHeight/2;stRender()})};
-  addEventListener('resize',()=>{if(!$('#studio').hidden)stRender()});
+    requestAnimationFrame(()=>{if(!zoom){fitStage();stRender();return}const p=look.find(q=>q.k===sel);const zw=zm.clientWidth,zh=zm.clientHeight;const fx=p?p.x:0.7,fy=p?p.y:0.4;stage.scrollLeft=fx*zw-stage.clientWidth/2;stage.scrollTop=fy*zh-stage.clientHeight/2;stRender()})};
+  addEventListener('resize',()=>{if(!$('#studio').hidden){stRender();fitStage()}});
   $('#stClose').onclick=stClose;})();
 async function saveImage(){try{const W=900,EHp=Math.round(W*VH/VW),H=EHp+230,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
   g.fillStyle='#F7F5F0';g.fillRect(0,0,W,EHp);
