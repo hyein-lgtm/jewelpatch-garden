@@ -397,6 +397,16 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 @media (max-width:560px){.brand{display:none}.foundchip{top:calc(58px + env(safe-area-inset-top,0px))}
   .pc-img{aspect-ratio:auto;height:min(46vw,200px)}
   .pcard{gap:10px}.spec{margin-top:6px}.pdesc{display:none}}
+.tjoy{position:fixed;width:112px;height:112px;margin:-56px 0 0 -56px;border-radius:50%;z-index:4;pointer-events:none;background:rgba(255,252,247,.28);border:1.5px solid rgba(255,252,247,.85);box-shadow:0 4px 18px rgba(80,60,60,.15)}
+.tjoy[hidden]{display:none}
+.tjoy i{position:absolute;left:50%;top:50%;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:rgba(255,252,247,.95);box-shadow:0 4px 12px rgba(80,60,60,.25)}
+#scene{touch-action:none}
+.bar .dk-mid{border:0;background:transparent;font:inherit;cursor:pointer;border-radius:12px}
+.bar .dk-mid:active{background:#F4ECE7}
+.dest{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.dest button{border:0;border-radius:16px;background:var(--c);padding:10px 6px;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:104px;font:inherit;color:#4A3A3C}
+.dest img{width:46px;height:46px;object-fit:contain;filter:drop-shadow(0 3px 5px rgba(0,0,0,.12))}
+.dest b{font-size:12.5px;line-height:1.2;text-align:center}.dest small{font-size:10.5px;color:#7C6A6C}
 </style>
 
 </head>
@@ -414,7 +424,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 
 <div class="bar" id="bar" hidden></div>
 <div class="chip foundchip" id="foundChip"></div>
-<div class="coach" id="coach" hidden></div>
+<div class="coach" id="coach" hidden></div><div class="tjoy" id="tjoy" hidden><i id="tknob"></i></div>
 <div class="joy" id="joy" aria-hidden="true"><i id="knob"></i></div>
 <button class="heart" id="heartBtn" aria-label="하트 보내기"><svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z" fill="#C2475A"/></svg></button>
 <div class="keys">바닥 클릭으로 이동 · 드래그로 둘러보기 · 패치 클릭으로 상품 보기 · 휠로 확대</div>
@@ -835,12 +845,21 @@ addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;keys[e.key.t
   if(e.key==='Escape'){if(!$('#studio').hidden)stClose();else closeSheet()}});
 addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false});
 let target=null,pending=null;const ray=new THREE.Raycaster();const ndc=new THREE.Vector2();let drag=null;const ptrs=new Map();let pinch0=null;
-canvas.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),c:camDist};drag=null;return}
-  yawGoal=null;drag={x:e.clientX,y:e.clientY,yaw:camYaw,pitch:camPitch,moved:false,id:e.pointerId};try{canvas.setPointerCapture(e.pointerId)}catch(_){}});
+/* touch: 1 finger drag = walk (floating stick) · 2 fingers = turn/zoom · tap = go/select. mouse: drag = look */
+const tjoy=$('#tjoy'),tknob=$('#tknob');const TJ={x:0,y:0,on:false};const TR=56;
+function stickShow(x,y){tjoy.style.left=x+'px';tjoy.style.top=y+'px';tjoy.hidden=false;tknob.style.transform=''}
+function stickHide(){tjoy.hidden=true;TJ.on=false;TJ.x=TJ.y=0}
+canvas.addEventListener('pointerdown',e=>{ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),c:camDist,mx:(a.x+b.x)/2,yaw:camYaw};drag=null;stickHide();return}
+  yawGoal=null;drag={x:e.clientX,y:e.clientY,yaw:camYaw,pitch:camPitch,moved:false,id:e.pointerId,touch:e.pointerType!=='mouse'};try{canvas.setPointerCapture(e.pointerId)}catch(_){}});
 canvas.addEventListener('pointermove',e=>{if(ptrs.has(e.pointerId))ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
-  if(pinch0&&ptrs.size===2){const [a,b]=[...ptrs.values()];camDist=Math.min(20,Math.max(7,pinch0.c*pinch0.d/Math.max(40,Math.hypot(a.x-b.x,a.y-b.y))));return}
-  if(!drag||e.pointerId!==drag.id)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.hypot(dx,dy)>(e.pointerType==='touch'?14:8))drag.moved=true;if(drag.moved){camYaw=drag.yaw-dx*0.006;camPitch=Math.min(1.15,Math.max(0.35,drag.pitch+dy*0.004))}});
-const upEnd=e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)pinch0=null;if(!drag||e.pointerId!==drag.id)return;const d=drag;drag=null;if(d.moved)return;
+  if(pinch0&&ptrs.size===2){const [a,b]=[...ptrs.values()];camDist=Math.min(20,Math.max(7,pinch0.c*pinch0.d/Math.max(40,Math.hypot(a.x-b.x,a.y-b.y))));camYaw=pinch0.yaw-((a.x+b.x)/2-pinch0.mx)*0.008;return}
+  if(!drag||e.pointerId!==drag.id)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+  if(!drag.moved&&Math.hypot(dx,dy)>(drag.touch?12:8)){drag.moved=true;if(drag.touch&&entered){stickShow(drag.x,drag.y);TJ.on=true;target=null;route=[];pending=null}}
+  if(!drag.moved)return;
+  if(drag.touch&&entered){const m=Math.hypot(dx,dy),k=m>TR?TR/m:1;TJ.x=dx*k/TR;TJ.y=dy*k/TR;tknob.style.transform=`translate(${dx*k}px,${dy*k}px)`}
+  else{camYaw=drag.yaw-dx*0.006;camPitch=Math.min(1.15,Math.max(0.35,drag.pitch+dy*0.004))}});
+const upEnd=e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)pinch0=null;if(!drag||e.pointerId!==drag.id)return;const d=drag;drag=null;if(d.moved){stickHide();return}
   const r=canvas.getBoundingClientRect();ndc.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1);ray.setFromCamera(ndc,camera);
   const h=ray.intersectObjects(hitMeshes,false)[0];
   if(h){const hd=h.object.userData.hit;
@@ -851,7 +870,7 @@ const upEnd=e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)pinch0=null;if(!drag||e.
     if(hd.kind==='shop'){const pd=PEDS.find(q=>q.p.id===hd.id);walkTo(pd);pending={kind:'shop',id:hd.id};return}
     if(hd.kind==='gift'){const gf=GIFTS[hd.i];if(Math.hypot(P.x-gf.x,P.z-gf.z)<2.6)openGift(gf);else{const l=Math.hypot(gf.x,gf.z)||1;plan(gf.x-gf.x/l*1.5,gf.z-gf.z/l*1.5);pending={kind:'gift',gf}}return}}
   if(!entered)return;const f=ray.intersectObject(floor,false)[0];if(f){plan(f.point.x,f.point.z);pending=null;tapMark(f.point.x,f.point.z)}};
-canvas.addEventListener('pointerup',upEnd);canvas.addEventListener('pointercancel',e=>{ptrs.delete(e.pointerId);pinch0=null;drag=null});
+canvas.addEventListener('pointerup',upEnd);canvas.addEventListener('pointercancel',e=>{ptrs.delete(e.pointerId);pinch0=null;drag=null;stickHide()});
 canvas.addEventListener('wheel',e=>{e.preventDefault();camDist=Math.min(20,Math.max(7,camDist*(e.deltaY>0?1.08:0.93)))},{passive:false});
 const mark=new THREE.Mesh(new THREE.RingGeometry(0.22,0.34,24),new THREE.MeshBasicMaterial({color:LC('#FFFFFF'),transparent:true,opacity:0,depthWrite:false}));mark.rotation.x=-Math.PI/2;mark.position.y=0.05;scene.add(mark);let markT=9;
 function tapMark(x,z){mark.position.x=x;mark.position.z=z;markT=0}
@@ -890,14 +909,17 @@ function openProductCard(no,from){const it=ITEMS.find(x=>x.no===+no);if(!it)retu
 let near=null,nearStudio=false,tourIdx=-1,barKey='',hintShown=store.get('hint1',0);
 const DESTS=[{kind:'studio',name:'내 귀 꾸미기',sub:'광장 · 레이어드 미러',x:0,z:4.6},...PEDS.map(pd=>({kind:'shop',pd,name:pd.p.name,sub:pd.p.en+' 쇼룸 · '+byStyle(pd.p.id).length+'종',x:pd.fx,z:pd.fz}))];
 function goDest(i){tourIdx=(i+DESTS.length)%DESTS.length;const d=DESTS[tourIdx];if(d.kind==='studio')plan(d.x,d.z,0);else walkTo(d.pd);pending=null;barKey=''}
+function openDestPicker(){if(!entered)return;sheet('Village Map','어디로 갈까요?',`<div class="dest">${DESTS.map((d,i)=>{const pd=d.pd;const top=pd&&pd.list[0];const img=d.kind==='studio'?(CUTS[7661]||[])[0]:top&&CUTS[top.no]?CUTS[top.no][0]:top?top.th:'';
+    return `<button data-dest="${i}" style="--c:${pd?(SHOPCOL[pd.p.id]||['#eee','#ddd'])[0]:'#F3E3E0'}">${img?`<img src="${img}" alt="">`:''}<b>${esc(d.name)}</b><small>${d.kind==='studio'?'진짜 크기로 붙여보기':byStyle(pd.p.id).length+'종'}</small></button>`}).join('')}</div><p class="note">누르면 캐릭터가 그 가게 앞까지 걸어가요.</p>`);
+  document.querySelectorAll('[data-dest]').forEach(b=>b.onclick=()=>{closeSheet();goDest(+b.dataset.dest)})}
 function watchers(id){let n=0;others.forEach(o=>{if(o.v===id)n++});return n}
 function renderBar(){const b=$('#bar');if(!entered||!$('#sheet').hidden||!$('#studio').hidden){b.hidden=true;return}
   let title,sub,act='',actTxt='';
   if(near){const w=watchers(near.p.id);title=near.p.name+' 쇼룸';sub=w?`지금 ${w}명이 같이 보고 있어요`:'진열된 패치를 눌러 자세히 보세요';act='shop';actTxt='전체 '+byStyle(near.p.id).length+'종'}
   else if(nearStudio){title='내 귀 꾸미기';sub='진짜 패치를 내 귀에 붙여봐요';act='studio';actTxt='시작하기'}
-  else{const d=DESTS[(tourIdx+1+DESTS.length)%DESTS.length];title=target?'이동 중…':'어디로 갈까요?';sub=target?'':'화살표로 가게를 둘러보거나 땅을 톡 눌러 걸어요';act='';}
-  b.innerHTML=`<button class="dk-arr" id="dkPrev" aria-label="이전 장소">‹</button><div class="dk-mid"><b>${esc(title)}</b>${sub?`<small>${esc(sub)}</small>`:''}</div>${act?`<button class="dk-act" id="dkAct">${actTxt}</button>`:''}<button class="dk-arr" id="dkNext" aria-label="다음 장소">›</button>`;
-  b.hidden=false;$('#dkPrev').onclick=()=>goDest(tourIdx-1);$('#dkNext').onclick=()=>goDest(tourIdx+1);
+  else{const d=DESTS[(tourIdx+1+DESTS.length)%DESTS.length];title=target?'이동 중…':'어디로 갈까요?';sub=target?'':'여기를 누르면 가고 싶은 가게로 데려다줘요';act='';}
+  b.innerHTML=`<button class="dk-arr" id="dkPrev" aria-label="이전 장소">‹</button><button class="dk-mid" id="dkMid" type="button"><b>${esc(title)}</b>${sub?`<small>${esc(sub)}</small>`:''}</button>${act?`<button class="dk-act" id="dkAct">${actTxt}</button>`:''}<button class="dk-arr" id="dkNext" aria-label="다음 장소">›</button>`;
+  b.hidden=false;$('#dkMid').onclick=openDestPicker;$('#dkPrev').onclick=()=>goDest(tourIdx-1);$('#dkNext').onclick=()=>goDest(tourIdx+1);
   const a=$('#dkAct');if(a)a.onclick=()=>{if(act==='shop')openShop(near.p.id);else stOpen()}}
 function updateNear(){let best=null,bd=1e9;for(const pd of PEDS){const d=Math.hypot(P.x-pd.fx,P.z-pd.fz);if(d<bd){bd=d;best=pd}}const nn=bd<3.6?best:null;
   if(nn!==near){near=nn;if(nn&&entered){burst(nn.fx*0.85+nn.x*0.15,2.2,nn.fz*0.85+nn.z*0.15);tourIdx=DESTS.findIndex(d=>d.pd===nn)}}
@@ -911,12 +933,13 @@ function frame(){
   const dt=Math.min(clock.getDelta(),0.05),t=clock.elapsedTime;let mx=0,mz=0;
   if(!$('#studio').hidden){requestAnimationFrame(frame);return}
   if(entered&&$('#sheet').hidden){const kf=(keys['w']||keys['arrowup']?1:0)-(keys['s']||keys['arrowdown']?1:0),kr=(keys['d']||keys['arrowright']?1:0)-(keys['a']||keys['arrowleft']?1:0);
-    if(kf||kr){target=null;route=[];pending=null;yawGoal=null;const fx=-Math.sin(camYaw),fz=-Math.cos(camYaw),rx=Math.cos(camYaw),rz=-Math.sin(camYaw);mx=fx*kf+rx*kr;mz=fz*kf+rz*kr;const m=Math.hypot(mx,mz);if(m>1){mx/=m;mz/=m}}
+    const jf=TJ.on?-TJ.y:0,jr=TJ.on?TJ.x:0;
+    if(kf||kr||Math.hypot(jf,jr)>0.15){const kf2=kf+jf,kr2=kr+jr;target=null;route=[];pending=null;yawGoal=null;const fx=-Math.sin(camYaw),fz=-Math.cos(camYaw),rx=Math.cos(camYaw),rz=-Math.sin(camYaw);mx=fx*kf2+rx*kr2;mz=fz*kf2+rz*kr2;const m=Math.hypot(mx,mz);if(m>1){mx/=m;mz/=m}}
     else if(target){const dx=target.x-P.x,dz=target.z-P.z,d=Math.hypot(dx,dz);if(d<(route.length?0.9:0.3)){if(route.length){target=route.shift()}else{target=null;barKey='';if(route.face!=null){yawGoal=route.face;route.face=null}}
         if(!target&&
         pending){const pq=pending;pending=null;if(pq.kind==='studio')stOpen();else if(pq.kind==='gift')openGift(pq.gf)}}else{mx=dx/d;mz=dz/d}}}
   const moving=Math.hypot(mx,mz)>0.05;
-  if(moving){const ox=P.x,oz=P.z;P.x+=mx*6*dt;P.z+=mz*6*dt;let dr=Math.atan2(mx,mz)-P.ry;dr=Math.atan2(Math.sin(dr),Math.cos(dr));P.ry+=dr*Math.min(1,dt*12);resolve();
+  if(moving){const ox=P.x,oz=P.z;const spd=target&&(route.length||route.face!=null||pending)?9:6.5;P.x+=mx*spd*dt;P.z+=mz*spd*dt;let dr=Math.atan2(mx,mz)-P.ry;dr=Math.atan2(Math.sin(dr),Math.cos(dr));P.ry+=dr*Math.min(1,dt*12);resolve();
     if(target&&Math.hypot(P.x-ox,P.z-oz)<dt*0.6){target.stuck=(target.stuck||0)+dt;if(target.stuck>0.6){target=route.length?route.shift():null;if(!target){pending=null;barKey=''}}}}
   if(player){player.position.set(P.x,0,P.z);player.rotation.y=P.ry;animAvatar(player,moving,dt)}
   updateNear();
@@ -949,10 +972,10 @@ addEventListener('resize',resize);resize();
 /* ---------- first-visit coach (touch-first) ---------- */
 function showCoach(){const c=$('#coach');if(!c)return;const touch=matchMedia('(pointer:coarse)').matches;
   c.innerHTML=`<div class="co-in"><b>이렇게 둘러보세요</b>
-   <div class="co-row"><i class="co-ic">👆</i><div><strong>땅을 ${touch?'톡':'클릭'}</strong><small>그 자리로 걸어가요</small></div></div>
+   ${touch?'<div class="co-row"><i class="co-ic">👆</i><div><strong>화면을 누른 채 끌기</strong><small>끄는 방향으로 걸어가요 · 땅을 톡 눌러도 가요</small></div></div>':'<div class="co-row"><i class="co-ic">👆</i><div><strong>땅을 클릭</strong><small>그 자리로 걸어가요 · 드래그하면 둘러봐요</small></div></div>'}
    <div class="co-row"><i class="co-ic">✨</i><div><strong>반짝이는 패치를 ${touch?'톡':'클릭'}</strong><small>가격 보고 바로 구매할 수 있어요</small></div></div>
-   <div class="co-row"><i class="co-ic">‹ ›</i><div><strong>아래 화살표</strong><small>가게 8곳을 차례로 데려다줘요</small></div></div>
-   ${touch?'<div class="co-row"><i class="co-ic">✌️</i><div><strong>두 손가락</strong><small>벌리면 가까이, 밀면 둘러보기</small></div></div>':''}
+   <div class="co-row"><i class="co-ic">🗺</i><div><strong>아래 안내바 누르기</strong><small>가고 싶은 가게를 고르면 알아서 데려다줘요</small></div></div>
+   ${touch?'<div class="co-row"><i class="co-ic">✌️</i><div><strong>두 손가락</strong><small>벌리면 가까이 · 옆으로 밀면 시점 돌리기</small></div></div>':''}
    <button class="buy" id="coachOk">시작하기</button></div>`;
   c.hidden=false;const done=()=>{c.hidden=true;store.set('coach1',1)};$('#coachOk').onclick=done;c.onclick=e=>{if(e.target===c)done()}}
 
