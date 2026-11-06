@@ -643,6 +643,10 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 .eai-err{margin-top:10px;background:#FFF4E5;border:1px solid #F2D3A6;color:#7A4E12;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.55;display:grid;gap:4px}
 .eai-err small{color:#9A7A55;font-size:11px;word-break:break-all}
 .eai-err .eai-link{justify-self:start;padding:2px 0}
+.eai-cands{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:13.5px;font-weight:700}
+.eai-cands span{margin-right:4px}
+.eai-cands button{border:1px solid var(--e-line);background:#fff;border-radius:999px;padding:7px 14px;font:inherit;font-size:13px;cursor:pointer}
+.eai-cands button[aria-pressed="true"]{background:#8E7BB5;border-color:#8E7BB5;color:#fff}
 </style>
 
 </head>
@@ -1826,8 +1830,8 @@ self.onmessage=async e=>{const m=e.data;try{
  else if(m.type==='decode'){const r=inp.reshaped_input_sizes[0];const pts=m.points.map(p=>[p[0]*r[1],p[1]*r[0]]);
   const ip=new Tensor('float32',Float32Array.from(pts.flat()),[1,1,pts.length,2]);const il=new Tensor('int64',BigInt64Array.from(m.labels.map(v=>BigInt(v))),[1,1,m.labels.length]);
   const out=await model({...emb,input_points:ip,input_labels:il});const masks=await proc.post_process_masks(out.pred_masks,inp.original_sizes,inp.reshaped_input_sizes);
-  const t=masks[0],d=t.dims,H=d[d.length-2],W=d[d.length-1],n=d.length>2?d[d.length-3]:1;const sc=Array.from(out.iou_scores.data);let bi=0;for(let i=1;i<Math.min(n,sc.length);i++)if(sc[i]>sc[bi])bi=i;
-  const plane=new Uint8Array(W*H),off=bi*W*H,src=t.data;for(let i=0;i<W*H;i++)plane[i]=src[off+i]?1:0;self.postMessage({type:'mask',W,H,score:sc[bi],mask:plane},[plane.buffer])}
+  const t=masks[0],d=t.dims,H=d[d.length-2],W=d[d.length-1],n=d.length>2?d[d.length-3]:1;const sc=Array.from(out.iou_scores.data).slice(0,n);const src=t.data;const planes=[];for(let k=0;k<n;k++){const p=new Uint8Array(W*H),off=k*W*H;for(let i=0;i<W*H;i++)p[i]=src[off+i]?1:0;planes.push(p)}
+  self.postMessage({type:'mask',W,H,scores:sc,masks:planes},planes.map(p=>p.buffer))}
 }catch(err){self.postMessage({type:'error',msg:String(err&&err.message||err)})}};`;
 function eaiRunner(){if(EAI.runner)return EAI.runner;let w=null,cb=null;const send=(msg)=>new Promise((res,rej)=>{cb={res,rej,type:msg.type};w.postMessage(msg)});
   if(!EAI.noWorker){try{w=new Worker(URL.createObjectURL(new Blob([EAI_WORKER],{type:'text/javascript'})),{type:'module'})}catch(e){w=null}}
@@ -1839,8 +1843,7 @@ function eaiRunner(){if(EAI.runner)return EAI.runner;let w=null,cb=null;const se
     if(m.type==='embed'){const img=await RawImage.fromURL(m.url);inp=await proc(img);emb=await model.get_image_embeddings(inp);return {type:'embedded'}}
     if(m.type==='decode'){const r=inp.reshaped_input_sizes[0];const pts=m.points.map(p=>[p[0]*r[1],p[1]*r[0]]);const ip=new Tensor('float32',Float32Array.from(pts.flat()),[1,1,pts.length,2]);const il=new Tensor('int64',BigInt64Array.from(m.labels.map(v=>BigInt(v))),[1,1,m.labels.length]);
       const out=await model({...emb,input_points:ip,input_labels:il});const masks=await proc.post_process_masks(out.pred_masks,inp.original_sizes,inp.reshaped_input_sizes);
-      const t=masks[0],d=t.dims,H=d[d.length-2],W=d[d.length-1],n=d.length>2?d[d.length-3]:1;const sc=Array.from(out.iou_scores.data);let bi=0;for(let i=1;i<Math.min(n,sc.length);i++)if(sc[i]>sc[bi])bi=i;
-      const plane=new Uint8Array(W*H),off=bi*W*H;for(let i=0;i<W*H;i++)plane[i]=t.data[off+i]?1:0;return {type:'mask',W,H,score:sc[bi],mask:plane}}}};return EAI.runner}
+      const t=masks[0],d=t.dims,H=d[d.length-2],W=d[d.length-1],n=d.length>2?d[d.length-3]:1;const sc=Array.from(out.iou_scores.data).slice(0,n);const planes=[];for(let k=0;k<n;k++){const p=new Uint8Array(W*H),off=k*W*H;for(let i=0;i<W*H;i++)p[i]=t.data[off+i]?1:0;planes.push(p)}return {type:'mask',W,H,scores:sc,masks:planes}}}};return EAI.runner}
 let eaiProgAgg={};function eaiProgress(p){if(!p||!p.file)return;if(p.status==='progress')eaiProgAgg[p.file]=p.progress||0;else if(p.status==='done')eaiProgAgg[p.file]=100;
   const v=Object.values(eaiProgAgg);const pct=v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length):0;const el=$('#eaiProg');if(el){el.style.setProperty('--p',pct+'%');el.dataset.p=pct}}
 
@@ -1939,7 +1942,7 @@ function eaiClose(){camStop();$('#eai').hidden=true;barKey=''}
 async function eaiPick(f){clearResume();if(!f)return;$('#eaiFile').value='';$('#eaiCam').value='';const url=URL.createObjectURL(f);const im=new Image();im.src=url;try{await im.decode()}catch(e){toast('사진을 열 수 없어요. 다른 사진으로 해볼까요?');return}
   const M=1024,s=Math.min(1,M/Math.max(im.naturalWidth,im.naturalHeight));const c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*s);c.height=Math.round(im.naturalHeight*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
   EAI.img=c;EAI.W=c.width;EAI.H=c.height;EAI.url=c.toDataURL('image/jpeg',0.92);EAI.pt=[0.5,0.5];EAI.mask=null;EAI.comment=null;EAI.adj=null;EAI.adjOn=false;eaiAim()}
-function eaiAim(){$('#eaiBody').innerHTML=`<p class="eai-step">① 귀를 톡 눌러 주세요</p><div class="eai-pic"><span class="eai-fr" id="eaiPic"><img src="${EAI.url}" alt="선택한 귀 사진"><canvas id="eaiMaskC"></canvas><i class="eai-dot" id="eaiDot"></i></span></div>
+function eaiAim(){$('#eaiBody').innerHTML=`<p class="eai-step">① 귀 한가운데를 톡 눌러 주세요</p><div class="eai-pic"><span class="eai-fr" id="eaiPic"><img src="${EAI.url}" alt="선택한 귀 사진"><canvas id="eaiMaskC"></canvas><i class="eai-dot" id="eaiDot"></i></span></div>
   <p class="eai-tip">AI가 누른 곳의 귀를 찾아 배경과 분리해요. 엇나가면 귀를 다시 눌러 주세요.</p>${sideHTML()}<div class="eai-load" id="eaiProg" data-p="0"><span>AI 준비 중</span></div>
   <div class="eai-acts"><button class="buy" id="eaiGo" disabled>이 귀로 분석하기</button><button class="ghost" id="eaiRe">다시 고르기</button></div>`;
   const pic=$('#eaiPic'),dot=$('#eaiDot');const place=()=>{dot.style.left=EAI.pt[0]*100+'%';dot.style.top=EAI.pt[1]*100+'%'};place();
@@ -1949,10 +1952,10 @@ async function eaiSegment(first){if(EAI.busy){EAI.again=true;return}EAI.busy=tru
   try{const R=eaiRunner();EAI.stage='모델 내려받기';if(!EAI.loaded){say('AI 모델 내려받는 중 (처음 한 번만)');await R.send({type:'load'});EAI.loaded=true}
     EAI.stage='사진 읽기';if(first||!EAI.embedded){say('AI가 사진을 읽는 중…');await R.send({type:'embed',url:EAI.url});EAI.embedded=EAI.url}
     if(EAI.embedded!==EAI.url){await R.send({type:'embed',url:EAI.url});EAI.embedded=EAI.url}
-    EAI.stage='윤곽 찾기';say('귀 윤곽을 찾는 중…');const r=await R.send({type:'decode',points:[EAI.pt],labels:[1]});EAI.mask=r.mask;EAI.mW=r.W;EAI.mH=r.H;EAI.score=r.score;
-    const st=maskStats(r.mask,r.W,r.H);const c=$('#eaiMaskC');if(c){c.width=r.W;c.height=r.H;const g=c.getContext('2d');const id=g.createImageData(r.W,r.H);for(let i=0;i<r.W*r.H;i++){if(r.mask[i]){id.data[i*4]=142;id.data[i*4+1]=123;id.data[i*4+2]=181;id.data[i*4+3]=105}}g.putImageData(id,0,0)}
-    const ok=st&&st.area>0.015&&st.area<0.8&&st.ratio>1.15&&st.ratio<3.4;EAI.low=!ok||(r.score||0)<0.86;P.classList.add('done');
-    say(ok?`귀를 찾았어요 · AI 확신도 ${Math.round((r.score||0)*100)}%`:'귀가 아닌 것 같아요. 귀를 다시 눌러 주세요');$('#eaiGo').disabled=!st;$('#eaiGo').onclick=eaiConds;$('#eaiGo').textContent=ok?'이 귀로 분석하기':'그래도 이걸로 진행';try{track('ai_mask',{ok:ok?1:0},true)}catch(e){}}
+    EAI.stage='윤곽 찾기';say('귀 윤곽을 찾는 중…');const r=await R.send({type:'decode',points:[EAI.pt],labels:[1]});EAI.mW=r.W;EAI.mH=r.H;
+    EAI.cands=r.masks.map((m,k)=>({m,score:r.scores[k]||0,st:maskStats(m,r.W,r.H)})).filter(c=>c.st).sort((x,y)=>x.st.area-y.st.area);
+    const good=c=>c.st.area>0.01&&c.st.area<0.6&&c.st.ratio>1.25&&c.st.ratio<3.2&&c.score>0.55;
+    EAI.ci=Math.max(0,EAI.cands.findIndex(good));pickCand(EAI.ci);P.classList.add('done');try{track('ai_mask',{ok:EAI.okShape?1:0},true)}catch(e){}}
   catch(err){console.warn(err);const R0=EAI.runner;
     if(R0&&R0.worker&&!EAI.noWorker){EAI.noWorker=true;try{R0.kill()}catch(_){}EAI.runner=null;EAI.loaded=false;EAI.embedded=null;EAI.busy=false;say('다른 방식으로 AI를 다시 불러오는 중…');return eaiSegment(true)}
     const msg=`[${EAI.stage||'-'} 단계${EAI.noWorker?' · 기본모드':''}] `+String(err&&err.message||err).slice(0,140);say('AI를 불러오지 못해 분석하지 못했어요');EAI.runner=null;EAI.loaded=false;EAI.embedded=null;
@@ -1960,6 +1963,14 @@ async function eaiSegment(first){if(EAI.busy){EAI.again=true;return}EAI.busy=tru
     const P2=$('#eaiProg');if(P2&&!$('#eaiErr'))P2.insertAdjacentHTML('afterend',`<div class="eai-err" id="eaiErr">이 브라우저에서 AI 모델을 열지 못했어요. 카카오톡·인스타 안에서 열었다면 <b>크롬이나 삼성 인터넷</b>으로 열어 주세요. 분석하지 못한 결과는 만들지 않아요.<small>오류: ${esc(msg)}</small><button class="eai-link" id="eaiNoAI">사진 없이 기준 귀로 꾸미기</button></div>`);
     const na=$('#eaiNoAI');if(na)na.onclick=()=>{$('#eai').hidden=true;photoMode=false;stOpen()}}
   EAI.busy=false;if(EAI.again){EAI.again=false;eaiSegment()}}
+function pickCand(i){const c=EAI.cands[i];if(!c)return;EAI.ci=i;EAI.mask=c.m;EAI.score=c.score;const st=c.st,W=EAI.mW,H=EAI.mH;
+  const ok=st.area>0.01&&st.area<0.6&&st.ratio>1.25&&st.ratio<3.2;EAI.okShape=ok;EAI.low=!ok||c.score<0.86;
+  const cv=$('#eaiMaskC');if(cv){cv.width=W;cv.height=H;const g=cv.getContext('2d');const id=g.createImageData(W,H);for(let k=0;k<W*H;k++){if(c.m[k]){id.data[k*4]=142;id.data[k*4+1]=123;id.data[k*4+2]=181;id.data[k*4+3]=115}}g.putImageData(id,0,0)}
+  const P=$('#eaiProg');if(P)P.querySelector('span').textContent=ok?`보라색이 귀만 칠해졌는지 확인해 주세요 · AI 확신도 ${Math.round(c.score*100)}%`:'귀 모양이 아닌 것 같아요 · 아래에서 다른 범위를 고르거나 귀를 다시 눌러 주세요';
+  let box=$('#eaiCands');if(!box&&P){P.insertAdjacentHTML('afterend','<div class="eai-cands" id="eaiCands"></div>');box=$('#eaiCands')}
+  if(box)box.innerHTML='<span>칠해진 범위</span>'+EAI.cands.map((x,k)=>`<button data-ci="${k}" aria-pressed="${k===i}">${['작게','중간','크게'][k]||k+1}</button>`).join('');
+  if(box)box.querySelectorAll('[data-ci]').forEach(b=>b.onclick=()=>pickCand(+b.dataset.ci));
+  const g=$('#eaiGo');if(g){g.disabled=false;g.onclick=eaiConds;g.textContent=ok?'이 귀로 분석하기':'그래도 이걸로 진행'}}
 function eaiFree(){const r=EAI.runner;if(r&&r.kill){r.kill();EAI.runner=null;EAI.loaded=false;EAI.embedded=null}}
 function eaiConds(){EAI.W=EAI.mW||EAI.W;EAI.H=EAI.mH||EAI.H;eaiFree();try{buildEarPhoto();EAI.thumb=readThumb()}catch(err){console.warn(err);toast('귀 사진을 정리하지 못했어요. 다른 사진으로 다시 해볼까요?');eaiIntro();return}$('#eaiBody').innerHTML=`<p class="eai-step">② 오늘 컨디션은 어떤가요?</p><p class="eai-tip">직접 고른 컨디션으로만 메시지를 만들어요. 사진으로는 판단하지 않아요.</p>
   <div class="eai-conds">${COND.map((c,i)=>`<button data-c="${i}"><i>${c.e}</i>${esc(c.n)}</button>`).join('')}</div>`;
