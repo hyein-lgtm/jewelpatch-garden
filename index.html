@@ -657,6 +657,10 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 .eai-zoom{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .eai-zoom button{border:1px solid var(--e-line);background:#fff;border-radius:999px;padding:7px 12px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
 #eaiFull{cursor:crosshair}
+
+.eai-hero .eai-ear{flex:0 0 78px;height:auto;aspect-ratio:550/805;position:relative;border:0;border-radius:0;background:none;box-shadow:none}
+.eai-ear svg{position:absolute;inset:0;width:100%;height:100%}
+.eai-ear img{position:absolute;transform:translate(-50%,-50%);filter:drop-shadow(0 1px 2px rgba(60,40,40,.3))}
 </style>
 
 </head>
@@ -1337,7 +1341,7 @@ function openProductCard(no,from){const it=ITEMS.find(x=>x.no===+no);if(!it)retu
   const sib=ITEMS.filter(x=>x.style===it.style&&x.no!==it.no).slice(0,8);
   try{track('product_view',{no:it.no,from:from||''})}catch(e){}
   sheet(st?st.name+' · '+st.en:'Jewelpatch',esc(nm),`<div class="pcard">
-    <div class="pc-img${cut?'':' th'}">${cut?`<img class="cutimg" src="${cut[0]}" alt="${esc(nm)}">`:`<img src="${it.th}" alt="${esc(nm)}">`}${cut?`<button class="pkgbtn" type="button" data-pkg>패키지 보기</button>`:''}<div class="pc-badges">${isNew?'<i class="bdg new">NEW</i>':''}${isB?'<i class="bdg">BEST</i>':''}${tag&&!/best|new/i.test(tag)?`<i class="bdg celeb">${esc(tag)}</i>`:''}</div></div>
+    <div class="pc-img${cut?'':' th'}">${cut?`<img class="cutimg" src="${cut[0]}" alt="${esc(nm)}">`:`<img src="${it.th}" alt="${esc(nm)}">`}<div class="pc-badges">${isNew?'<i class="bdg new">NEW</i>':''}${isB?'<i class="bdg">BEST</i>':''}${tag&&!/best|new/i.test(tag)?`<i class="bdg celeb">${esc(tag)}</i>`:''}</div></div>
     <div class="pc-info">${priceHTML(it)}
       <dl class="spec">${sizes.length?`<div><dt>사이즈</dt><dd>${sizes.join(' · ')}</dd></div>`:''}<div><dt>옵션</dt><dd>${vs>1?vs+'가지 (색상·사이즈)':'단일 옵션'}</dd></div><div><dt>스타일</dt><dd>${st?st.name:''}</dd></div></dl>
       <p class="pdesc">${st?st.desc:''}</p>
@@ -1951,10 +1955,11 @@ function inApp(){const u=navigator.userAgent;return /KAKAOTALK/i.test(u)?'kakao'
 function openOutside(){const u=location.href;if(inApp()==='kakao'){location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(u);return}
   if(/Android/i.test(navigator.userAgent)){location.href='intent://'+u.replace(/^https?:\/\//,'')+'#Intent;scheme=https;package=com.android.chrome;end';return}
   try{navigator.clipboard.writeText(u);toast('주소를 복사했어요 · 사파리나 크롬에 붙여넣어 열어 주세요')}catch(e){toast('오른쪽 아래 ··· 메뉴에서 ‘다른 브라우저로 열기’를 눌러 주세요')}}
-const PHONE=/iPhone|iPad|Android|Mobi/i.test(navigator.userAgent);
-function freeGL(){if(!PHONE||EAI.glFreed)return;EAI.glFreed=true;try{renderer.setSize(2,2,false);renderer.dispose();renderer.forceContextLoss()}catch(e){}try{renderer.domElement.style.visibility='hidden'}catch(e){}}
-function backToGarden(){if(!EAI.glFreed||EAI.noBack)return false;try{sessionStorage.setItem('garden_back',String(Date.now()))}catch(e){}location.reload();return true}
-function eaiOpen(){freeGL();$('#eai').hidden=false;$('#bar').hidden=true;try{track('ai_start',{},true)}catch(e){}eaiIntro();eaiRunner().send({type:'load'}).then(()=>{EAI.loaded=true}).catch(()=>{})}
+const PHONE=/iPhone|iPad|Android|Mobi/i.test(navigator.userAgent);const AIPAGE=!!window.__AIPAGE;
+function onPages(){try{return !!SB_URL}catch(e){return false}}
+function freeGL(){if(!PHONE||EAI.glFreed||AIPAGE)return;EAI.glFreed=true;try{renderer.setSize(2,2,false);renderer.dispose();renderer.forceContextLoss()}catch(e){}try{renderer.domElement.style.visibility='hidden'}catch(e){}}
+function backToGarden(){if(EAI.noBack)return false;if(AIPAGE){location.href='./'+location.search;return true}if(!EAI.glFreed)return false;try{sessionStorage.setItem('garden_back',String(Date.now()))}catch(e){}location.reload();return true}
+function eaiOpen(){if(PHONE&&!AIPAGE&&onPages()){try{track('ai_start',{},true)}catch(e){}location.href='ai.html'+location.search;return}freeGL();$('#eai').hidden=false;$('#bar').hidden=true;try{track('ai_start',{},true)}catch(e){}eaiIntro();eaiRunner().send({type:'load'}).then(()=>{EAI.loaded=true}).catch(()=>{})}
 function eaiClose(){camStop();if(backToGarden())return;$('#eai').hidden=true;barKey=''}
 async function eaiPick(f){clearResume();if(!f)return;$('#eaiFile').value='';$('#eaiCam').value='';const url=URL.createObjectURL(f);const im=new Image();im.src=url;try{await im.decode()}catch(e){toast('사진을 열 수 없어요. 다른 사진으로 해볼까요?');return}
   const M=1600,s=Math.min(1,M/Math.max(im.naturalWidth,im.naturalHeight));const c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*s);c.height=Math.round(im.naturalHeight*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
@@ -2008,7 +2013,9 @@ async function eaiComment(){EAI.comment={loading:true};const s=EAI.stats,sw=shap
   const box=$('#eaiCmt');if(box)box.outerHTML=cmtHTML()}
 function cmtHTML(){const c=EAI.comment;if(!EAI.ai||!c)return '';if(c.loading)return `<div class="eai-cmt" id="eaiCmt"><b>AI 스타일리스트가 귀 실루엣을 보는 중…</b></div>`;if(c.fail)return `<div class="eai-cmt" id="eaiCmt" hidden></div>`;
   return `<div class="eai-cmt" id="eaiCmt"><span class="en">AI Stylist · Claude</span><b>${esc(c.title)}</b><p>${esc(c.text)}</p></div>`}
-function eaiIntro(){$('#eaiBody').innerHTML=`${inApp()?`<div class="eai-inapp"><b>${inApp()==='kakao'?'카카오톡':'앱'} 안의 브라우저에서는 AI 분석이 잘 안 돼요</b><span>크롬·사파리 같은 기본 브라우저로 열면 바로 할 수 있어요.</span><button class="buy" id="eaiOut">기본 브라우저로 열기</button></div>`:''}<div class="eai-hero"><div class="eai-ear"></div><p class="lead">내 귀 사진 한 장으로 <b>내 귀 위의 전통 이혈 포인트</b>를 살펴보고, 그 자리에 어울리는 주얼패치를 골라 바로 붙여봐요.</p></div>
+function earArt(){const pr=[[7661,650,935,8],[7777,724,878,3],[7660,800,262,5],[7343,905,300,4]];
+  return `<svg viewBox="470 225 550 805" aria-hidden="true">${EARSVG}</svg>${pr.filter(([n])=>CUTS[n]).map(([n,x,y,mm])=>`<img src="${CUTS[n][0]}" alt="" style="left:${(x-470)/550*100}%;top:${(y-225)/805*100}%;width:${mm*783/62/550*100}%">`).join('')}`}
+function eaiIntro(){$('#eaiBody').innerHTML=`${inApp()?`<div class="eai-inapp"><b>${inApp()==='kakao'?'카카오톡':'앱'} 안의 브라우저에서는 AI 분석이 잘 안 돼요</b><span>크롬·사파리 같은 기본 브라우저로 열면 바로 할 수 있어요.</span><button class="buy" id="eaiOut">기본 브라우저로 열기</button></div>`:''}<div class="eai-hero"><div class="eai-ear">${earArt()}</div><p class="lead">내 귀 사진 한 장으로 <b>내 귀 위의 전통 이혈 포인트</b>를 살펴보고, 그 자리에 어울리는 주얼패치를 골라 바로 붙여봐요.</p></div>
   <div class="eai-pbox on"><b>📱 기본 체험 · 이 기기 안에서만</b><ul>
    <li>귀 윤곽 찾기는 <b>이 휴대폰 브라우저 안</b>에서 돌아가는 AI(SlimSAM)가 해요. 처음 한 번 AI 모델 파일만 내려받고, <b>사진은 어디로도 보내지 않아요.</b></li>
    <li>사진과 분석 결과는 저장하지 않아요. 창을 닫거나 새로고침하면 사라져요.</li>
