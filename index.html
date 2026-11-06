@@ -520,6 +520,7 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 .bar.mini .dk-arr{width:34px;height:34px;border-radius:999px;font-size:20px;background:transparent}
 .bar.mini .dk-mid{padding:0 10px}
 .bar.mini .dk-mid b{font-family:inherit;font-size:13.5px;font-weight:700}
+.bar.mini .dk-mid{min-width:max-content}.bar.mini .dk-mid b{overflow:visible}
 .eai{position:fixed;inset:0;z-index:14;background:rgba(40,15,30,.55);display:flex;justify-content:center;align-items:stretch;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   --e-ink:#454342;--e-sub:#6B6764;--e-line:#E3DED6;--e-lav:#8E7BB5;--e-lav-t:#F1ECF8;--e-ivory:#F8F5F0;--e-sage-d:#66745A}
 .eai[hidden]{display:none}
@@ -1689,7 +1690,7 @@ function applyPreset(id){const pr=PRESETS.find(p=>p.id===id);if(!pr)return;if(lo
   if(!lookTitle)$('#rsName')&&($('#rsName').value='');sel=null;saveLook();firstPatch();track('preset',{id});renderChooser();stRender();toast(`${pr.n} 조합을 붙였어요`)}
 function stOpen(no){$('#studio').hidden=false;$('#bar').hidden=true;$('#joy').style.visibility='hidden';track('studio_start',{from:entered?'garden':'entry'},true);
   $('#earSvg').innerHTML=EARSVG;renderChooser();renderTray();if(no)addPiece(no,0);setTimeout(dragHint,500);requestAnimationFrame(()=>{stRender();fitStage()});stRender();barKey=''}
-function stClose(){if($('#studio').hidden)return;$('#studio').hidden=true;$('#result').hidden=true;$('#mbar').hidden=true;$('#selbar').hidden=true;sel=null;$('#joy').style.visibility='';barKey='';if(!entered&&$('#sheet').hidden)$('#entry').hidden=false;canvas.focus({preventScroll:true})}
+function stClose(){if($('#studio').hidden)return;if(typeof backToGarden==='function'&&backToGarden())return;$('#studio').hidden=true;$('#result').hidden=true;$('#mbar').hidden=true;$('#selbar').hidden=true;sel=null;$('#joy').style.visibility='';barKey='';if(!entered&&$('#sheet').hidden)$('#entry').hidden=false;canvas.focus({preventScroll:true})}
 document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;store.set('mode',mode);renderChooser()});
 $('#clrBtn').onclick=()=>{if(look.length)snapshot();look=[];sel=null;preset='';store.set('preset','');saveLook();renderChooser();stRender()};
 $('#undoBtn').onclick=()=>{if(!prev)return;look=prev;prev=null;$('#undoBtn').hidden=true;sel=null;saveLook();stRender()};
@@ -1950,18 +1951,21 @@ function inApp(){const u=navigator.userAgent;return /KAKAOTALK/i.test(u)?'kakao'
 function openOutside(){const u=location.href;if(inApp()==='kakao'){location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(u);return}
   if(/Android/i.test(navigator.userAgent)){location.href='intent://'+u.replace(/^https?:\/\//,'')+'#Intent;scheme=https;package=com.android.chrome;end';return}
   try{navigator.clipboard.writeText(u);toast('주소를 복사했어요 · 사파리나 크롬에 붙여넣어 열어 주세요')}catch(e){toast('오른쪽 아래 ··· 메뉴에서 ‘다른 브라우저로 열기’를 눌러 주세요')}}
-function eaiOpen(){$('#eai').hidden=false;$('#bar').hidden=true;try{track('ai_start',{},true)}catch(e){}eaiIntro();eaiRunner().send({type:'load'}).then(()=>{EAI.loaded=true}).catch(()=>{})}
-function eaiClose(){camStop();$('#eai').hidden=true;barKey=''}
+const PHONE=/iPhone|iPad|Android|Mobi/i.test(navigator.userAgent);
+function freeGL(){if(!PHONE||EAI.glFreed)return;EAI.glFreed=true;try{renderer.setSize(2,2,false);renderer.dispose();renderer.forceContextLoss()}catch(e){}try{renderer.domElement.style.visibility='hidden'}catch(e){}}
+function backToGarden(){if(!EAI.glFreed||EAI.noBack)return false;try{sessionStorage.setItem('garden_back',String(Date.now()))}catch(e){}location.reload();return true}
+function eaiOpen(){freeGL();$('#eai').hidden=false;$('#bar').hidden=true;try{track('ai_start',{},true)}catch(e){}eaiIntro();eaiRunner().send({type:'load'}).then(()=>{EAI.loaded=true}).catch(()=>{})}
+function eaiClose(){camStop();if(backToGarden())return;$('#eai').hidden=true;barKey=''}
 async function eaiPick(f){clearResume();if(!f)return;$('#eaiFile').value='';$('#eaiCam').value='';const url=URL.createObjectURL(f);const im=new Image();im.src=url;try{await im.decode()}catch(e){toast('사진을 열 수 없어요. 다른 사진으로 해볼까요?');return}
-  const M=2048,s=Math.min(1,M/Math.max(im.naturalWidth,im.naturalHeight));const c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*s);c.height=Math.round(im.naturalHeight*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
+  const M=1600,s=Math.min(1,M/Math.max(im.naturalWidth,im.naturalHeight));const c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*s);c.height=Math.round(im.naturalHeight*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
   setFull(c)}
 /* the photo can be a normal profile selfie: the visitor taps the ear on the whole photo, we zoom in around it */
 function setFull(c){EAI.full=c;EAI.zs=0.36;EAI.mask=null;EAI.comment=null;EAI.adj=null;EAI.adjOn=false;eaiFind()}
-function eaiFind(){const u=EAI.full.toDataURL('image/jpeg',0.85);$('#eaiBody').innerHTML=`<p class="eai-step">① 사진에서 귀를 톡 눌러 주세요</p><div class="eai-pic"><span class="eai-fr" id="eaiFull"><img src="${u}" alt="찍은 사진"></span></div>
+function eaiFind(){const F=EAI.full,k=Math.min(1,900/Math.max(F.width,F.height)),pc=document.createElement('canvas');pc.width=Math.round(F.width*k);pc.height=Math.round(F.height*k);pc.getContext('2d').drawImage(F,0,0,pc.width,pc.height);const u=pc.toDataURL('image/jpeg',0.8);$('#eaiBody').innerHTML=`<p class="eai-step">① 사진에서 귀를 톡 눌러 주세요</p><div class="eai-pic"><span class="eai-fr" id="eaiFull"><img src="${u}" alt="찍은 사진"></span></div>
   <p class="eai-tip">귀가 작게 나와도 괜찮아요. 누른 곳을 AI가 확대해서 귀를 찾아요.</p><div class="eai-acts"><button class="ghost" id="eaiRe2">다른 사진으로</button></div>`;
   $('#eaiRe2').onclick=eaiIntro;$('#eaiFull').onclick=e=>{const r=e.currentTarget.getBoundingClientRect();EAI.fc=[(e.clientX-r.left)/r.width*EAI.full.width,(e.clientY-r.top)/r.height*EAI.full.height];zoomCrop()}}
 function zoomCrop(){const F=EAI.full,side=Math.max(160,Math.round(Math.min(F.width,F.height)*EAI.zs));const x0=Math.round(Math.min(Math.max(0,EAI.fc[0]-side/2),Math.max(0,F.width-side))),y0=Math.round(Math.min(Math.max(0,EAI.fc[1]-side*0.5),Math.max(0,F.height-side)));
-  const sw=Math.min(side,F.width-x0),sh=Math.min(side,F.height-y0),S=Math.min(4,1024/Math.max(sw,sh));const c=document.createElement('canvas');c.width=Math.round(sw*S);c.height=Math.round(sh*S);const g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(F,x0,y0,sw,sh,0,0,c.width,c.height);
+  const sw=Math.min(side,F.width-x0),sh=Math.min(side,F.height-y0),S=Math.min(4,800/Math.max(sw,sh));const c=document.createElement('canvas');c.width=Math.round(sw*S);c.height=Math.round(sh*S);const g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(F,x0,y0,sw,sh,0,0,c.width,c.height);
   EAI.img=c;EAI.W=c.width;EAI.H=c.height;EAI.url=c.toDataURL('image/jpeg',0.92);EAI.pt=[(EAI.fc[0]-x0)/sw,(EAI.fc[1]-y0)/sh];EAI.mask=null;eaiAim()}
 function eaiAim(){$('#eaiBody').innerHTML=`<p class="eai-step">② 확대한 사진에서 귀가 보라색으로 칠해졌는지 확인해 주세요</p><div class="eai-pic"><span class="eai-fr" id="eaiPic"><img src="${EAI.url}" alt="선택한 귀 사진"><canvas id="eaiMaskC"></canvas><i class="eai-dot" id="eaiDot"></i></span></div>
   <p class="eai-tip">엇나가면 귀 한가운데를 다시 눌러 주세요.</p>${EAI.full?`<div class="eai-zoom"><button id="eaiZin">🔍 더 가까이</button><button id="eaiZout">더 넓게</button><button id="eaiZback">전체 사진에서 다시 고르기</button></div>`:''}${sideHTML()}<div class="eai-load" id="eaiProg" data-p="0"><span>AI 준비 중</span></div>
@@ -2062,18 +2066,19 @@ async function eaiCamera(){if(!(navigator.mediaDevices&&navigator.mediaDevices.g
    <div class="eai-acts"><button class="buy" id="eaiTimer" disabled>⏱ 3초 뒤 자동 촬영</button><button class="ghost" id="eaiSnap" disabled>바로 찍기</button></div>
    <div class="eai-acts sm"><button class="ghost" id="eaiFlipCam">🔄 앞/뒤 카메라</button><button class="ghost" id="eaiCamAlbum">앨범에서 고르기</button></div>
    <p class="eai-tip">평소 셀카처럼 팔을 뻗은 채 <b>3초 타이머</b>를 누르고 고개만 옆으로 돌려 주세요. ‘삐’ 소리 세 번 뒤 찍혀요. 찍은 뒤 사진에서 귀를 누르면 AI가 확대해서 찾아요. 영상은 저장되거나 전송되지 않아요.</p><button class="eai-link" id="eaiCamX">취소하고 돌아가기</button>`;
-  const v=$('#eaiVid');const start=async()=>{camStop();try{CAM.st=await navigator.mediaDevices.getUserMedia({video:{facingMode:CAM.face,width:{ideal:1920},height:{ideal:1920}},audio:false});v.srcObject=CAM.st;await v.play().catch(()=>{});$('#eaiSnap').disabled=false;$('#eaiTimer').disabled=false;v.classList.toggle('mir',CAM.face==='user')}
+  const v=$('#eaiVid');const start=async()=>{camStop();try{CAM.st=await navigator.mediaDevices.getUserMedia({video:{facingMode:CAM.face,width:{ideal:1600},height:{ideal:1600}},audio:false});v.srcObject=CAM.st;await v.play().catch(()=>{});$('#eaiSnap').disabled=false;$('#eaiTimer').disabled=false;v.classList.toggle('mir',CAM.face==='user')}
     catch(e){camStop();toast('카메라를 열 수 없어요. 카메라 권한을 허용하거나 ‘앨범에서 고르기’를 이용해 주세요');eaiIntro()}};
   $('#eaiFlipCam').onclick=()=>{CAM.face=CAM.face==='user'?'environment':'user';start()};$('#eaiCamX').onclick=()=>{camStop();eaiIntro()};
   $('#eaiCamAlbum').onclick=()=>{camStop();markResume();$('#eaiFile').click()};
   $('#eaiTimer').onclick=async()=>{const c=$('#eaiCount'),tb=$('#eaiTimer');tb.disabled=true;let ac=null;try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}
     const beep=f=>{try{navigator.vibrate&&navigator.vibrate(80)}catch(e){}if(!ac)return;const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;g.gain.value=0.15;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+0.12)};
     for(const n of [3,2,1]){c.hidden=false;c.textContent=n;beep(880);await new Promise(r=>setTimeout(r,1000))}c.hidden=true;beep(1320);$('#eaiSnap').onclick()};
-  $('#eaiSnap').onclick=()=>{const W=v.videoWidth,H=v.videoHeight;if(!W)return;const c=document.createElement('canvas');c.width=W;c.height=H;
-    c.getContext('2d').drawImage(v,0,0,W,H);camStop();setFull(c)};
+  $('#eaiSnap').onclick=()=>{const W=v.videoWidth,H=v.videoHeight;if(!W)return;const k=Math.min(1,1600/Math.max(W,H));const c=document.createElement('canvas');c.width=Math.round(W*k);c.height=Math.round(H*k);
+    c.getContext('2d').drawImage(v,0,0,c.width,c.height);camStop();setFull(c)};
   start()}
 /* if the phone reloaded the page while the camera/album app was open, bring the visitor straight back here */
-setTimeout(()=>{let t=0;try{t=+sessionStorage.getItem('eai_resume')||0}catch(e){}clearResume();if(!t||Date.now()-t>5*60*1000)return;
+setTimeout(()=>{let gb=0;try{gb=+sessionStorage.getItem('garden_back')||0;sessionStorage.removeItem('garden_back')}catch(e){}if(gb&&Date.now()-gb<60000){try{if(!entered)$('#entryForm').requestSubmit()}catch(e){}return}
+  let t=0;try{t=+sessionStorage.getItem('eai_resume')||0}catch(e){}clearResume();if(!t||Date.now()-t>5*60*1000)return;
   try{if(!entered)$('#entryForm').requestSubmit()}catch(e){}setTimeout(()=>{eaiOpen();toast('사진 앱에서 돌아오며 페이지가 새로 열렸어요 · ‘화면 안에서 찍기’로 다시 찍어 주세요')},500)},900);
 
 /* studio: photo layer + toggle */
@@ -2081,7 +2086,7 @@ function photoSync(){const z=$('#zoomer');if(!z)return;let im=$('#earPhoto');if(
   const on=photoMode&&EARPHOTO;im.hidden=!on;if(on&&im.src!==EARPHOTO.url)im.src=EARPHOTO.url;$('#earSvg').style.opacity=on?0:'';
   let t=$('#photoTog');if(!t){t=document.createElement('div');t.id='photoTog';t.className='phtog';const ch=document.querySelector('#studio .chooser');ch.parentNode.insertBefore(t,ch)}
   t.innerHTML=EARPHOTO?`<button data-pm="1" aria-pressed="${!!photoMode}">📷 내 귀 사진</button><button data-pm="0" aria-pressed="${!photoMode}">기준 귀</button>`:`<button class="phnew" data-ai>📷 내 귀 사진으로 AI 추천받기</button>`;
-  t.querySelectorAll('[data-pm]').forEach(b=>b.onclick=()=>{photoMode=b.dataset.pm==='1';photoSync()});const a=t.querySelector('[data-ai]');if(a)a.onclick=()=>{stClose();eaiOpen()}}
+  t.querySelectorAll('[data-pm]').forEach(b=>b.onclick=()=>{photoMode=b.dataset.pm==='1';photoSync()});const a=t.querySelector('[data-ai]');if(a)a.onclick=()=>{EAI.noBack=true;stClose();EAI.noBack=false;eaiOpen()}}
 
 /* ---------- entry ---------- */
 function showEntry(){const h=$('#heroEar');if(h&&!h.dataset.done){h.dataset.done=1;const pr=[[7661,650,935,8],[7777,724,878,3],[7660,800,262,5],[7343,905,300,4],[7345,968,470,7]];
