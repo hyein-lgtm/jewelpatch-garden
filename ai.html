@@ -732,6 +732,32 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 .phtog small{flex-basis:100%;font-size:11.5px;color:var(--s-sub)}
 .phtog{flex-wrap:wrap}
 .zoomer.pview{width:100%}.stage:has(.zoomer.pview){max-height:62vh;margin:0 auto}
+/* landmark onboarding */
+.eai-mart{flex:0 0 92px}
+.eai-coach{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;white-space:nowrap;background:rgba(40,25,32,.82);color:#fff;font-size:13px;line-height:1.2;padding:8px 12px;border-radius:999px;pointer-events:none;z-index:3}
+.eai-coach .hand{display:inline-block;animation:tapit 1.2s ease-in-out infinite}
+@keyframes tapit{50%{transform:translateY(-4px) scale(.9)}}
+.eai-ghost{position:absolute;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:2.5px dashed #fff;box-shadow:0 0 0 3px rgba(194,71,90,.55);animation:mpul 1.4s ease-in-out infinite;pointer-events:none;z-index:2}
+.eai-ghost em{position:absolute;left:50%;top:-24px;transform:translateX(-50%);font-style:normal;font-size:11px;white-space:nowrap;background:#fff;color:#C2475A;font-weight:800;border-radius:6px;padding:1px 6px}
+.eai-predb{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}.eai-predb .ghost{flex:1 1 140px;padding:10px;font-size:13px}
+.eai-mintro{position:fixed;inset:0;z-index:30;background:rgba(40,15,30,.55);display:grid;place-items:center;padding:16px}
+.eai-mintro .card{background:#fff;border-radius:20px;padding:18px;max-width:360px;width:100%;display:grid;gap:8px;text-align:center}
+.eai-mintro .demo{width:150px;margin:0 auto}.eai-mintro svg{display:block;width:100%;height:auto}
+.eai-mintro .dm{opacity:0;animation:dmIn .4s ease forwards}.eai-mintro .dm circle{fill:#C2475A;stroke:#fff;stroke-width:6}.eai-mintro .dm text{fill:#fff;font:800 30px sans-serif;text-anchor:middle}
+@keyframes dmIn{from{opacity:0;transform:scale(.4)}to{opacity:1}}
+.eai-mintro .dm{transform-box:fill-box;transform-origin:center}
+.eai-mintro b{font-size:17px}.eai-mintro ol{margin:0 auto;padding-left:20px;text-align:left;font-size:14px;line-height:1.7}
+.eai-mintro p{margin:0;font-size:12.5px;color:#6B6764;line-height:1.5}
+.eai-mintro .buy{border-radius:12px;background:#4E2338;color:#fff;padding:13px;font-size:15px;margin-top:4px}
+.eai-why{display:block;margin-top:4px;font-size:11.5px;color:#8E7BB5;font-weight:700;line-height:1.4}
+.eai-whybox{display:grid;gap:4px;background:#F6EEF6;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.5;text-align:left}
+.eai-mapline{display:flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap;font-size:11.5px}
+.eai-mapline em{font-style:normal;background:#F1ECF8;color:#5A4A80;border-radius:999px;padding:3px 8px;font-weight:700}
+.eai-mapline i{font-style:normal;color:#A39E98}
+.eai-mintro b.sub{font-size:14px;margin-top:4px}
+.eai-mintro .card{max-height:calc(100vh - 32px);overflow:auto}
+.eai-mintro .demo{width:110px}
+.eai-mintro .eai-whybox b{font-size:inherit}
 </style>
 
 <style>body.aimode{background:#fff}body.aimode>*:not(#eai):not(#studio):not(#result):not(#mbar):not(#selbar):not(#toast):not(#sheet):not(script):not(style){display:none!important}</style></head>
@@ -1426,10 +1452,10 @@ setTimeout(()=>{let gb=0;try{gb=+sessionStorage.getItem('garden_back')||0;sessio
   try{if(!entered)$('#entryForm').requestSubmit()}catch(e){}setTimeout(()=>{eaiOpen();toast('사진 앱에서 돌아오며 페이지가 새로 열렸어요 · ‘화면 안에서 찍기’로 다시 찍어 주세요')},500)},900);
 
 /* ===== Manual landmarks: the visitor taps 4 parts of their own ear; the guide chart is mapped through them (affine) ===== */
-const MARKS=[{k:'top',t:[790,236],n:'귓바퀴 맨 위',d:'귀 테두리에서 가장 높은 곳을 눌러 주세요.'},
- {k:'lobe',t:[596,1012],n:'귓불 맨 아래',d:'말랑한 귓불의 가장 아래 끝을 눌러 주세요.'},
- {k:'tragus',t:[575,660],n:'이주',d:'귓구멍 바로 앞을 덮고 있는 작은 연골 돌기예요.'},
- {k:'fossa',t:[722,412],n:'삼각와 가운데',d:'귀 위쪽에서 연골이 Y자로 갈라진 사이, 세모난 오목한 곳의 가운데예요.'}];
+const MARKS=[{k:'top',t:[790,236],n:'귓바퀴 맨 위',d:'귀 테두리에서 가장 높은 곳을 눌러 주세요.',w:'귀의 위쪽 끝을 알아야 내 귀 길이를 잴 수 있어요'},
+ {k:'lobe',t:[596,1012],n:'귓불 맨 아래',d:'말랑한 귓불의 가장 아래 끝을 눌러 주세요.',w:'위·아래 끝으로 내 귀 크기와 기울기를 알 수 있어요'},
+ {k:'tragus',t:[575,660],n:'이주',d:'귓구멍 바로 앞을 덮고 있는 작은 연골 돌기예요.',w:'귀 앞쪽 기준점이라 귀 폭과 방향을 맞춰요'},
+ {k:'fossa',t:[722,412],n:'삼각와 가운데',d:'귀 위쪽에서 연골이 Y자로 갈라진 사이, 세모난 오목한 곳의 가운데예요.',w:'신문 같은 포인트가 있는 귀 위쪽 안쪽 구조를 맞춰요'}];
 function fitAffine(src,dst){/* least squares: dst = [a b c; d e f]·[x y 1] */
   const S=[[0,0,0],[0,0,0],[0,0,0]],bx=[0,0,0],by=[0,0,0];src.forEach(([x,y],i)=>{const v=[x,y,1];for(let r=0;r<3;r++){for(let c=0;c<3;c++)S[r][c]+=v[r]*v[c];bx[r]+=v[r]*dst[i][0];by[r]+=v[r]*dst[i][1]}});
   const sol=b=>{const M=S.map((r,i)=>[...r,b[i]]);for(let i=0;i<3;i++){let p=i;for(let r=i+1;r<3;r++)if(Math.abs(M[r][i])>Math.abs(M[p][i]))p=r;[M[i],M[p]]=[M[p],M[i]];const v=M[i][i];if(Math.abs(v)<1e-9)return null;for(let c=i;c<4;c++)M[i][c]/=v;for(let r=0;r<3;r++)if(r!==i){const f=M[r][i];for(let c=i;c<4;c++)M[r][c]-=f*M[i][c]}}return M.map(r=>r[3])};
@@ -1438,20 +1464,31 @@ function fitAffine(src,dst){/* least squares: dst = [a b c; d e f]·[x y 1] */
   return {a,d,det,res,inv:{a:[d[1]/det,-a[1]/det,(a[1]*d[2]-d[1]*a[2])/det],d:[-d[0]/det,a[0]/det,(d[0]*a[2]-a[0]*d[2])/det]}}}
 function affT2P(x,y){const F=EAI.aff;return [F.a[0]*x+F.a[1]*y+F.a[2],F.d[0]*x+F.d[1]*y+F.d[2]]}
 function affP2T(x,y){const I=EAI.aff.inv;return [I.a[0]*x+I.a[1]*y+I.a[2],I.d[0]*x+I.d[1]*y+I.d[2]]}
+function predictMark(i){if(EAI.marks.length<2||i<2)return null;const [A,B]=[MARKS[0].t,MARKS[1].t],[a,b]=EAI.marks;
+  const tx=B[0]-A[0],ty=B[1]-A[1],px=b[0]-a[0],py=b[1]-a[1];const tl=Math.hypot(tx,ty),pl=Math.hypot(px,py);if(!pl)return null;const s=pl/tl,rot=Math.atan2(py,px)-Math.atan2(ty,tx),c=Math.cos(rot)*s,n=Math.sin(rot)*s;
+  const [x,y]=MARKS[i].t,dx=x-A[0],dy=y-A[1];let X=a[0]+dx*c-dy*n,Y=a[1]+dx*n+dy*c;
+  if(EAI.markFlip){/* mirrored ear: reflect across the top-lobe axis */const ux=px/pl,uy=py/pl,vx=X-a[0],vy=Y-a[1],d=vx*ux+vy*uy;X=a[0]+2*d*ux-vx;Y=a[1]+2*d*uy-vy}return [X,Y]}
+function markIntro(){return `<div class="eai-mintro" id="eaiMintro"><div class="card"><div class="demo"><svg viewBox="470 200 580 860" aria-hidden="true">${EARSVG}${MARKS.map((m,j)=>`<g class="dm" style="animation-delay:${0.4+j*0.7}s"><circle cx="${m.t[0]}" cy="${m.t[1]}" r="26"/><text x="${m.t[0]}" y="${m.t[1]+11}">${j+1}</text></g>`).join('')}</svg></div>
+  <b>왜 귀에 점을 찍나요?</b><div class="eai-whybox"><span>사람마다 귀 모양·크기·각도가 달라요.</span><span>내 귀의 기준점 4곳을 알려 주시면, 조재숙 박사님 자문 이혈 가이드의 포인트를 <b>표준 귀가 아닌 내 귀</b>에 맞춰 옮겨 보여드려요.</span></div><div class="eai-mapline"><em>표준 귀 지도</em><i>→</i><em>내 귀 4곳</em><i>→</i><em>내 귀 맞춤 포인트</em></div><b class="sub">아래 4곳을 순서대로 톡톡 눌러 주세요</b><ol>${MARKS.map(m=>`<li>${m.n}</li>`).join('')}</ol><p>단계마다 어디를 누를지 그림으로 알려 드려요. 2곳만 짚으면 나머지는 예상 위치를 보여 드리고, 잘못 눌렀으면 점을 끌어서 옮기면 돼요. 사진은 이 기기 밖으로 나가지 않아요.</p><button class="buy" id="eaiMintroGo">알겠어요, 시작할게요</button></div></div>`}
 function markArt(i){const m=MARKS[i];return `<div class="eai-mart"><svg viewBox="470 200 580 860" aria-hidden="true">${EARSVG}<circle cx="${m.t[0]}" cy="${m.t[1]}" r="34" class="pulse"/><circle cx="${m.t[0]}" cy="${m.t[1]}" r="17" class="dot"/></svg></div>`}
-function eaiMarks(){EAI.manual=true;EAI.marks=EAI.marks||[];const i=Math.min(EAI.marks.length,3),done=EAI.marks.length>=4,m=MARKS[i];
-  $('#eaiBody').innerHTML=`<div class="eai-mstep">${done?`<div class="eai-mdone"><b>기준점 4곳을 모두 짚었어요 ✓</b><span>점이 조금 어긋났다면 끌어서 옮길 수 있어요.</span></div>`:`${markArt(i)}<div><span class="eai-mno">${i+1} / 4</span><b>${m.n}</b><p>${m.d}</p></div>`}</div>
-   <div class="eai-pic"><span class="eai-fr" id="eaiMk"><img src="${EAI.url}" alt="확대한 귀 사진">${EAI.marks.map((p,j)=>`<i class="eai-mk" data-mk="${j}" style="left:${p[0]/EAI.W*100}%;top:${p[1]/EAI.H*100}%">${j+1}</i>`).join('')}</span></div>
+function eaiMarks(){EAI.manual=true;EAI.marks=EAI.marks||[];const i=Math.min(EAI.marks.length,3),done=EAI.marks.length>=4,m=MARKS[i];const pred=!done?predictMark(i):null;
+  $('#eaiBody').innerHTML=`<div class="eai-mstep">${done?`<div class="eai-mdone"><b>기준점 4곳을 모두 짚었어요 ✓</b><span>점이 조금 어긋났다면 끌어서 옮길 수 있어요.</span></div>`:`${markArt(i)}<div><span class="eai-mno">${i+1} / 4</span><b>${m.n}</b><p>${m.d}</p><small class="eai-why">왜? ${m.w}</small></div>`}</div>
+   <div class="eai-pic"><span class="eai-fr" id="eaiMk"><img src="${EAI.url}" alt="확대한 귀 사진">${EAI.marks.map((p,j)=>`<i class="eai-mk" data-mk="${j}" style="left:${p[0]/EAI.W*100}%;top:${p[1]/EAI.H*100}%">${j+1}</i>`).join('')}
+     ${pred?`<i class="eai-ghost" style="left:${pred[0]/EAI.W*100}%;top:${pred[1]/EAI.H*100}%"><em>여기쯤일 거예요</em></i>`:''}
+     ${done?'':`<span class="eai-coach"><span class="hand">👆</span><b>${m.n}</b>를 눌러 주세요</span>`}</span></div>
+   ${pred?`<div class="eai-predb"><button class="ghost" id="eaiPredOk">✓ 예상 위치 그대로 쓰기</button>${i===2?`<button class="ghost" id="eaiPredFlip">↔ 반대쪽인가요?</button>`:''}</div>`:''}
    <div class="eai-mlist">${MARKS.map((x,j)=>`<span class="${j<EAI.marks.length?'ok':j===i&&!done?'cur':''}">${j+1}. ${x.n}</span>`).join('')}</div>
    ${EAI.full?`<div class="eai-zoom"><button id="eaiZin">🔍 더 가까이</button><button id="eaiZout">더 넓게</button><button id="eaiZback">전체 사진에서 다시 고르기</button></div>`:''}
    <div class="eai-acts"><button class="buy" id="eaiMgo" ${done?'':'disabled'}>이 위치로 내 귀 살펴보기</button><button class="ghost" id="eaiMundo" ${EAI.marks.length?'':'disabled'}>한 단계 되돌리기</button></div>
    <p class="eai-tip">짚은 4곳을 기준으로 조재숙 박사님 자문 가이드 도표를 내 귀에 맞춰요. 사진은 이 기기 밖으로 나가지 않아요.</p>
    <button class="eai-link" id="eaiAuto">AI 자동 인식으로 하기 (PC 권장 · 휴대폰에선 꺼질 수 있어요)</button>`;
+  const pk=$('#eaiPredOk');if(pk)pk.onclick=()=>{EAI.marks.push(pred);eaiMarks()};const pf=$('#eaiPredFlip');if(pf)pf.onclick=()=>{EAI.markFlip=!EAI.markFlip;eaiMarks()};
+  if(!EAI.introSeen&&!EAI.marks.length){$('#eaiBody').insertAdjacentHTML('beforeend',markIntro());$('#eaiMintroGo').onclick=()=>{EAI.introSeen=true;$('#eaiMintro').remove()}}
   const box=$('#eaiMk');box.onclick=e=>{if(EAI.marks.length>=4||e.target.closest('.eai-mk'))return;const r=box.getBoundingClientRect();EAI.marks.push([(e.clientX-r.left)/r.width*EAI.W,(e.clientY-r.top)/r.height*EAI.H]);try{navigator.vibrate&&navigator.vibrate(20)}catch(_){}eaiMarks()};
   box.querySelectorAll('.eai-mk').forEach(d=>{d.onpointerdown=ev=>{ev.preventDefault();ev.stopPropagation();d.setPointerCapture(ev.pointerId);const j=+d.dataset.mk;
     const mv=e2=>{const r=box.getBoundingClientRect();const x=Math.min(1,Math.max(0,(e2.clientX-r.left)/r.width)),y=Math.min(1,Math.max(0,(e2.clientY-r.top)/r.height));d.style.left=x*100+'%';d.style.top=y*100+'%';EAI.marks[j]=[x*EAI.W,y*EAI.H]};
     const up=()=>{d.removeEventListener('pointermove',mv);d.removeEventListener('pointerup',up)};d.addEventListener('pointermove',mv);d.addEventListener('pointerup',up)}});
-  $('#eaiMundo').onclick=()=>{EAI.marks.pop();eaiMarks()};
+  $('#eaiMundo').onclick=()=>{EAI.marks.pop();if(EAI.marks.length<3)EAI.markFlip=false;eaiMarks()};
   $('#eaiMgo').onclick=()=>{const F=fitAffine(MARKS.map(x=>x.t),EAI.marks);if(!F){toast('점 위치가 한 줄로 겹쳐 있어요. 다시 짚어 주세요');return}
     const sc=Math.sqrt(Math.abs(F.det));EAI.aff=F;EAI.low=F.res/(sc*783)>0.06;
     const L=Math.hypot(EAI.marks[0][0]-EAI.marks[1][0],EAI.marks[0][1]-EAI.marks[1][1]);if(L<EAI.H*0.15){toast('귀가 너무 작게 잡혔어요. 귀 맨 위와 귓불 끝을 다시 확인해 주세요');return}
