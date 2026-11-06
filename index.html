@@ -647,6 +647,15 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 .eai-cands span{margin-right:4px}
 .eai-cands button{border:1px solid var(--e-line);background:#fff;border-radius:999px;padding:7px 14px;font:inherit;font-size:13px;cursor:pointer}
 .eai-cands button[aria-pressed="true"]{background:#8E7BB5;border-color:#8E7BB5;color:#fff}
+.eai-camtip{position:absolute;left:10px;right:10px;bottom:10px;text-align:center;font-size:12.5px;color:#fff;background:rgba(0,0,0,.4);border-radius:10px;padding:6px 8px}
+.eai-count{position:absolute;inset:0;display:grid;place-items:center;font-size:120px;font-weight:800;color:#fff;text-shadow:0 4px 20px rgba(0,0,0,.5)}
+.eai-count[hidden]{display:none}
+.eai-acts.sm{margin-top:8px}.eai-acts.sm .ghost{padding:10px;font-size:13px}
+.eai-inapp{display:grid;gap:6px;background:#FFF4E5;border:1px solid #F2D3A6;border-radius:14px;padding:12px;margin-bottom:12px;font-size:13px;color:#7A4E12}
+.eai-inapp .buy{border-radius:10px;background:#4E2338;color:#fff;padding:11px;font-size:14px}
+.eai-zoom{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.eai-zoom button{border:1px solid var(--e-line);background:#fff;border-radius:999px;padding:7px 12px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
+#eaiFull{cursor:crosshair}
 </style>
 
 </head>
@@ -1937,16 +1946,29 @@ function planBill(P){const sv=[look,QTY,OPT];look=P.recs.map(r=>({k:0,no:r.no,pi
   el.innerHTML=`<div class="eai-in"><div class="eai-h"><div><span class="en">AI Ear Ritual</span><h2>AI가 읽어주는 나의 귀 이야기</h2></div><button class="x" id="eaiX" aria-label="닫기">×</button></div><div id="eaiBody"></div></div>
   <input type="file" accept="image/*" id="eaiFile" hidden><input type="file" accept="image/*" capture="user" id="eaiCam" hidden>`;document.body.appendChild(el);
   $('#eaiX').onclick=eaiClose;$('#eaiFile').onchange=e=>eaiPick(e.target.files[0]);$('#eaiCam').onchange=e=>eaiPick(e.target.files[0])})();
+function inApp(){const u=navigator.userAgent;return /KAKAOTALK/i.test(u)?'kakao':/Instagram|FBAN|FBAV|NAVER\(inapp|Line\//i.test(u)?'other':''}
+function openOutside(){const u=location.href;if(inApp()==='kakao'){location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(u);return}
+  if(/Android/i.test(navigator.userAgent)){location.href='intent://'+u.replace(/^https?:\/\//,'')+'#Intent;scheme=https;package=com.android.chrome;end';return}
+  try{navigator.clipboard.writeText(u);toast('주소를 복사했어요 · 사파리나 크롬에 붙여넣어 열어 주세요')}catch(e){toast('오른쪽 아래 ··· 메뉴에서 ‘다른 브라우저로 열기’를 눌러 주세요')}}
 function eaiOpen(){$('#eai').hidden=false;$('#bar').hidden=true;try{track('ai_start',{},true)}catch(e){}eaiIntro();eaiRunner().send({type:'load'}).then(()=>{EAI.loaded=true}).catch(()=>{})}
 function eaiClose(){camStop();$('#eai').hidden=true;barKey=''}
 async function eaiPick(f){clearResume();if(!f)return;$('#eaiFile').value='';$('#eaiCam').value='';const url=URL.createObjectURL(f);const im=new Image();im.src=url;try{await im.decode()}catch(e){toast('사진을 열 수 없어요. 다른 사진으로 해볼까요?');return}
-  const M=1024,s=Math.min(1,M/Math.max(im.naturalWidth,im.naturalHeight));const c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*s);c.height=Math.round(im.naturalHeight*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
-  EAI.img=c;EAI.W=c.width;EAI.H=c.height;EAI.url=c.toDataURL('image/jpeg',0.92);EAI.pt=[0.5,0.5];EAI.mask=null;EAI.comment=null;EAI.adj=null;EAI.adjOn=false;eaiAim()}
-function eaiAim(){$('#eaiBody').innerHTML=`<p class="eai-step">① 귀 한가운데를 톡 눌러 주세요</p><div class="eai-pic"><span class="eai-fr" id="eaiPic"><img src="${EAI.url}" alt="선택한 귀 사진"><canvas id="eaiMaskC"></canvas><i class="eai-dot" id="eaiDot"></i></span></div>
-  <p class="eai-tip">AI가 누른 곳의 귀를 찾아 배경과 분리해요. 엇나가면 귀를 다시 눌러 주세요.</p>${sideHTML()}<div class="eai-load" id="eaiProg" data-p="0"><span>AI 준비 중</span></div>
+  const M=2048,s=Math.min(1,M/Math.max(im.naturalWidth,im.naturalHeight));const c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*s);c.height=Math.round(im.naturalHeight*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
+  setFull(c)}
+/* the photo can be a normal profile selfie: the visitor taps the ear on the whole photo, we zoom in around it */
+function setFull(c){EAI.full=c;EAI.zs=0.36;EAI.mask=null;EAI.comment=null;EAI.adj=null;EAI.adjOn=false;eaiFind()}
+function eaiFind(){const u=EAI.full.toDataURL('image/jpeg',0.85);$('#eaiBody').innerHTML=`<p class="eai-step">① 사진에서 귀를 톡 눌러 주세요</p><div class="eai-pic"><span class="eai-fr" id="eaiFull"><img src="${u}" alt="찍은 사진"></span></div>
+  <p class="eai-tip">귀가 작게 나와도 괜찮아요. 누른 곳을 AI가 확대해서 귀를 찾아요.</p><div class="eai-acts"><button class="ghost" id="eaiRe2">다른 사진으로</button></div>`;
+  $('#eaiRe2').onclick=eaiIntro;$('#eaiFull').onclick=e=>{const r=e.currentTarget.getBoundingClientRect();EAI.fc=[(e.clientX-r.left)/r.width*EAI.full.width,(e.clientY-r.top)/r.height*EAI.full.height];zoomCrop()}}
+function zoomCrop(){const F=EAI.full,side=Math.max(160,Math.round(Math.min(F.width,F.height)*EAI.zs));const x0=Math.round(Math.min(Math.max(0,EAI.fc[0]-side/2),Math.max(0,F.width-side))),y0=Math.round(Math.min(Math.max(0,EAI.fc[1]-side*0.5),Math.max(0,F.height-side)));
+  const sw=Math.min(side,F.width-x0),sh=Math.min(side,F.height-y0),S=Math.min(4,1024/Math.max(sw,sh));const c=document.createElement('canvas');c.width=Math.round(sw*S);c.height=Math.round(sh*S);const g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(F,x0,y0,sw,sh,0,0,c.width,c.height);
+  EAI.img=c;EAI.W=c.width;EAI.H=c.height;EAI.url=c.toDataURL('image/jpeg',0.92);EAI.pt=[(EAI.fc[0]-x0)/sw,(EAI.fc[1]-y0)/sh];EAI.mask=null;eaiAim()}
+function eaiAim(){$('#eaiBody').innerHTML=`<p class="eai-step">② 확대한 사진에서 귀가 보라색으로 칠해졌는지 확인해 주세요</p><div class="eai-pic"><span class="eai-fr" id="eaiPic"><img src="${EAI.url}" alt="선택한 귀 사진"><canvas id="eaiMaskC"></canvas><i class="eai-dot" id="eaiDot"></i></span></div>
+  <p class="eai-tip">엇나가면 귀 한가운데를 다시 눌러 주세요.</p>${EAI.full?`<div class="eai-zoom"><button id="eaiZin">🔍 더 가까이</button><button id="eaiZout">더 넓게</button><button id="eaiZback">전체 사진에서 다시 고르기</button></div>`:''}${sideHTML()}<div class="eai-load" id="eaiProg" data-p="0"><span>AI 준비 중</span></div>
   <div class="eai-acts"><button class="buy" id="eaiGo" disabled>이 귀로 분석하기</button><button class="ghost" id="eaiRe">다시 고르기</button></div>`;
   const pic=$('#eaiPic'),dot=$('#eaiDot');const place=()=>{dot.style.left=EAI.pt[0]*100+'%';dot.style.top=EAI.pt[1]*100+'%'};place();
   pic.onclick=e=>{const r=pic.getBoundingClientRect();EAI.pt=[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height];place();eaiSegment()};
+  if(EAI.full){$('#eaiZin').onclick=()=>{EAI.zs=Math.max(0.16,EAI.zs*0.7);EAI.embedded=null;zoomCrop()};$('#eaiZout').onclick=()=>{EAI.zs=Math.min(0.9,EAI.zs*1.4);EAI.embedded=null;zoomCrop()};$('#eaiZback').onclick=eaiFind}
   bindSide();$('#eaiRe').onclick=eaiIntro;$('#eaiGo').onclick=eaiConds;eaiSegment(true)}
 async function eaiSegment(first){if(EAI.busy){EAI.again=true;return}EAI.busy=true;const P=$('#eaiProg');const say=t=>{if(P)P.querySelector('span').textContent=t};$('#eaiGo').disabled=true;
   try{const R=eaiRunner();EAI.stage='모델 내려받기';if(!EAI.loaded){say('AI 모델 내려받는 중 (처음 한 번만)');await R.send({type:'load'});EAI.loaded=true}
@@ -1982,7 +2004,7 @@ async function eaiComment(){EAI.comment={loading:true};const s=EAI.stats,sw=shap
   const box=$('#eaiCmt');if(box)box.outerHTML=cmtHTML()}
 function cmtHTML(){const c=EAI.comment;if(!EAI.ai||!c)return '';if(c.loading)return `<div class="eai-cmt" id="eaiCmt"><b>AI 스타일리스트가 귀 실루엣을 보는 중…</b></div>`;if(c.fail)return `<div class="eai-cmt" id="eaiCmt" hidden></div>`;
   return `<div class="eai-cmt" id="eaiCmt"><span class="en">AI Stylist · Claude</span><b>${esc(c.title)}</b><p>${esc(c.text)}</p></div>`}
-function eaiIntro(){$('#eaiBody').innerHTML=`<div class="eai-hero"><div class="eai-ear"></div><p class="lead">내 귀 사진 한 장으로 <b>내 귀 위의 전통 이혈 포인트</b>를 살펴보고, 그 자리에 어울리는 주얼패치를 골라 바로 붙여봐요.</p></div>
+function eaiIntro(){$('#eaiBody').innerHTML=`${inApp()?`<div class="eai-inapp"><b>${inApp()==='kakao'?'카카오톡':'앱'} 안의 브라우저에서는 AI 분석이 잘 안 돼요</b><span>크롬·사파리 같은 기본 브라우저로 열면 바로 할 수 있어요.</span><button class="buy" id="eaiOut">기본 브라우저로 열기</button></div>`:''}<div class="eai-hero"><div class="eai-ear"></div><p class="lead">내 귀 사진 한 장으로 <b>내 귀 위의 전통 이혈 포인트</b>를 살펴보고, 그 자리에 어울리는 주얼패치를 골라 바로 붙여봐요.</p></div>
   <div class="eai-pbox on"><b>📱 기본 체험 · 이 기기 안에서만</b><ul>
    <li>귀 윤곽 찾기는 <b>이 휴대폰 브라우저 안</b>에서 돌아가는 AI(SlimSAM)가 해요. 처음 한 번 AI 모델 파일만 내려받고, <b>사진은 어디로도 보내지 않아요.</b></li>
    <li>사진과 분석 결과는 저장하지 않아요. 창을 닫거나 새로고침하면 사라져요.</li>
@@ -1992,7 +2014,7 @@ function eaiIntro(){$('#eaiBody').innerHTML=`<div class="eai-hero"><div class="e
   <p class="eai-tip">본인 귀 사진만 올려 주세요. 다른 사람의 사진은 동의 없이 쓰면 안 돼요.</p>
   <div class="eai-acts"><button class="buy" id="eaiShoot">📷 화면 안에서 찍기</button><button class="ghost" id="eaiAlbum">앨범에서 고르기</button></div>
   <p class="eai-tip">TIP · 머리카락을 귀 뒤로 넘기고, 밝은 곳에서 귀가 화면 가운데 오도록 옆모습을 찍어 주세요.</p>`;
-  const ck=$('#eaiAI');if(ck)ck.onchange=e=>{EAI.ai=e.target.checked};$('#eaiShoot').onclick=eaiCamera;$('#eaiAlbum').onclick=()=>{markResume();$('#eaiFile').click()}}
+  const eo=$('#eaiOut');if(eo)eo.onclick=openOutside;const ck=$('#eaiAI');if(ck)ck.onchange=e=>{EAI.ai=e.target.checked};$('#eaiShoot').onclick=eaiCamera;$('#eaiAlbum').onclick=()=>{markResume();$('#eaiFile').click()}}
 function sideHTML(){return `<div class="eai-side" role="group" aria-label="어느 쪽 귀인가요"><span>어느 쪽 귀인가요?</span><button data-side="L" aria-pressed="${!EAI.flip}">왼쪽 귀</button><button data-side="R" aria-pressed="${!!EAI.flip}">오른쪽 귀</button></div>`}
 function bindSide(){document.querySelectorAll('[data-side]').forEach(b=>b.onclick=()=>{EAI.flip=b.dataset.side==='R';document.querySelectorAll('[data-side]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))})}
 function eaiResult(){const P=eaiPlan(),cd=COND[EAI.condI]||COND[COND.length-1];const B=planBill(P);EAI.plan=P;const low=EAI.low;
@@ -2036,14 +2058,19 @@ function camStop(){if(CAM.st){CAM.st.getTracks().forEach(t=>t.stop());CAM.st=nul
 function markResume(){try{sessionStorage.setItem('eai_resume',String(Date.now()))}catch(e){}}
 function clearResume(){try{sessionStorage.removeItem('eai_resume')}catch(e){}}
 async function eaiCamera(){if(!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia)){markResume();$('#eaiCam').click();return}
-  $('#eaiBody').innerHTML=`<p class="eai-step">귀가 가운데 점선 안에 오도록 맞춰 주세요</p><div class="eai-camv"><video id="eaiVid" playsinline muted autoplay></video><i class="eai-guide"></i></div>
-   <div class="eai-acts"><button class="buy" id="eaiSnap" disabled>찰칵 · 이 사진으로</button><button class="ghost" id="eaiFlipCam">🔄 앞/뒤 카메라</button></div>
-   <p class="eai-tip">혼자 찍을 땐 앞 카메라로 옆모습을, 다른 사람이 찍어줄 땐 뒤 카메라가 더 선명해요. 영상은 저장되거나 전송되지 않아요.</p><button class="eai-link" id="eaiCamX">취소하고 돌아가기</button>`;
-  const v=$('#eaiVid');const start=async()=>{camStop();try{CAM.st=await navigator.mediaDevices.getUserMedia({video:{facingMode:CAM.face,width:{ideal:1280},height:{ideal:1280}},audio:false});v.srcObject=CAM.st;await v.play().catch(()=>{});$('#eaiSnap').disabled=false;v.classList.toggle('mir',CAM.face==='user')}
+  $('#eaiBody').innerHTML=`<p class="eai-step">팔을 뻗고 고개만 옆으로 돌려 찍어 주세요</p><div class="eai-camv"><video id="eaiVid" playsinline muted autoplay></video><span class="eai-camtip">귀를 크게 찍을 필요 없어요 · 얼굴 옆모습에 귀가 보이기만 하면 돼요</span><b class="eai-count" id="eaiCount" hidden></b></div>
+   <div class="eai-acts"><button class="buy" id="eaiTimer" disabled>⏱ 3초 뒤 자동 촬영</button><button class="ghost" id="eaiSnap" disabled>바로 찍기</button></div>
+   <div class="eai-acts sm"><button class="ghost" id="eaiFlipCam">🔄 앞/뒤 카메라</button><button class="ghost" id="eaiCamAlbum">앨범에서 고르기</button></div>
+   <p class="eai-tip">평소 셀카처럼 팔을 뻗은 채 <b>3초 타이머</b>를 누르고 고개만 옆으로 돌려 주세요. ‘삐’ 소리 세 번 뒤 찍혀요. 찍은 뒤 사진에서 귀를 누르면 AI가 확대해서 찾아요. 영상은 저장되거나 전송되지 않아요.</p><button class="eai-link" id="eaiCamX">취소하고 돌아가기</button>`;
+  const v=$('#eaiVid');const start=async()=>{camStop();try{CAM.st=await navigator.mediaDevices.getUserMedia({video:{facingMode:CAM.face,width:{ideal:1920},height:{ideal:1920}},audio:false});v.srcObject=CAM.st;await v.play().catch(()=>{});$('#eaiSnap').disabled=false;$('#eaiTimer').disabled=false;v.classList.toggle('mir',CAM.face==='user')}
     catch(e){camStop();toast('카메라를 열 수 없어요. 카메라 권한을 허용하거나 ‘앨범에서 고르기’를 이용해 주세요');eaiIntro()}};
   $('#eaiFlipCam').onclick=()=>{CAM.face=CAM.face==='user'?'environment':'user';start()};$('#eaiCamX').onclick=()=>{camStop();eaiIntro()};
-  $('#eaiSnap').onclick=()=>{const W=v.videoWidth,H=v.videoHeight;if(!W)return;const M=1024,s=Math.min(1,M/Math.max(W,H));const c=document.createElement('canvas');c.width=Math.round(W*s);c.height=Math.round(H*s);
-    c.getContext('2d').drawImage(v,0,0,c.width,c.height);camStop();EAI.img=c;EAI.W=c.width;EAI.H=c.height;EAI.url=c.toDataURL('image/jpeg',0.92);EAI.pt=[0.5,0.5];EAI.mask=null;EAI.comment=null;EAI.adj=null;EAI.adjOn=false;eaiAim()};
+  $('#eaiCamAlbum').onclick=()=>{camStop();markResume();$('#eaiFile').click()};
+  $('#eaiTimer').onclick=async()=>{const c=$('#eaiCount'),tb=$('#eaiTimer');tb.disabled=true;let ac=null;try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}
+    const beep=f=>{try{navigator.vibrate&&navigator.vibrate(80)}catch(e){}if(!ac)return;const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;g.gain.value=0.15;o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+0.12)};
+    for(const n of [3,2,1]){c.hidden=false;c.textContent=n;beep(880);await new Promise(r=>setTimeout(r,1000))}c.hidden=true;beep(1320);$('#eaiSnap').onclick()};
+  $('#eaiSnap').onclick=()=>{const W=v.videoWidth,H=v.videoHeight;if(!W)return;const c=document.createElement('canvas');c.width=W;c.height=H;
+    c.getContext('2d').drawImage(v,0,0,W,H);camStop();setFull(c)};
   start()}
 /* if the phone reloaded the page while the camera/album app was open, bring the visitor straight back here */
 setTimeout(()=>{let t=0;try{t=+sessionStorage.getItem('eai_resume')||0}catch(e){}clearResume();if(!t||Date.now()-t>5*60*1000)return;
