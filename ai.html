@@ -661,6 +661,20 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 .eai-hero .eai-ear{flex:0 0 78px;height:auto;aspect-ratio:550/805;position:relative;border:0;border-radius:0;background:none;box-shadow:none}
 .eai-ear svg{position:absolute;inset:0;width:100%;height:100%}
 .eai-ear img{position:absolute;transform:translate(-50%,-50%);filter:drop-shadow(0 1px 2px rgba(60,40,40,.3))}
+/* v3: guide-chart + soft zones */
+.eai-phwrap{position:relative}
+.eai-pt.zone{width:44px;height:44px;margin:-22px 0 0 -22px;background:radial-gradient(circle,rgba(142,123,181,.55) 0 38%,rgba(142,123,181,.22) 39% 100%);border:2px dashed rgba(255,255,255,.9);font-size:14px;line-height:40px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.eai-pt.zone.on{background:radial-gradient(circle,rgba(78,35,56,.75) 0 38%,rgba(198,145,163,.35) 39% 100%)}
+.eai-chart{position:absolute;right:8px;bottom:8px;width:84px;background:rgba(255,255,255,.94);border-radius:12px;padding:6px 6px 4px;box-shadow:0 4px 12px rgba(0,0,0,.2);text-align:center}
+.eai-chart .ear{position:relative;aspect-ratio:865/957}
+.eai-chart svg{width:100%;height:100%;display:block}
+.eai-chart i{position:absolute;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:#66745A;color:#fff;font:700 9px/14px sans-serif;font-style:normal}
+.eai-chart small{display:block;font-size:9.5px;color:#6B6764;line-height:1.3;margin-top:2px}
+.eai-ptinfo .basis{display:block;margin-top:4px;font-size:11.5px;color:#7A6F8F}
+.eai-caps{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12.5px;line-height:1.5}
+.eai-caps>div{background:var(--e-ivory);border-radius:12px;padding:10px;display:grid;gap:2px}
+.eai-caps b{font-size:12.5px;margin-bottom:2px}
+.eai-caps>div:last-child{background:#FBF4EC;color:#7A5A3A}
 </style>
 
 <style>body.aimode{background:#fff}body.aimode>*:not(#eai):not(#studio):not(#result):not(#mbar):not(#selbar):not(#toast):not(#sheet):not(script):not(style){display:none!important}</style></head>
@@ -1142,24 +1156,37 @@ function snapIn(nx,ny){const ax=nx*VW,ay=ny*VH;if(inside(ax,ay,9))return [nx,ny]
 function shapeWords(s){const r=s.ratio,lb=s.lobe;const form=r>1.95?'세로로 길쭉한 귀':r<1.55?'동글동글한 귀':'균형 잡힌 귀';const lobe=lb>0.62?'넉넉한 귓불':lb<0.45?'아담한 귓불':'적당한 귓불';const rim=s.top>0.72?'넓은 윗귓바퀴':'완만한 윗귓바퀴';
   return {form,lobe,rim,style:r>1.95?'glam':lb>0.62?'pierce':'daily'}}
 /* --- traditional ear-point notes (참고용 전통 개념 · 효능 주장 없음) --- */
-const PINFO={'신문':['삼각와 위쪽','귀 위쪽의 세모난 오목한 자리예요. 전통 이혈에서 마음을 고요히 하는 것과 연결해 가장 자주 소개돼 온 자리예요.'],
- '수면점':['귓불 쪽','이름처럼 전통 이혈에서 편안한 밤, 쉼과 연결해 불러 온 자리예요.'],
- '신경쇠약구':['귓불 위 가장자리','전통 이혈에서 예민하고 뒤척이는 날과 연결해 불러 온 구역이에요.'],
- '눈':['귓불 가운데','귓불 한가운데를 전통 이혈에서는 눈과 연결해 불러요.'],
- '턱':['귓불 위 바깥','귓불 윗부분 바깥쪽을 전통 이혈에서는 턱과 연결해 불러요.'],
- '외비':['이주 바깥면','귀 앞쪽 작은 돌기(이주)의 바깥면을 전통 이혈에서는 코와 연결해 불러요.'],
- '갈점':['이주 위쪽','이주 위쪽 끝을 전통 이혈에서는 목마름과 연결해 불러요.'],
- '기점':['이주 아래쪽','이주 쪽 자리를 전통 이혈에서는 허기와 연결해 불러요.'],
- '복':['대이륜 가운데','귓바퀴 안쪽 둥근 능선의 가운데를 전통 이혈에서는 배와 연결해 불러요.'],
- '이첨':['귓바퀴 꼭대기','귀 맨 위 꼭대기 끝이에요. 전통 이혈에서 머리를 맑게 하는 것과 연결해 소개돼 온 자리예요.'],
- '간':['이갑개 위쪽','귀 안쪽 오목한 곳(이갑개)의 윗부분을 전통 이혈에서는 간과 연결해 불러요.'],
- '이중':['이륜각','귓바퀴가 귀 안쪽으로 이어져 들어오는 시작점이에요. 전통 이혈에서 귀의 중심으로 불러요.'],
- '위':['이륜각 끝','이륜각이 끝나는 자리를 전통 이혈에서는 위와 연결해 불러요.'],
- '신장':['이갑개 위 가장자리','귀 안쪽 오목한 곳 위 가장자리를 전통 이혈에서는 신장과 연결해 불러요.'],
- '앞머리':['귓불 앞쪽 위','귓불 앞쪽 윗부분을 전통 이혈에서는 이마·앞머리와 연결해 불러요.'],
- '내분비':['이주간절흔 안쪽','귀 아래쪽 V자 홈 안쪽을 전통 이혈에서는 몸의 리듬과 연결해 불러요.'],
- '자궁':['삼각와 앞쪽','삼각와의 앞쪽 끝을 전통 이혈에서는 여성의 리듬과 연결해 불러요.']};
-const STRUCT=[['귓바퀴',905,330],['삼각와',728,428],['이갑개',708,660],['이주',566,668],['귓불',640,985]];
+/* ===== Ear-point registry (data layer) =====
+   Source today: 'WBL 주얼패치 이혈테라피 가이드' (조재숙 박사 자문) — same 8 concerns, point names and chart dots on the same reference ear.
+   Book page / figure numbers, written location rules, surface (front/inner) and core/support roles are NOT in that guide yet:
+   they stay null until 조재숙 박사's material is entered (see mall/ear-points-jo.csv), and nothing is shown for a null field.
+   status: 'guide' = 자문 가이드 도표 기준 · 전문가 사진 검증 전 → shown only as a soft '참고 구역', never as an exact point. */
+const SRC_GUIDE={id:'wbl-guide',title:'WBL 주얼패치 이혈테라피 가이드 (조재숙 박사 자문)',page:null,figure:null};
+const PT_META={'면협구':['面頰區','Cheek Area'],'온열점':['溫熱點','Warming Point'],'눈':['眼','Eye'],'턱':['頜','Jaw'],'외비':['外鼻','External Nose'],'갈점':['渴點','Thirst Point'],'기점':['飢點','Hunger Point'],'복':['腹','Abdomen'],'이첨':['耳尖','Ear Apex'],'신문':['神門','Shenmen'],'간':['肝','Liver'],'수면점':['睡眠點','Sleep Point'],'신경쇠약구':['神經衰弱區','Neurasthenia Area'],'이중':['耳中','Ear Center'],'위':['胃','Stomach'],'신장':['腎','Kidney'],'앞머리':['額','Forehead'],'내분비':['內分泌','Endocrine'],'자궁':['子宮','Uterus']};
+const POINTS=(()=>{const o={};CONCERNS.forEach(c=>c.pts.forEach((n,i)=>{const d=c.dots[i];if(!o[n])o[n]={id:n,ko:n,hanja:(PT_META[n]||[])[0]||'',en:(PT_META[n]||[])[1]||'',
+  chart:{x:d.x,y:d.y,space:'refear'},source:SRC_GUIDE,
+  region:null,      /* 해부학 구역 키 (예: 'triangular_fossa') — 조재숙 자료 입력 후 */
+  rule:null,        /* 구조 기반 위치 규칙 (예: {region:'triangular_fossa',anchor:'upper_third'}) — 내부 구조 인식 모델이 생기면 사용 */
+  surface:null,     /* 'front' | 'inner' (가이드의 빈 동그라미 = 귀 안쪽 오목한 면) */
+  role:null,        /* 'core' | 'support' */
+  note:null,        /* 원문 기반 전통 설명 — 출처 확인 전에는 비워 둠 */
+  status:'guide',   /* 'guide' → 'expert_verified' 로 바뀌기 전엔 정확한 위치로 표시하지 않음 */
+  concerns:[]};o[n].concerns.push(c.id)}));return o})();
+
+/* ===== Ear analysis (model layer) — swappable providers =====
+   What each provider can really see:
+   silhouette (지금): SlimSAM이 분리한 '귀 바깥 윤곽' 하나 → 크기·기울기·중심·길이/폭 비율·귓불/윗귓바퀴 폭. 귀 안쪽 구조는 보지 못함.
+   landmarks (향후): 귀 안쪽 구조점(삼각와·이갑개·이주·대이륜 등)을 찾는 모델 — 연결만 되어 있고 아직 없음. */
+const EAR_CAPS={silhouette:{sees:['귀 바깥 윤곽','귀 크기·기울기·방향','길이/폭 비율','귓불·윗귓바퀴 폭'],cannot:['삼각와·이갑개·이주 같은 귀 안쪽 구조','연골의 굴곡과 깊이','정확한 혈자리 위치']}};
+const ANALYZERS={
+  silhouette:{name:'귀 윤곽 맞춤',basis:'AI가 찾은 귀 바깥 윤곽의 크기·기울기·중심에 가이드 도표를 맞춰 옮긴 추정 구역',
+    place(pt){const p=t2p(pt.chart.x,pt.chart.y);return p?{xy:p,mode:'approx'}:null}},
+  landmarks:null /* { name, basis, place(pt){ uses pt.rule + detected landmarks → {xy, mode:'landmark'} or null when the structure is unclear } } */
+};
+function analyzer(){return ANALYZERS.landmarks||ANALYZERS.silhouette}
+/* a point is drawn as an exact dot only when its position comes from detected structure AND an expert has verified the method */
+function pointMode(pt,placed){return placed&&placed.mode==='landmark'&&pt.status==='expert_verified'?'exact':'zone'}
+
 const STYLE_WHY={pearl:'은은한 광이라 매일 붙여도 부담 없어요',flower:'꽃잎 모양이 귀를 작은 정원처럼 화사하게 해줘요',romantic:'하나만 붙여도 사랑스러운 포인트가 돼요',flutter:'작은 별·나비라 가볍게 반짝이는 포인트가 돼요',sparkle:'빛을 받을 때마다 또렷하게 반짝여요',metal:'단정한 메탈이라 다른 패치와 겹쳐도 깔끔해요'};
 /* template (viewBox) <-> photo pixel mapping from the measured alignment */
 function t2p(ax,ay){const A=EAI.al;if(!A)return null;const qx=ax-VX-A.tx,qy=ay-VY-A.ty,c=Math.cos(-A.rot),s=Math.sin(-A.rot);let x=(qx*c-qy*s)/A.s+A.ux,y=(qx*s+qy*c)/A.s+A.uy;if(A.flip)x=EAI.W-1-x;return [x,y]}
@@ -1172,7 +1199,7 @@ function pickMM(no,zone,sw){const l=mmOf(no,0).slice().sort((a,b)=>a-b);if(l.len
 function sizeWhy(zone,mm,sw,no){if(no&&mmOf(no,0).length<2)return `${ZN[zone]} 자리에 맞는 ${mm}mm 한 가지 크기예요`;return zone==='lobe'?`${sw.lobe}이라 ${mm}mm로 크기를 맞췄어요`:zone==='top'?`${sw.rim}라 ${mm}mm가 곡선 위에 편하게 앉아요`:zone==='rim'?`귓바퀴 가장자리는 폭이 좁아 ${mm}mm로 골랐어요`:`귀 안쪽 오목한 자리라 작은 ${mm}mm로 골랐어요`}
 /* the recommendation: one product per traditional point + 1~2 accents for the measured shape; every product appears once */
 function eaiPlan(){const sw=shapeWords(EAI.stats);const pr=PRESETS.find(p=>p.id===sw.style)||PRESETS[0];const c=CONCERNS.find(x=>x.id===EAI.cond);const recs=[];const used=new Set();
-  const pts=c?c.pts.map((n,i)=>{const d=c.dots[i];const adj=EAI.adj&&EAI.adj[n];const ph=adj||t2p(d.x,d.y);const t=adj?p2t(adj[0],adj[1]):[d.x,d.y];return {n,i,t,ph,info:PINFO[n]||['','전통 이혈에서 불러 온 자리예요.']}}):[];
+  const A=analyzer();const pts=c?c.pts.map((n,i)=>{const pt=POINTS[n];const adj=EAI.adj&&EAI.adj[n];const placed=adj?{xy:adj,mode:'manual'}:A.place(pt);const ph=placed?placed.xy:null;const t=adj?p2t(adj[0],adj[1]):[pt.chart.x,pt.chart.y];return {n,i,t,ph,pt,mode:adj?'manual':pointMode(pt,placed)}}).filter(p=>p.ph):[];
   if(c)pts.forEach((p,i)=>{const no=(REC[c.id]||[])[i];if(!no||!CUTS[no]||used.has(no))return;used.add(no);const z=zoneOf(p.t[0],p.t[1]);const mm=pickMM(no,z,sw);
     recs.push({no,x:p.t[0],y:p.t[1],mm,pt:p.n,zone:z,why:`${STYLE_WHY[itemOf(no).style]||'디자인이 귀 모양과 잘 어울려요'} · ${sizeWhy(z,mm,sw,no)}`})});
   const want=c?Math.min(5,recs.length+(sw.style==='glam'?2:1)):4;
@@ -1252,7 +1279,7 @@ function cmtHTML(){const c=EAI.comment;if(!EAI.ai||!c)return '';if(c.loading)ret
   return `<div class="eai-cmt" id="eaiCmt"><span class="en">AI Stylist · Claude</span><b>${esc(c.title)}</b><p>${esc(c.text)}</p></div>`}
 function earArt(){const pr=[[7661,650,935,8],[7777,724,878,3],[7660,800,262,5],[7343,905,300,4]];
   return `<svg viewBox="470 225 550 805" aria-hidden="true">${EARSVG}</svg>${pr.filter(([n])=>CUTS[n]).map(([n,x,y,mm])=>`<img src="${CUTS[n][0]}" alt="" style="left:${(x-470)/550*100}%;top:${(y-225)/805*100}%;width:${mm*783/62/550*100}%">`).join('')}`}
-function eaiIntro(){$('#eaiBody').innerHTML=`${inApp()?`<div class="eai-inapp"><b>${inApp()==='kakao'?'카카오톡':'앱'} 안의 브라우저에서는 AI 분석이 잘 안 돼요</b><span>크롬·사파리 같은 기본 브라우저로 열면 바로 할 수 있어요.</span><button class="buy" id="eaiOut">기본 브라우저로 열기</button></div>`:''}<div class="eai-hero"><div class="eai-ear">${earArt()}</div><p class="lead">내 귀 사진 한 장으로 <b>내 귀 위의 전통 이혈 포인트</b>를 살펴보고, 그 자리에 어울리는 주얼패치를 골라 바로 붙여봐요.</p></div>
+function eaiIntro(){$('#eaiBody').innerHTML=`${inApp()?`<div class="eai-inapp"><b>${inApp()==='kakao'?'카카오톡':'앱'} 안의 브라우저에서는 AI 분석이 잘 안 돼요</b><span>크롬·사파리 같은 기본 브라우저로 열면 바로 할 수 있어요.</span><button class="buy" id="eaiOut">기본 브라우저로 열기</button></div>`:''}<div class="eai-hero"><div class="eai-ear">${earArt()}</div><p class="lead">내 귀 사진 위에서 <b>조재숙 박사 자문 이혈 가이드</b>의 포인트 구역을 살펴보고, 어울리는 주얼패치를 골라 바로 붙여봐요.</p></div>
   <div class="eai-pbox on"><b>📱 기본 체험 · 이 기기 안에서만</b><ul>
    <li>귀 윤곽 찾기는 <b>이 휴대폰 브라우저 안</b>에서 돌아가는 AI(SlimSAM)가 해요. 처음 한 번 AI 모델 파일만 내려받고, <b>사진은 어디로도 보내지 않아요.</b></li>
    <li>사진과 분석 결과는 저장하지 않아요. 창을 닫거나 새로고침하면 사라져요.</li>
@@ -1265,30 +1292,33 @@ function eaiIntro(){$('#eaiBody').innerHTML=`${inApp()?`<div class="eai-inapp"><
   const eo=$('#eaiOut');if(eo)eo.onclick=openOutside;const ck=$('#eaiAI');if(ck)ck.onchange=e=>{EAI.ai=e.target.checked};$('#eaiShoot').onclick=eaiCamera;$('#eaiAlbum').onclick=()=>{markResume();$('#eaiFile').click()}}
 function sideHTML(){return `<div class="eai-side" role="group" aria-label="어느 쪽 귀인가요"><span>어느 쪽 귀인가요?</span><button data-side="L" aria-pressed="${!EAI.flip}">왼쪽 귀</button><button data-side="R" aria-pressed="${!!EAI.flip}">오른쪽 귀</button></div>`}
 function bindSide(){document.querySelectorAll('[data-side]').forEach(b=>b.onclick=()=>{EAI.flip=b.dataset.side==='R';document.querySelectorAll('[data-side]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))})}
+function capsHTML(){const k=ANALYZERS.landmarks?null:EAR_CAPS.silhouette;if(!k)return '';return `<div class="eai-caps"><div><b>AI가 읽은 것</b>${k.sees.map(x=>`<span>✓ ${x}</span>`).join('')}</div><div><b>아직 읽지 못하는 것</b>${k.cannot.map(x=>`<span>– ${x}</span>`).join('')}</div></div>`}
 function eaiResult(){const P=eaiPlan(),cd=COND[EAI.condI]||COND[COND.length-1];const B=planBill(P);EAI.plan=P;const low=EAI.low;
   try{track('ai_result',{cond:EAI.cond||'none',style:P.sw.style},true)}catch(e){}
   const lineOf=no=>B.ls.find(l=>l.it.no===no);
-  const ptp=P.pts.map(p=>p2pct(p.ph));const struct=STRUCT.map(([n,x,y])=>{const p=t2p(x,y);if(!p)return '';const [l,t]=p2pct(p);return l<2||l>98||t<2||t>98||ptp.some(q=>Math.hypot(q[0]-l,q[1]-t)<9)?'':`<i class="eai-st" style="left:${l}%;top:${t}%">${n}</i>`}).join('');
-  const dots=P.pts.map((p,i)=>{const [l,t]=p2pct(p.ph);return `<button class="eai-pt" data-pt="${i}" style="left:${l}%;top:${t}%" aria-label="${esc(p.n)}">${i+1}</button>`}).join('');
+  const struct='';const A=analyzer();
+  const dots=P.pts.map((p,i)=>{const [l,t]=p2pct(p.ph);return `<button class="eai-pt ${p.mode==='exact'?'':'zone'}" data-pt="${i}" style="left:${l}%;top:${t}%" aria-label="${esc(p.n)} 참고 구역">${i+1}</button>`}).join('');
+  const chart=P.pts.length?`<div class="eai-chart"><div class="ear"><svg viewBox="153 223 865 957" aria-hidden="true">${EARSVG}</svg>${P.pts.map((p,i)=>`<i style="left:${(p.pt.chart.x-153)/865*100}%;top:${(p.pt.chart.y-223)/957*100}%">${i+1}</i>`).join('')}</div><small>가이드 도표 원본 위치</small></div>`:'';
   $('#eaiBody').innerHTML=`<div class="eai-res"><div class="eai-msg"><h3>${esc(cd.h)}</h3><p>${esc(cd.b)}</p></div>
-   ${low?`<div class="eai-low">AI가 귀 윤곽을 확실하게 찾지 못했어요${EAI.score?` (확신도 ${Math.round(EAI.score*100)}%)`:''}. 포인트가 어긋나 보이면 <b>위치 직접 맞추기</b>로 옮겨 주세요.</div>`:''}
-   <div class="eai-photo${EAI.adjOn?' adj':''}" id="eaiPhoto"><img src="${EAI.thumb}" alt="내 귀 사진과 AI가 찾은 윤곽">${struct}${dots}</div>
-   <div class="eai-ptbar">${P.pts.length?P.pts.map((p,i)=>`<button data-pt="${i}"><i>${i+1}</i>${esc(p.n)}</button>`).join('')+`<button class="adjb" id="eaiAdj" aria-pressed="${!!EAI.adjOn}">${EAI.adjOn?'위치 맞추기 끝':'✋ 위치 직접 맞추기'}</button>`:'<small>‘그냥 예쁘게’를 골라 이혈 포인트 없이 귀 모양으로만 추천했어요.</small>'}</div>
-   <div class="eai-ptinfo" id="eaiPtInfo" ${P.pts.length?'':'hidden'}>${P.pts.length?'번호를 누르면 그 자리의 이름과 전통적인 설명을 볼 수 있어요.':''}</div>
-   <p class="eai-note">흰 선은 AI가 사진에서 찾은 내 귀 윤곽, 번호는 그 윤곽에 표준 귀 지도를 겹쳐 그린 <b>참고 위치</b>예요. 실제 혈자리를 정확히 판별하거나 진단한 것이 아니에요.</p>
-   <section class="eai-sec"><h4><span>①</span> AI가 읽은 내 귀 모양</h4><div class="eai-chips"><em>${P.sw.form}</em><em>${P.sw.lobe}</em><em>${P.sw.rim}</em></div>${cmtHTML()}</section>
-   ${P.c?`<section class="eai-sec trad"><h4><span>②</span> 전통 이혈 이야기 · ${esc(cd.n)}</h4><p>전통 이혈에서는 ‘${esc(P.c.sit)}’ 아래 자리들을 살펴보곤 했어요.</p>
-     <ol>${P.pts.map((p,i)=>`<li><b>${esc(p.n)}</b><small>${esc(p.info[0])}</small><p>${esc(p.info[1])}</p></li>`).join('')}</ol><p class="eai-dis">전통 개념을 소개하는 참고 정보예요. 주얼패치가 특정 효과를 낸다고 보장하지 않아요.</p></section>`:''}
+   ${low?`<div class="eai-low">AI가 귀 윤곽을 확실하게 찾지 못했어요. 귀가 잘 보이도록 <b>다시 찍거나</b>, 구역이 어긋나 보이면 <b>직접 옮겨</b> 주세요. <button class="eai-link" id="eaiRetake">다시 찍기</button></div>`:''}
+   <div class="eai-phwrap"><div class="eai-photo${EAI.adjOn?' adj':''}" id="eaiPhoto"><img src="${EAI.thumb}" alt="내 귀 사진과 AI가 찾은 윤곽">${struct}${dots}</div>${chart}</div>
+   <div class="eai-ptbar">${P.pts.length?P.pts.map((p,i)=>`<button data-pt="${i}"><i>${i+1}</i>${esc(p.n)}</button>`).join('')+`<button class="adjb" id="eaiAdj" aria-pressed="${!!EAI.adjOn}">${EAI.adjOn?'옮기기 끝':'✋ 구역 직접 옮기기'}</button>`:'<small>‘그냥 예쁘게’를 골라 이혈 포인트 없이 귀 모양으로만 추천했어요.</small>'}</div>
+   <div class="eai-ptinfo" id="eaiPtInfo" ${P.pts.length?'':'hidden'}>${P.pts.length?'번호를 누르면 포인트 이름과 표시 근거를 볼 수 있어요.':''}</div>
+   <p class="eai-note">흰 선은 AI가 찾은 내 귀 윤곽이에요. 번호 구역은 <b>조재숙 박사 자문 가이드 도표</b>(오른쪽 작은 그림)의 위치를 내 귀 윤곽에 맞춰 옮긴 <b>참고 구역</b>이에요. 귀 안쪽 구조까지 읽은 건 아니라서 정확한 혈자리 위치로 보시면 안 돼요.</p>
+   <section class="eai-sec"><h4><span>①</span> AI가 읽은 내 귀 모양</h4><div class="eai-chips"><em>${P.sw.form}</em><em>${P.sw.lobe}</em><em>${P.sw.rim}</em></div>${capsHTML()}${cmtHTML()}</section>
+   ${P.c?`<section class="eai-sec trad"><h4><span>②</span> ${esc(cd.n)} · 이혈 리추얼</h4><p>WBL 주얼패치 이혈테라피 가이드(조재숙 박사 자문)는 ‘${esc(P.c.sit)}’ 아래 포인트에 붙이도록 안내해요.</p>
+     <ol>${P.pts.map(p=>`<li><b>${esc(p.n)}</b>${p.pt.hanja?`<small>${esc(p.pt.hanja)}</small>`:''}${p.pt.note?`<p>${esc(p.pt.note)}</p>`:''}</li>`).join('')}</ol>
+     <p class="eai-dis">출처: ${esc(SRC_GUIDE.title)}${SRC_GUIDE.page?` · p.${SRC_GUIDE.page}`:''}. 전통 개념을 소개하는 참고 정보이며, 주얼패치가 특정 효과를 낸다고 보장하지 않아요.</p></section>`:''}
    <section class="eai-sec"><h4><span>${P.c?'③':'②'}</span> 디자인 추천 · ${esc(P.pr.n)}</h4>
      <div class="eai-recs">${P.recs.map(r=>{const it=itemOf(r.no),l=lineOf(r.no);return `<div class="eai-rc"><img src="${CUTS[r.no][0]}" alt=""><div><b>${esc(shortName(it.name))}</b><small>${r.mm}mm · ${r.pt?`📍 ${esc(r.pt)} 자리`:`✨ ${ZN[r.zone]} 포인트`}</small><p>${esc(r.why)}</p></div><em>${won(l?l.price:it.sell)}</em></div>`}).join('')}</div>
      <div class="eai-sum"><div><span>추천 ${B.ls.length}종 · ${B.n}개</span><span>${won(B.base)}</span></div>${B.on?`<div class="d"><span>가든 단독 5% 할인</span><span>−${won(B.disc)}</span></div><div class="f"><span>최종 예상가</span><strong>${won(B.final)}</strong></div>`:`<div class="f"><span>합계</span><strong>${won(B.final)}</strong></div>`}
      <small>${B.on?'결제 단계에서 이번 주 가든 할인코드를 입력하면 적용돼요':B.low?'5% 할인은 3만원 이상일 때 적용돼요':'붙여본 뒤 바로 장바구니에 담을 수 있어요'}</small></div></section>
    <div class="eai-acts"><button class="buy" id="eaiApply">내 귀 사진에 붙여보기</button><button class="ghost" id="eaiTpl">기준 귀로 꾸미기</button></div>
    <button class="eai-link" id="eaiAgain">다른 사진으로 다시 하기</button></div>`;
-  const info=i=>{const p=P.pts[i];const el=$('#eaiPtInfo');el.innerHTML=`<b>${i+1}. ${esc(p.n)}</b> <small>${esc(p.info[0])}</small><p>${esc(p.info[1])}</p>`;document.querySelectorAll('[data-pt]').forEach(b=>b.classList.toggle('on',+b.dataset.pt===i))};
+  const info=i=>{const p=P.pts[i];const el=$('#eaiPtInfo');el.innerHTML=`<b>${i+1}. ${esc(p.n)}</b> ${p.pt.hanja?`<small>${esc(p.pt.hanja)}</small>`:''}<p>${p.pt.note?esc(p.pt.note)+'<br>':''}<span class="basis">표시 근거 · ${p.mode==='manual'?'직접 옮긴 위치':esc(A.basis)} · 출처: 자문 가이드 도표${p.pt.status==='expert_verified'?'':' · 전문가 사진 검증 전'}</span></p>`;document.querySelectorAll('[data-pt]').forEach(b=>b.classList.toggle('on',+b.dataset.pt===i))};
   document.querySelectorAll('[data-pt]').forEach(b=>b.onclick=()=>{if(!EAI.adjOn)info(+b.dataset.pt)});
   const ab=$('#eaiAdj');if(ab)ab.onclick=()=>{EAI.adjOn=!EAI.adjOn;eaiResult()};if(EAI.adjOn)bindAdj(P);
-  $('#eaiApply').onclick=()=>eaiApply(true);$('#eaiTpl').onclick=()=>eaiApply(false);$('#eaiAgain').onclick=()=>{EAI.adj=null;EAI.adjOn=false;eaiIntro()}}
+  const rt=$('#eaiRetake');if(rt)rt.onclick=()=>{EAI.adj=null;EAI.adjOn=false;eaiIntro()};$('#eaiApply').onclick=()=>eaiApply(true);$('#eaiTpl').onclick=()=>eaiApply(false);$('#eaiAgain').onclick=()=>{EAI.adj=null;EAI.adjOn=false;eaiIntro()}}
 function bindAdj(P){const box=$('#eaiPhoto');box.querySelectorAll('.eai-pt').forEach(d=>{d.onpointerdown=e=>{e.preventDefault();d.setPointerCapture(e.pointerId);const i=+d.dataset.pt;
   const mv=ev=>{const r=box.getBoundingClientRect();const l=Math.min(100,Math.max(0,(ev.clientX-r.left)/r.width*100)),t=Math.min(100,Math.max(0,(ev.clientY-r.top)/r.height*100));d.style.left=l+'%';d.style.top=t+'%';
     const C=EAI.crop;EAI.adj=EAI.adj||{};EAI.adj[P.pts[i].n]=[C.x0+l/100*C.w,C.y0+t/100*C.h]};
