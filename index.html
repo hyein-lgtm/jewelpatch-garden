@@ -363,6 +363,20 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .pcode button{border:0;border-radius:8px;background:#4F5E45;color:#fff;font-size:11.5px;font-weight:700;padding:6px 10px}
 .pc-how{font-size:10.5px;color:var(--s-sub);margin-top:3px}
 .psum .fin small{font-weight:500;font-size:10.5px;color:var(--s-sub)}
+
+/* BEST/NEW tags sit on the card edge so they never cover the patch */
+.tray{padding-top:9px!important;row-gap:12px!important}
+.pc{overflow:visible}
+.pc .bd{left:50%;top:-8px;transform:translateX(-50%);font-size:8.5px;line-height:1.35;padding:1px 6px;border-radius:999px;box-shadow:0 0 0 2px #fff;white-space:nowrap;z-index:1}
+.pc{touch-action:pan-y;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.pc img{-webkit-user-drag:none;pointer-events:none}
+.pc.dragging{opacity:.45}
+.dghost{position:fixed;z-index:60;width:58px;height:58px;object-fit:contain;transform:translate(-50%,-80%) scale(1.1);pointer-events:none;filter:drop-shadow(0 8px 12px rgba(40,20,20,.35));transition:transform .12s}
+.dghost.ok{transform:translate(-50%,-80%) scale(1.3)}
+.stage.drop{box-shadow:0 0 0 3px #C691A3 inset}
+.dhint{position:absolute;inset:38% 8px auto 8px;z-index:5;display:flex;align-items:center;gap:10px;background:rgba(62,40,48,.88);color:#fff;border-radius:14px;padding:10px 12px;font-size:13px;line-height:1.4;cursor:pointer;pointer-events:auto}
+.dhint .hand{font-size:28px;display:inline-block;animation:dhand 1.8s ease-in-out infinite}
+@keyframes dhand{0%{transform:translate(70px,0) scale(1)}15%{transform:translate(70px,0) scale(.85)}70%{transform:translate(-4px,-6px) scale(.85)}85%,100%{transform:translate(-4px,-6px) scale(1)}}
 /* ---- village skin ---- */
 .brand{color:#4A3A3C;text-shadow:0 1px 8px rgba(255,255,255,.7)}
 .brand span{color:#B08A5B}
@@ -492,6 +506,20 @@ body.tod-night .brand,body.tod-night .brand b{color:#F4EEE4;text-shadow:0 1px 8p
 body.tod-night .brand span{color:#E3C98F}
 body.tod-night .keys{color:#E8E0D2}
 body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
+
+.pbig{display:grid;gap:10px;padding-bottom:6px}
+.pbig img{display:block;width:100%;max-height:62vh;object-fit:contain;border-radius:14px;background:#F3EEE6}
+.pper{margin:0;text-align:center;font-weight:700;color:#4E2338;font-size:14px}
+.pdots{display:flex;justify-content:center;gap:8px}
+.pdots button{width:9px;height:9px;border-radius:50%;border:0;padding:0;background:#DCD3CB;cursor:pointer}
+.pdots button[aria-pressed="true"]{background:#4E2338;width:22px;border-radius:5px}
+.pbig .pgo{display:block;text-align:center;text-decoration:none;border-radius:12px;background:#4E2338;color:#fff;padding:14px;font-weight:700}
+.phome{text-align:center;color:#6B6764;font-size:13px;text-decoration:underline}
+/* idle dock: a small pill so it doesn't cover the shops */
+.bar.mini{width:auto;grid-template-columns:auto auto auto;padding:4px!important;gap:2px;border-radius:999px;bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+.bar.mini .dk-arr{width:34px;height:34px;border-radius:999px;font-size:20px;background:transparent}
+.bar.mini .dk-mid{padding:0 10px}
+.bar.mini .dk-mid b{font-family:inherit;font-size:13.5px;font-weight:700}
 .eai{position:fixed;inset:0;z-index:14;background:rgba(40,15,30,.55);display:flex;justify-content:center;align-items:stretch;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   --e-ink:#454342;--e-sub:#6B6764;--e-line:#E3DED6;--e-lav:#8E7BB5;--e-lav-t:#F1ECF8;--e-ivory:#F8F5F0;--e-sage-d:#66745A}
 .eai[hidden]{display:none}
@@ -534,8 +562,8 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 .eai-msg h3{font-family:var(--f-display);font-size:19px;margin:0 0 6px}
 .eai-msg p{margin:0;font-size:14.5px;line-height:1.6}
 .eai-read{display:flex;gap:12px;align-items:center;border:1px solid var(--e-line);border-radius:16px;padding:10px}
-.eai-cut{flex:0 0 96px;height:118px;border-radius:12px;background:#F3EEE6;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.eai-cut img{width:100%;height:100%;object-fit:contain}
+.eai-cut{flex:0 0 112px;height:136px;border-radius:12px;background:#2a2321;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.eai-cut img{width:100%;height:100%;object-fit:cover}
 .eai-read ul{margin:4px 0;padding-left:18px;font-weight:700;font-size:14px;line-height:1.6}
 .eai-read small{color:var(--e-sub);font-size:11.5px}
 .eai-cmt{border-left:3px solid var(--e-lav);background:var(--e-ivory);border-radius:0 14px 14px 0;padding:10px 12px;font-size:14px}
@@ -556,6 +584,58 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 .phtog button{border:1px solid var(--s-line);background:#fff;border-radius:999px;padding:8px 12px;font:inherit;font-size:13px;font-weight:700;color:var(--s-sub);cursor:pointer}
 .phtog button[aria-pressed="true"]{background:#4E2338;border-color:#4E2338;color:#fff}
 .phtog .phnew{background:linear-gradient(135deg,#F1ECF8,#F6EEF6);border-color:#DCD2EE;color:#5A4A80}
+/* v2: privacy boxes */
+.eai-pbox{display:block;border-radius:14px;padding:12px 14px;margin-top:12px;font-size:13px;line-height:1.55}
+.eai-pbox.on{background:#EEF1EA}
+.eai-pbox.on ul{margin:6px 0 0;padding-left:18px;display:grid;gap:4px}
+.eai-pbox.opt{display:flex;gap:10px;align-items:flex-start;border:1px dashed #CFC6DE;background:#fff;cursor:pointer}
+.eai-pbox.opt input{width:20px;height:20px;margin-top:2px;accent-color:var(--e-lav);flex:0 0 auto}
+.eai-pbox.opt small{display:block;color:var(--e-sub);font-size:12.5px;margin-top:3px}
+.eai-side{display:flex;align-items:center;gap:6px;margin-top:10px;flex-wrap:wrap;font-size:13.5px;font-weight:700}
+.eai-side span{margin-right:4px}
+.eai-side button{border:1px solid var(--e-line);background:#fff;border-radius:999px;padding:7px 14px;font:inherit;font-size:13px;cursor:pointer}
+.eai-side button[aria-pressed="true"]{background:#4E2338;border-color:#4E2338;color:#fff}
+/* v2: photo hero with points */
+.eai-low{background:#FFF4E5;border:1px solid #F2D3A6;color:#7A4E12;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.5}
+.eai-photo{position:relative;border-radius:18px;overflow:hidden;background:#222;line-height:0;touch-action:pan-y}
+.eai-photo img{width:100%;display:block;max-height:64vh;object-fit:cover}
+.eai-photo.adj{outline:3px solid #C691A3;outline-offset:-3px;touch-action:none}
+.eai-st{position:absolute;transform:translate(-50%,-50%);font-style:normal;font-size:10.5px;line-height:1;color:#fff;background:rgba(40,30,30,.45);border:1px solid rgba(255,255,255,.55);padding:3px 6px;border-radius:999px;white-space:nowrap;pointer-events:none}
+.eai-pt{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;border:2px solid #fff;background:#8E7BB5;color:#fff;font:800 13px/26px inherit;text-align:center;padding:0;box-shadow:0 0 0 5px rgba(142,123,181,.35),0 3px 8px rgba(0,0,0,.35);cursor:pointer;z-index:2}
+.eai-pt.on{background:#4E2338;box-shadow:0 0 0 6px rgba(198,145,163,.55),0 3px 8px rgba(0,0,0,.35)}
+.eai-photo.adj .eai-pt{cursor:grab;animation:eaipul 1.2s ease-in-out infinite}
+@keyframes eaipul{50%{box-shadow:0 0 0 10px rgba(198,145,163,.35),0 3px 8px rgba(0,0,0,.35)}}
+.eai-ptbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.eai-ptbar button{display:flex;align-items:center;gap:6px;border:1px solid var(--e-line);background:#fff;border-radius:999px;padding:6px 12px 6px 6px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.eai-ptbar button i{font-style:normal;width:20px;height:20px;border-radius:50%;background:#8E7BB5;color:#fff;font-size:11px;display:grid;place-items:center}
+.eai-ptbar button.on{border-color:#4E2338}
+.eai-ptbar .adjb{padding:6px 12px;background:#F6EEF6;border-color:#DCD2EE;color:#5A4A80;margin-left:auto}
+.eai-ptbar .adjb[aria-pressed="true"]{background:#4E2338;color:#fff;border-color:#4E2338}
+.eai-ptbar small{color:var(--e-sub);font-size:12.5px}
+.eai-ptinfo{background:var(--e-lav-t);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.55;color:#4A3F60}
+.eai-ptinfo small{color:var(--e-sub)}.eai-ptinfo p{margin:4px 0 0}
+.eai-note{margin:0;color:var(--e-sub);font-size:11.5px;line-height:1.5}
+/* v2: sections */
+.eai-sec{border-top:1px solid var(--e-line);padding-top:12px;display:grid;gap:8px}
+.eai-sec h4{margin:0;font-size:15.5px;display:flex;gap:6px;align-items:center}
+.eai-sec h4 span{color:var(--e-lav)}
+.eai-sec>p{margin:0;font-size:13.5px;line-height:1.55}
+.eai-chips{display:flex;gap:6px;flex-wrap:wrap}.eai-chips em{font-style:normal;background:var(--e-ivory);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700}
+.eai-sec.trad{background:#FBF7EE;border:0;border-radius:16px;padding:14px}
+.eai-sec.trad ol{margin:0;padding-left:20px;display:grid;gap:8px}
+.eai-sec.trad li b{font-size:14px}.eai-sec.trad li small{margin-left:6px;color:var(--e-sub)}.eai-sec.trad li p{margin:2px 0 0;font-size:13px;line-height:1.55;color:#5B524E}
+.eai-dis{margin:0;font-size:11.5px;color:var(--e-sub)}
+.eai-recs{display:grid;gap:8px}
+.eai-rc{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:10px;align-items:start;background:var(--e-ivory);border-radius:14px;padding:10px}
+.eai-rc img{width:56px;height:56px;object-fit:contain;background:#fff;border-radius:10px}
+.eai-rc b{font-size:14px}.eai-rc small{display:block;color:#5A4A80;font-size:12px;font-weight:700;margin-top:1px}
+.eai-rc p{margin:3px 0 0;font-size:12.5px;line-height:1.5;color:var(--e-sub)}
+.eai-rc em{font-style:normal;font-weight:800;color:#4E2338;font-size:14px;white-space:nowrap}
+.eai-sum{border:1px solid var(--e-line);border-radius:14px;padding:12px;display:grid;gap:4px;font-size:13.5px}
+.eai-sum div{display:flex;justify-content:space-between}
+.eai-sum .d{color:#C2475A;font-weight:700}
+.eai-sum .f strong{font-size:18px;color:#4E2338}
+.eai-sum small{color:var(--e-sub);font-size:11.5px}
 </style>
 
 </head>
@@ -796,6 +876,14 @@ const PROMO_FALLBACK=[
  {image:'https://wingbling.cafe24.com/main-hero/launch_d4213224a98c.webp',link:'https://wblbeauty.com/product/list.html?cate_no=217',alt:"'Signs of Me' VOL.03"},
  {image:'https://wingbling.cafe24.com/main-hero/hero_436370.webp',link:'https://wblbeauty.com/product/list.html?cate_no=1105',alt:'이혈테라피 주얼패치'},
  {image:'https://wingbling.cafe24.com/main-hero/celebbanner_2026W45_5c2c2b109a0e_mo.webp',link:'https://wblbeauty.com/product/list.html?cate_no=387',alt:'셀럽 PICK'}];
+const MALL=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'https://m.wblbeauty.com':'https://wblbeauty.com';
+function mallLink(u){u=String(u||'').trim();if(!u||u==='#')return MALL+'/';if(/^https?:\/\//i.test(u))return u;if(u.startsWith('//'))return 'https:'+u;return MALL+(u.startsWith('/')?'':'/')+u}
+function promoPeriod(s){if(s.period)return String(s.period);const f=d=>{const t=new Date(d);return isNaN(t)?'':(t.getMonth()+1)+'.'+t.getDate()};const a=f(s.start),b=f(s.end);return a&&b?a+' ~ '+b:b?'~ '+b+' 까지':''}
+function openPromo(){const s=SIGN.slides[SIGN.i];if(!s)return;try{track('promo_click',{alt:s.alt||''})}catch(e){}const link=mallLink(s.link),per=promoPeriod(s);
+  sheet('WBL NOW · 지금 진행 중인 혜택',esc(s.alt||'WBL 프로모션'),`<div class="pbig"><a href="${esc(link)}" target="_blank" rel="noopener"><img src="${esc(s.image)}" alt="${esc(s.alt||'')}"></a>${per?`<p class="pper">${esc(per)}${s.urgency?' · '+esc(s.urgency):''}</p>`:''}
+   ${SIGN.slides.length>1?`<div class="pdots">${SIGN.slides.map((x,i)=>`<button data-ps="${i}" aria-label="${esc(x.alt||'프로모션 '+(i+1))}" aria-pressed="${i===SIGN.i}"></button>`).join('')}</div>`:''}
+   <a class="buy pgo" href="${esc(link)}" target="_blank" rel="noopener">공식몰에서 혜택 보기</a><a class="phome" href="${MALL}/" target="_blank" rel="noopener">WBL 공식몰 홈으로</a></div>`);
+  document.querySelectorAll('[data-ps]').forEach(b=>b.onclick=()=>{SIGN.i=+b.dataset.ps;SIGN.show&&SIGN.show();openPromo()})}
 const SIGN={g:null,corners:[],slides:[],i:0,ms:4500,t:0,el:null,img:null,cap:null};
 (function(){
   const g=new THREE.Group();g.position.set(-3.7,0,3.7);g.rotation.y=0.66;
@@ -814,13 +902,13 @@ const SIGN={g:null,corners:[],slides:[],i:0,ms:4500,t:0,el:null,img:null,cap:nul
   tagHit(frame,{kind:'promo'});tagHit(screen,{kind:'promo'});tagHit(head,{kind:'promo'});
   const el=document.createElement('a');el.className='psign';el.target='_blank';el.rel='noopener';el.hidden=true;
   el.innerHTML='<img alt=""><span class="pcap"></span>';document.body.appendChild(el);SIGN.el=el;SIGN.img=el.querySelector('img');SIGN.cap=el.querySelector('.pcap');
-  el.addEventListener('click',()=>{try{track('promo_click',{alt:(SIGN.slides[SIGN.i]||{}).alt||''})}catch(e){}});
+  el.addEventListener('click',e=>{e.preventDefault();openPromo()});
   function load(){const src=(window.WBL_MAIN_HERO&&Array.isArray(window.WBL_MAIN_HERO.slides))?window.WBL_MAIN_HERO:null;
     const now=Date.now();const ok=s=>{const a=s.start?Date.parse(s.start):NaN,b=s.end?Date.parse(s.end):NaN;return (isNaN(a)||a<=now)&&(isNaN(b)||now<=b)};
     let sl=(src?src.slides:PROMO_FALLBACK).filter(s=>s&&s.image&&s.link&&ok(s));if(!sl.length)sl=PROMO_FALLBACK.filter(ok);
     SIGN.slides=sl;SIGN.ms=Math.max(3000,Math.min(9000,(src&&+src.autoplay_ms)||4500));SIGN.i=0;show()}
-  function show(){const s=SIGN.slides[SIGN.i];if(!s)return;const img=SIGN.img;img.style.opacity=0;setTimeout(()=>{img.src=s.image;img.alt=s.alt||'';SIGN.el.href=s.link;SIGN.cap.textContent=s.alt||'';img.onload=()=>{img.style.opacity=1}},180)}
-  SIGN.next=()=>{if(SIGN.slides.length<2)return;SIGN.i=(SIGN.i+1)%SIGN.slides.length;show()};
+  function show(){const s=SIGN.slides[SIGN.i];if(!s)return;const img=SIGN.img;img.style.opacity=0;setTimeout(()=>{img.src=s.image;img.alt=s.alt||'';SIGN.el.href=mallLink(s.link);SIGN.cap.textContent=s.alt||'';img.onload=()=>{img.style.opacity=1}},180)}
+  SIGN.show=show;SIGN.next=()=>{if(SIGN.slides.length<2)return;SIGN.i=(SIGN.i+1)%SIGN.slides.length;show()};
   let tries=0;(function wait(){if(window.WBL_MAIN_HERO||tries++>20)load();else setTimeout(wait,150)})();
 })();
 /* map the 500x532 overlay onto the projected screen quad with a CSS homography */
@@ -1199,7 +1287,7 @@ const upEnd=e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)pinch0=null;if(!drag||e.
   if(h){const hd=h.object.userData.hit;
     if(hd.kind==='prod'){openProductCard(hd.no,'village');return}
     if(hd.kind==='guide'){guideTap();return}
-    if(hd.kind==='promo'){const s=SIGN.slides[SIGN.i];if(s){try{track('promo_click',{alt:s.alt||''})}catch(e){}window.open(s.link,'_blank','noopener')}return}
+    if(hd.kind==='promo'){openPromo();return}
     if(!entered){return}
     if(hd.kind==='ai'){if(Math.hypot(P.x-AIH.x,P.z-AIH.z)<3.2)aiOpen();else{plan(AIH.ax,AIH.az,Math.PI/4+Math.PI);pending={kind:'ai'}}return}
     if(hd.kind==='studio'){if(Math.hypot(P.x,P.z)<7)stOpen();else{const a=Math.atan2(P.z,P.x);plan(Math.cos(a)*4.6,Math.sin(a)*4.6);pending={kind:'studio'}}return}
@@ -1254,10 +1342,10 @@ function renderBar(){const b=$('#bar');if(!entered||!$('#sheet').hidden||!$('#st
   if(near){const w=watchers(near.p.id);title=(ZONES[near.p.id]||[near.p.name+' 쇼룸'])[0];sub=w?`지금 ${w}명이 같이 보고 있어요`:'진열된 패치를 눌러 자세히 보세요';act='shop';actTxt='전체 '+byStyle(near.p.id).length+'종'}
   else if(nearAI){title='AI 이어 리추얼 하우스';sub='귀 사진 한 장으로 어울리는 이어룩 찾기';act='ai';actTxt='체험하기'}
   else if(nearStudio){title='내 귀 꾸미기';sub='진짜 패치를 내 귀에 붙여봐요';act='studio';actTxt='시작하기'}
-  else{const d=DESTS[(tourIdx+1+DESTS.length)%DESTS.length];title=target?'이동 중…':'어디로 갈까요?';sub=target?'':'여기를 누르면 가고 싶은 가게로 데려다줘요';act='';}
+  else{const d=DESTS[(tourIdx+1+DESTS.length)%DESTS.length];title=target?'이동 중…':'🗺 어디로 갈까요?';sub='';act='';}
   b.innerHTML=`<button class="dk-arr" id="dkPrev" aria-label="이전 장소">‹</button><button class="dk-mid" id="dkMid" type="button"><b>${esc(title)}</b>${sub?`<small>${esc(sub)}</small>`:''}</button>${act?`<button class="dk-act" id="dkAct">${actTxt}</button>`:''}<button class="dk-arr" id="dkNext" aria-label="다음 장소">›</button>`;
   if(near){const lst=near.list;b.innerHTML=`<div class="dk-strip">${lst.map(it=>`<button data-sp="${it.no}"><span class="im">${CUTS[it.no]?`<img src="${CUTS[it.no][0]}" alt="">`:`<img class="t" src="${it.th}" alt="">`}</span><b>${esc(shortNm(it.name))}</b><em>${won(it.sell)}</em></button>`).join('')}</div>`+b.innerHTML}
-  b.classList.toggle('has-strip',!!near);b.querySelectorAll('[data-sp]').forEach(x=>x.onclick=()=>openProductCard(+x.dataset.sp,'dock'));
+  b.classList.toggle('has-strip',!!near);b.classList.toggle('mini',!near&&!nearStudio&&!nearAI);b.querySelectorAll('[data-sp]').forEach(x=>x.onclick=()=>openProductCard(+x.dataset.sp,'dock'));
   b.hidden=false;$('#dkMid').onclick=openDestPicker;$('#dkPrev').onclick=()=>goDest(tourIdx-1);$('#dkNext').onclick=()=>goDest(tourIdx+1);
   const a=$('#dkAct');if(a)a.onclick=()=>{if(act==='shop')openShop(near.p.id);else if(act==='ai')aiOpen();else stOpen()}}
 function updateNear(){let best=null,bd=1e9;for(const pd of PEDS){const d=Math.hypot(P.x-pd.fx,P.z-pd.fz);if(d<bd){bd=d;best=pd}}const nn=bd<3.6?best:null;
@@ -1270,7 +1358,7 @@ function updateNear(){let best=null,bd=1e9;for(const pd of PEDS){const d=Math.hy
 const clock=new THREE.Clock();let lastSent=0,sentKey='';const tmpV=new THREE.Vector3();
 function frame(){
   const dt=Math.min(clock.getDelta(),0.05),t=clock.elapsedTime;let mx=0,mz=0;
-  if(!$('#studio').hidden){requestAnimationFrame(frame);return}
+  if(!$('#studio').hidden||!$('#eai').hidden){requestAnimationFrame(frame);return}
   if(entered&&$('#sheet').hidden){const kf=(keys['w']||keys['arrowup']?1:0)-(keys['s']||keys['arrowdown']?1:0),kr=(keys['d']||keys['arrowright']?1:0)-(keys['a']||keys['arrowleft']?1:0);
     const jf=TJ.on?-TJ.y:0,jr=TJ.on?TJ.x:0;
     if(kf||kr||Math.hypot(jf,jr)>0.15){const kf2=kf+jf,kr2=kr+jr;target=null;route=[];pending=null;yawGoal=null;const fx=-Math.sin(camYaw),fz=-Math.cos(camYaw),rx=Math.cos(camYaw),rz=-Math.sin(camYaw);mx=fx*kf2+rx*kr2;mz=fz*kf2+rz*kr2;const m=Math.hypot(mx,mz);if(m>1){mx/=m;mz/=m}}
@@ -1580,7 +1668,7 @@ function applyPreset(id){const pr=PRESETS.find(p=>p.id===id);if(!pr)return;if(lo
   look=pr.items.filter(([no])=>CUTS[no]).map(([no,ax,ay,mm])=>({k:++uid,no,pi:0,x:(ax-VX)/VW,y:(ay-VY)/VH,mm:mmOf(no,0).includes(mm)?mm:mmOf(no,0).slice(-1)[0],r:0}));
   if(!lookTitle)$('#rsName')&&($('#rsName').value='');sel=null;saveLook();firstPatch();track('preset',{id});renderChooser();stRender();toast(`${pr.n} 조합을 붙였어요`)}
 function stOpen(no){$('#studio').hidden=false;$('#bar').hidden=true;$('#joy').style.visibility='hidden';track('studio_start',{from:entered?'garden':'entry'},true);
-  $('#earSvg').innerHTML=EARSVG;renderChooser();renderTray();if(no)addPiece(no,0);requestAnimationFrame(()=>{stRender();fitStage()});stRender();barKey=''}
+  $('#earSvg').innerHTML=EARSVG;renderChooser();renderTray();if(no)addPiece(no,0);setTimeout(dragHint,500);requestAnimationFrame(()=>{stRender();fitStage()});stRender();barKey=''}
 function stClose(){if($('#studio').hidden)return;$('#studio').hidden=true;$('#result').hidden=true;$('#mbar').hidden=true;$('#selbar').hidden=true;sel=null;$('#joy').style.visibility='';barKey='';if(!entered&&$('#sheet').hidden)$('#entry').hidden=false;canvas.focus({preventScroll:true})}
 document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;store.set('mode',mode);renderChooser()});
 $('#clrBtn').onclick=()=>{if(look.length)snapshot();look=[];sel=null;preset='';store.set('preset','');saveLook();renderChooser();stRender()};
@@ -1592,7 +1680,25 @@ function renderTray(){const styles=STYLES.filter(s=>pieceList.some(p=>p.it.style
   $('#stTabs').innerHTML=tabs.map(s=>`<button role="tab" aria-selected="${s.id===stTab}" data-st="${s.id}">${s.name}</button>`).join('');
   document.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>{stTab=b.dataset.st;renderTray();$('#tray').scrollTop=0});
   $('#tray').innerHTML=trayList().map(p=>`<button class="pc" data-no="${p.no}" data-pi="${p.pi}">${NEWS.has(p.no)?'<i class="bd new">NEW</i>':isBest(p.no)?'<i class="bd">BEST</i>':''}<img src="${p.src}" alt=""><span>${esc(shortName(p.it.name))}</span><small>${p.mm.join('/')}mm</small></button>`).join('');
-  document.querySelectorAll('.pc').forEach(b=>b.onclick=()=>{addPiece(+b.dataset.no,+b.dataset.pi);stRender()})}
+  document.querySelectorAll('.pc').forEach(b=>{b.onclick=()=>{if(DRAG.just){DRAG.just=false;return}addPiece(+b.dataset.no,+b.dataset.pi);stRender();dragHintDone()};b.addEventListener('pointerdown',dragDown)})}
+/* drag a patch from the tray and drop it where you want it on the ear */
+const DRAG={on:false,just:false,b:null,x0:0,y0:0,ghost:null,id:null};
+function dragDown(e){if(e.button>0)return;DRAG.b=e.currentTarget;DRAG.x0=e.clientX;DRAG.y0=e.clientY;DRAG.id=e.pointerId;DRAG.on=false;
+  window.addEventListener('pointermove',dragMove,{passive:false});window.addEventListener('pointerup',dragUp);window.addEventListener('pointercancel',dragEnd)}
+function overStage(x,y){const st=$('#stage').getBoundingClientRect();return x>=st.left&&x<=st.right&&y>=st.top&&y<=st.bottom}
+function dragMove(e){if(e.pointerId!==DRAG.id)return;const dx=e.clientX-DRAG.x0,dy=e.clientY-DRAG.y0;
+  if(!DRAG.on){if(Math.hypot(dx,dy)<10)return;if(e.pointerType==='touch'&&Math.abs(dx)<Math.abs(dy)*0.9){dragEnd();return}
+    DRAG.on=true;const im=DRAG.b.querySelector('img');const g=document.createElement('img');g.src=im.src;g.className='dghost';document.body.appendChild(g);DRAG.ghost=g;DRAG.b.classList.add('dragging');try{DRAG.b.setPointerCapture(e.pointerId)}catch(_){}}
+  e.preventDefault();const g=DRAG.ghost;g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';const ov=overStage(e.clientX,e.clientY);g.classList.toggle('ok',ov);$('#stage').classList.toggle('drop',ov)}
+function dragUp(e){if(e.pointerId!==DRAG.id)return;if(DRAG.on){DRAG.just=true;setTimeout(()=>{DRAG.just=false},350);
+    if(overStage(e.clientX,e.clientY)){const z=$('#zoomer').getBoundingClientRect();const x=Math.min(0.98,Math.max(0.02,(e.clientX-z.left)/z.width)),y=Math.min(0.98,Math.max(0.02,(e.clientY-z.top)/z.height));
+      const no=+DRAG.b.dataset.no,pi=+DRAG.b.dataset.pi;const p={k:++uid,no,pi,x,y,mm:mmOf(no,pi).slice(-1)[0],r:0};look.push(p);sel=p.k;saveLook();firstPatch();track('add_patch',{no,drag:1});stRender();dragHintDone()}
+    else toast('귀 위에 놓아야 붙어요')}dragEnd()}
+function dragEnd(){window.removeEventListener('pointermove',dragMove);window.removeEventListener('pointerup',dragUp);window.removeEventListener('pointercancel',dragEnd);
+  if(DRAG.ghost)DRAG.ghost.remove();DRAG.ghost=null;if(DRAG.b)DRAG.b.classList.remove('dragging');DRAG.on=false;const st=$('#stage');if(st)st.classList.remove('drop')}
+function dragHint(){if(store.get('dragHint',0)||$('#dhint'))return;const w=document.querySelector('#studio .stagewrap');if(!w)return;const h=document.createElement('div');h.id='dhint';h.className='dhint';
+  h.innerHTML='<span class="hand" aria-hidden="true">👆</span><b>패치를 꾹 눌러 끌어다<br>원하는 자리에 놓아보세요</b>';h.onclick=dragHintDone;w.appendChild(h)}
+function dragHintDone(){store.set('dragHint',1);const h=$('#dhint');if(h)h.remove()}
 function addPiece(no,pi){const cand=[...curPts(),...(mode==='style'?STYLE_SPOTS:[]),...ALLPTS];const free=cand.find(s=>!look.some(p=>Math.hypot(p.x-s.x,(p.y-s.y)*VH/VW)<0.04))||{x:0.7+Math.random()*0.08,y:0.45+Math.random()*0.08};
   const p={k:++uid,no,pi,x:free.x,y:free.y,mm:mmOf(no,pi).slice(-1)[0],r:0};look.push(p);sel=p.k;saveLook();firstPatch();track('add_patch',{no});if(free.n)toast(`${free.n} 위치에 붙였어요`)}
 function lookName(){const c={};look.forEach(p=>{const s=itemOf(p.no).style;c[s]=(c[s]||0)+1});const ks=Object.keys(c).sort((a,b)=>c[b]-c[a]);
@@ -1719,7 +1825,7 @@ self.onmessage=async e=>{const m=e.data;try{
 function eaiRunner(){if(EAI.runner)return EAI.runner;let w=null,cb=null;const send=(msg)=>new Promise((res,rej)=>{cb={res,rej,type:msg.type};w.postMessage(msg)});
   try{w=new Worker(URL.createObjectURL(new Blob([EAI_WORKER],{type:'text/javascript'})),{type:'module'})}catch(e){w=null}
   if(w){w.onmessage=e=>{const d=e.data;if(d.type==='progress'){eaiProgress(d.p);return}if(!cb)return;const c=cb;cb=null;if(d.type==='error')c.rej(new Error(d.msg));else c.res(d)};
-    w.onerror=e=>{if(cb){const c=cb;cb=null;c.rej(new Error(e.message||'worker'))}};EAI.runner={send};return EAI.runner}
+    w.onerror=e=>{if(cb){const c=cb;cb=null;c.rej(new Error(e.message||'worker'))}};EAI.runner={send,kill:()=>{try{w.terminate()}catch(e){}}};return EAI.runner}
   /* main-thread fallback */
   let lib=null,model,proc,emb,inp;EAI.runner={send:async m=>{if(!lib)lib=await import(EAI.lib);const {SamModel,AutoProcessor,RawImage,Tensor,env}=lib;env.allowLocalModels=false;
     if(m.type==='load'){if(!model){model=await SamModel.from_pretrained(EAI.id,{quantized:true,progress_callback:eaiProgress});proc=await AutoProcessor.from_pretrained(EAI.id)}return {type:'loaded'}}
@@ -1751,13 +1857,22 @@ function buildEarPhoto(){const {W,H}=EAI;const mk=maskCanvas();const cut=documen
   if(EAI.flip){g.translate(W,0);g.scale(-1,1)}g.drawImage(EAI.img,0,0,W,H);g.setTransform(1,0,0,1,0,0);g.globalCompositeOperation='destination-in';
   const soft=document.createElement('canvas');soft.width=W;soft.height=H;const sg=soft.getContext('2d');sg.filter='blur('+Math.max(1,Math.round(W/500))+'px)';if(EAI.flip){sg.translate(W,0);sg.scale(-1,1)}sg.drawImage(mk,0,0);g.drawImage(soft,0,0);g.globalCompositeOperation='source-over';
   const m=EAI.flip?flipPlane(EAI.mask,W,H):EAI.mask;const us=maskStats(m,W,H);const ts=tplStats();EAI.stats=us;
-  const K=1.4,cw=Math.round(VW*K),ch=Math.round(VH*K);const out=document.createElement('canvas');out.width=cw;out.height=ch;const o=out.getContext('2d');
-  const s=ts.L/us.L,rot=Math.atan2(ts.uy,ts.ux)-Math.atan2(us.uy,us.ux);o.scale(K,K);o.translate(ts.cx,ts.cy);o.rotate(rot);o.scale(s,s);o.translate(-us.cx,-us.cy);o.drawImage(cut,0,0);
+  const K=1.0,cw=Math.round(VW*K),ch=Math.round(VH*K);const out=document.createElement('canvas');out.width=cw;out.height=ch;const o=out.getContext('2d');
+  const s=ts.L/us.L,rot=Math.atan2(ts.uy,ts.ux)-Math.atan2(us.uy,us.ux);EAI.al={s,rot,tx:ts.cx,ty:ts.cy,ux:us.cx,uy:us.cy,flip:EAI.flip};o.scale(K,K);o.translate(ts.cx,ts.cy);o.rotate(rot);o.scale(s,s);o.translate(-us.cx,-us.cy);o.drawImage(cut,0,0);
   const alpha=new Uint8ClampedArray(cw*ch);const px=o.getImageData(0,0,cw,ch).data;for(let i=0;i<alpha.length;i++)alpha[i]=px[i*4+3];
   EARPHOTO={url:out.toDataURL('image/png'),alpha,K,cw,ch,img:null};const im=new Image();im.src=EARPHOTO.url;EARPHOTO.img=im;
   /* silhouette (shape only) for the optional AI comment */
   const sil=document.createElement('canvas');const SH=320,sw=Math.round(SH*cw/ch);sil.width=sw;sil.height=SH;const sgc=sil.getContext('2d');sgc.fillStyle='#F3EEE6';sgc.fillRect(0,0,sw,SH);
   const tmp=document.createElement('canvas');tmp.width=cw;tmp.height=ch;const tg=tmp.getContext('2d');tg.drawImage(out,0,0);tg.globalCompositeOperation='source-in';tg.fillStyle='#55624D';tg.fillRect(0,0,cw,ch);sgc.drawImage(tmp,0,0,sw,SH);EAI.sil=sil.toDataURL('image/png')}
+/* result thumbnail: the visitor's own photo, cropped around the ear, with the outline the AI found */
+function readThumb(){const {W,H,mask}=EAI,m=mask;let x0=W,y0=H,x1=0,y1=0;for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(m[y*W+x]){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}
+  const bw=x1-x0,bh=y1-y0,pad=Math.max(bw,bh)*0.22;let cx0=Math.max(0,Math.floor(x0-pad)),cy0=Math.max(0,Math.floor(y0-pad)),cx1=Math.min(W,Math.ceil(x1+pad)),cy1=Math.min(H,Math.ceil(y1+pad));
+  const cw=cx1-cx0,ch=cy1-cy0,S=Math.min(1,760/Math.max(cw,ch)),ow=Math.round(cw*S),oh=Math.round(ch*S);const c=document.createElement('canvas');c.width=ow;c.height=oh;const g=c.getContext('2d');
+  EAI.crop={x0:cx0,y0:cy0,w:cw,h:ch};g.drawImage(EAI.img,cx0,cy0,cw,ch,0,0,ow,oh);
+  const e=document.createElement('canvas');e.width=cw;e.height=ch;const eg=e.getContext('2d');const id=eg.createImageData(cw,ch);const k=Math.max(2,Math.round(3/S));
+  for(let y=cy0;y<cy1;y++)for(let x=cx0;x<cx1;x++){const v=m[y*W+x];if(!v)continue;let edge=false;for(const [dx,dy] of [[k,0],[-k,0],[0,k],[0,-k]]){const xx=x+dx,yy=y+dy;if(xx<0||yy<0||xx>=W||yy>=H||!m[yy*W+xx]){edge=true;break}}
+    if(edge){const o=((y-cy0)*cw+(x-cx0))*4;id.data[o]=255;id.data[o+1]=255;id.data[o+2]=255;id.data[o+3]=255}}
+  eg.putImageData(id,0,0);g.save();g.shadowColor='rgba(142,123,181,.95)';g.shadowBlur=6;g.drawImage(e,0,0,ow,oh);g.drawImage(e,0,0,ow,oh);g.restore();return c.toDataURL('image/jpeg',0.86)}
 function inside(ax,ay,r){const E=EARPHOTO;if(!E)return true;const k=E.K;const t=(x,y)=>{const u=Math.round(x*k),v=Math.round(y*k);return u>=0&&v>=0&&u<E.cw&&v<E.ch&&E.alpha[v*E.cw+u]>150};
   return t(ax,ay)&&t(ax+r,ay)&&t(ax-r,ay)&&t(ax,ay+r)&&t(ax,ay-r)}
 function snapIn(nx,ny){const ax=nx*VW,ay=ny*VH;if(inside(ax,ay,9))return [nx,ny];for(let rad=4;rad<=140;rad+=4){for(let k=0;k<24;k++){const a=k/24*Math.PI*2,x=ax+Math.cos(a)*rad,y=ay+Math.sin(a)*rad;if(inside(x,y,9))return [x/VW,y/VH]}}return [nx,ny]}
@@ -1765,10 +1880,47 @@ function snapIn(nx,ny){const ax=nx*VW,ay=ny*VH;if(inside(ax,ay,9))return [nx,ny]
 /* --- recommendation from the measured shape + the chosen condition --- */
 function shapeWords(s){const r=s.ratio,lb=s.lobe;const form=r>1.95?'세로로 길쭉한 귀':r<1.55?'동글동글한 귀':'균형 잡힌 귀';const lobe=lb>0.62?'넉넉한 귓불':lb<0.45?'아담한 귓불':'적당한 귓불';const rim=s.top>0.72?'넓은 윗귓바퀴':'완만한 윗귓바퀴';
   return {form,lobe,rim,style:r>1.95?'glam':lb>0.62?'pierce':'daily'}}
-function eaiLook(){const sw=shapeWords(EAI.stats);const pr=PRESETS.find(p=>p.id===sw.style)||PRESETS[0];const c=CONCERNS.find(x=>x.id===EAI.cond);const items=[];
-  if(c){(REC[c.id]||[]).forEach((no,i)=>{if(CUTS[no]&&c.dots[i])items.push([no,c.dots[i].x,c.dots[i].y,mmOf(no,0).slice(-1)[0]])});
-    pr.items.forEach(it=>{if(items.length>=5||items.some(q=>q[0]===it[0]||Math.hypot(q[1]-it[1],q[2]-it[2])<70))return;items.push(it)})}else pr.items.forEach(it=>items.push(it));
-  return {sw,pr,c,items:items.slice(0,5)}}
+/* --- traditional ear-point notes (참고용 전통 개념 · 효능 주장 없음) --- */
+const PINFO={'신문':['삼각와 위쪽','귀 위쪽의 세모난 오목한 자리예요. 전통 이혈에서 마음을 고요히 하는 것과 연결해 가장 자주 소개돼 온 자리예요.'],
+ '수면점':['귓불 쪽','이름처럼 전통 이혈에서 편안한 밤, 쉼과 연결해 불러 온 자리예요.'],
+ '신경쇠약구':['귓불 위 가장자리','전통 이혈에서 예민하고 뒤척이는 날과 연결해 불러 온 구역이에요.'],
+ '눈':['귓불 가운데','귓불 한가운데를 전통 이혈에서는 눈과 연결해 불러요.'],
+ '턱':['귓불 위 바깥','귓불 윗부분 바깥쪽을 전통 이혈에서는 턱과 연결해 불러요.'],
+ '외비':['이주 바깥면','귀 앞쪽 작은 돌기(이주)의 바깥면을 전통 이혈에서는 코와 연결해 불러요.'],
+ '갈점':['이주 위쪽','이주 위쪽 끝을 전통 이혈에서는 목마름과 연결해 불러요.'],
+ '기점':['이주 아래쪽','이주 쪽 자리를 전통 이혈에서는 허기와 연결해 불러요.'],
+ '복':['대이륜 가운데','귓바퀴 안쪽 둥근 능선의 가운데를 전통 이혈에서는 배와 연결해 불러요.'],
+ '이첨':['귓바퀴 꼭대기','귀 맨 위 꼭대기 끝이에요. 전통 이혈에서 머리를 맑게 하는 것과 연결해 소개돼 온 자리예요.'],
+ '간':['이갑개 위쪽','귀 안쪽 오목한 곳(이갑개)의 윗부분을 전통 이혈에서는 간과 연결해 불러요.'],
+ '이중':['이륜각','귓바퀴가 귀 안쪽으로 이어져 들어오는 시작점이에요. 전통 이혈에서 귀의 중심으로 불러요.'],
+ '위':['이륜각 끝','이륜각이 끝나는 자리를 전통 이혈에서는 위와 연결해 불러요.'],
+ '신장':['이갑개 위 가장자리','귀 안쪽 오목한 곳 위 가장자리를 전통 이혈에서는 신장과 연결해 불러요.'],
+ '앞머리':['귓불 앞쪽 위','귓불 앞쪽 윗부분을 전통 이혈에서는 이마·앞머리와 연결해 불러요.'],
+ '내분비':['이주간절흔 안쪽','귀 아래쪽 V자 홈 안쪽을 전통 이혈에서는 몸의 리듬과 연결해 불러요.'],
+ '자궁':['삼각와 앞쪽','삼각와의 앞쪽 끝을 전통 이혈에서는 여성의 리듬과 연결해 불러요.']};
+const STRUCT=[['귓바퀴',905,330],['삼각와',728,428],['이갑개',708,660],['이주',566,668],['귓불',640,985]];
+const STYLE_WHY={pearl:'은은한 광이라 매일 붙여도 부담 없어요',flower:'꽃잎 모양이 귀를 작은 정원처럼 화사하게 해줘요',romantic:'하나만 붙여도 사랑스러운 포인트가 돼요',flutter:'작은 별·나비라 가볍게 반짝이는 포인트가 돼요',sparkle:'빛을 받을 때마다 또렷하게 반짝여요',metal:'단정한 메탈이라 다른 패치와 겹쳐도 깔끔해요'};
+/* template (viewBox) <-> photo pixel mapping from the measured alignment */
+function t2p(ax,ay){const A=EAI.al;if(!A)return null;const qx=ax-VX-A.tx,qy=ay-VY-A.ty,c=Math.cos(-A.rot),s=Math.sin(-A.rot);let x=(qx*c-qy*s)/A.s+A.ux,y=(qx*s+qy*c)/A.s+A.uy;if(A.flip)x=EAI.W-1-x;return [x,y]}
+function p2t(px,py){const A=EAI.al;let x=A.flip?EAI.W-1-px:px;const dx=(x-A.ux)*A.s,dy=(py-A.uy)*A.s,c=Math.cos(A.rot),s=Math.sin(A.rot);return [dx*c-dy*s+A.tx+VX,dx*s+dy*c+A.ty+VY]}
+function p2pct(p){const C=EAI.crop;return [(p[0]-C.x0)/C.w*100,(p[1]-C.y0)/C.h*100]}
+function zoneOf(x,y){return y>=860?'lobe':y<=340?'top':x>=880?'rim':'inner'}
+const ZN={lobe:'귓불',top:'윗귓바퀴',rim:'귓바퀴 가장자리',inner:'귀 안쪽'};
+function pickMM(no,zone,sw){const l=mmOf(no,0).slice().sort((a,b)=>a-b);if(l.length<2)return l[0];const big=l[l.length-1],sm=l[0],mid=l[Math.floor((l.length-1)/2)];
+  if(zone==='lobe')return sw.lobe==='넉넉한 귓불'?big:sw.lobe==='아담한 귓불'?sm:mid;if(zone==='top')return sw.rim==='넓은 윗귓바퀴'?big:mid;return sm}
+function sizeWhy(zone,mm,sw,no){if(no&&mmOf(no,0).length<2)return `${ZN[zone]} 자리에 맞는 ${mm}mm 한 가지 크기예요`;return zone==='lobe'?`${sw.lobe}이라 ${mm}mm로 크기를 맞췄어요`:zone==='top'?`${sw.rim}라 ${mm}mm가 곡선 위에 편하게 앉아요`:zone==='rim'?`귓바퀴 가장자리는 폭이 좁아 ${mm}mm로 골랐어요`:`귀 안쪽 오목한 자리라 작은 ${mm}mm로 골랐어요`}
+/* the recommendation: one product per traditional point + 1~2 accents for the measured shape; every product appears once */
+function eaiPlan(){const sw=shapeWords(EAI.stats);const pr=PRESETS.find(p=>p.id===sw.style)||PRESETS[0];const c=CONCERNS.find(x=>x.id===EAI.cond);const recs=[];const used=new Set();
+  const pts=c?c.pts.map((n,i)=>{const d=c.dots[i];const adj=EAI.adj&&EAI.adj[n];const ph=adj||t2p(d.x,d.y);const t=adj?p2t(adj[0],adj[1]):[d.x,d.y];return {n,i,t,ph,info:PINFO[n]||['','전통 이혈에서 불러 온 자리예요.']}}):[];
+  if(c)pts.forEach((p,i)=>{const no=(REC[c.id]||[])[i];if(!no||!CUTS[no]||used.has(no))return;used.add(no);const z=zoneOf(p.t[0],p.t[1]);const mm=pickMM(no,z,sw);
+    recs.push({no,x:p.t[0],y:p.t[1],mm,pt:p.n,zone:z,why:`${STYLE_WHY[itemOf(no).style]||'디자인이 귀 모양과 잘 어울려요'} · ${sizeWhy(z,mm,sw,no)}`})});
+  const want=c?Math.min(5,recs.length+(sw.style==='glam'?2:1)):4;
+  for(const it of pr.items){if(recs.length>=want)break;const [no,x,y]=it;if(!CUTS[no]||used.has(no)||recs.some(q=>Math.hypot(q.x-x,q.y-y)<80))continue;used.add(no);const z=zoneOf(x,y);const mm=pickMM(no,z,sw);
+    recs.push({no,x,y,mm,pt:'',zone:z,accent:1,why:`${sw.form}에 맞춘 ‘${pr.n}’ 포인트로 하나 더 얹었어요 · ${sizeWhy(z,mm,sw,no)}`})}
+  return {sw,pr,c,pts,recs}}
+/* price exactly as the studio/cart computes it (same bill(), qty 1 each, option = recommended size) */
+function planBill(P){const sv=[look,QTY,OPT];look=P.recs.map(r=>({k:0,no:r.no,pi:0,x:0,y:0,mm:r.mm,r:0}));QTY=Object.assign({},QTY);OPT=Object.assign({},OPT);P.recs.forEach(r=>{QTY[r.no]=1;delete OPT[r.no]});
+  let B;try{B=bill()}finally{look=sv[0];QTY=sv[1];OPT=sv[2]}return B}
 
 /* --- UI --- */
 (function(){const el=document.createElement('div');el.className='eai';el.id='eai';el.hidden=true;el.setAttribute('role','dialog');el.setAttribute('aria-label','AI가 읽어주는 나의 귀 이야기');
@@ -1777,34 +1929,29 @@ function eaiLook(){const sw=shapeWords(EAI.stats);const pr=PRESETS.find(p=>p.id=
   $('#eaiX').onclick=eaiClose;$('#eaiFile').onchange=e=>eaiPick(e.target.files[0]);$('#eaiCam').onchange=e=>eaiPick(e.target.files[0])})();
 function eaiOpen(){$('#eai').hidden=false;$('#bar').hidden=true;try{track('ai_start',{},true)}catch(e){}eaiIntro();eaiRunner().send({type:'load'}).then(()=>{EAI.loaded=true}).catch(()=>{})}
 function eaiClose(){$('#eai').hidden=true;barKey=''}
-function eaiIntro(){$('#eaiBody').innerHTML=`<div class="eai-hero"><div class="eai-ear"></div><p class="lead">귀 사진 한 장이면, AI가 <b>내 귀의 윤곽과 형태</b>를 읽고 어울리는 주얼패치 레이어드를 찾아줘요.</p></div>
-  <ul class="eai-priv"><li><b>사진은 이 기기 안에서만</b> 분석돼요. 서버로 보내거나 저장하지 않아요.</li><li>귀 모양만 읽어요. 사진으로 <b>건강·컨디션을 판단하지 않아요.</b> 컨디션은 직접 고르신 것만 써요.</li><li><b>본인 귀 사진</b>만 올려 주세요. 다른 사람의 사진은 동의 없이 쓰면 안 돼요.</li></ul>
-  ${eaiFn()?`<label class="eai-opt"><input type="checkbox" id="eaiAI"${EAI.ai?' checked':''}><span><b>(선택) AI 스타일 코멘트 받기</b><small>사진 원본이 아닌 <b>귀 실루엣(단색 윤곽 모양)</b>만 Anthropic의 Claude로 보내 한두 문장의 스타일 코멘트를 받아요. 저희는 저장하지 않고, 코멘트를 만든 뒤 바로 버려요.</small></span></label>`:''}
-  <div class="eai-acts"><button class="buy" id="eaiShoot">귀 사진 찍기</button><button class="ghost" id="eaiAlbum">앨범에서 고르기</button></div>
-  <p class="eai-tip">TIP · 머리카락을 귀 뒤로 넘기고, 밝은 곳에서 귀가 화면 가운데 오도록 옆모습을 찍어 주세요.</p>`;
-  const ck=$('#eaiAI');if(ck)ck.onchange=e=>{EAI.ai=e.target.checked};$('#eaiShoot').onclick=()=>$('#eaiCam').click();$('#eaiAlbum').onclick=()=>$('#eaiFile').click()}
 async function eaiPick(f){if(!f)return;$('#eaiFile').value='';$('#eaiCam').value='';const url=URL.createObjectURL(f);const im=new Image();im.src=url;try{await im.decode()}catch(e){toast('사진을 열 수 없어요. 다른 사진으로 해볼까요?');return}
   const M=1024,s=Math.min(1,M/Math.max(im.naturalWidth,im.naturalHeight));const c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*s);c.height=Math.round(im.naturalHeight*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
-  EAI.img=c;EAI.W=c.width;EAI.H=c.height;EAI.url=c.toDataURL('image/jpeg',0.92);EAI.pt=[0.5,0.5];EAI.mask=null;EAI.comment=null;EAI.flip=false;eaiAim()}
+  EAI.img=c;EAI.W=c.width;EAI.H=c.height;EAI.url=c.toDataURL('image/jpeg',0.92);EAI.pt=[0.5,0.5];EAI.mask=null;EAI.comment=null;EAI.adj=null;EAI.adjOn=false;eaiAim()}
 function eaiAim(){$('#eaiBody').innerHTML=`<p class="eai-step">① 귀를 톡 눌러 주세요</p><div class="eai-pic"><span class="eai-fr" id="eaiPic"><img src="${EAI.url}" alt="선택한 귀 사진"><canvas id="eaiMaskC"></canvas><i class="eai-dot" id="eaiDot"></i></span></div>
-  <p class="eai-tip">AI가 누른 곳의 귀를 찾아 배경과 분리해요. 엇나가면 귀를 다시 눌러 주세요.</p><div class="eai-load" id="eaiProg" data-p="0"><span>AI 준비 중</span></div>
+  <p class="eai-tip">AI가 누른 곳의 귀를 찾아 배경과 분리해요. 엇나가면 귀를 다시 눌러 주세요.</p>${sideHTML()}<div class="eai-load" id="eaiProg" data-p="0"><span>AI 준비 중</span></div>
   <div class="eai-acts"><button class="buy" id="eaiGo" disabled>이 귀로 분석하기</button><button class="ghost" id="eaiRe">다시 고르기</button></div>`;
   const pic=$('#eaiPic'),dot=$('#eaiDot');const place=()=>{dot.style.left=EAI.pt[0]*100+'%';dot.style.top=EAI.pt[1]*100+'%'};place();
   pic.onclick=e=>{const r=pic.getBoundingClientRect();EAI.pt=[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height];place();eaiSegment()};
-  $('#eaiRe').onclick=eaiIntro;$('#eaiGo').onclick=eaiConds;eaiSegment(true)}
+  bindSide();$('#eaiRe').onclick=eaiIntro;$('#eaiGo').onclick=eaiConds;eaiSegment(true)}
 async function eaiSegment(first){if(EAI.busy){EAI.again=true;return}EAI.busy=true;const P=$('#eaiProg');const say=t=>{if(P)P.querySelector('span').textContent=t};$('#eaiGo').disabled=true;
   try{const R=eaiRunner();if(!EAI.loaded){say('AI 모델 내려받는 중 (처음 한 번만)');await R.send({type:'load'});EAI.loaded=true}
     if(first||!EAI.embedded){say('AI가 사진을 읽는 중…');await R.send({type:'embed',url:EAI.url});EAI.embedded=EAI.url}
     if(EAI.embedded!==EAI.url){await R.send({type:'embed',url:EAI.url});EAI.embedded=EAI.url}
     say('귀 윤곽을 찾는 중…');const r=await R.send({type:'decode',points:[EAI.pt],labels:[1]});EAI.mask=r.mask;EAI.mW=r.W;EAI.mH=r.H;EAI.score=r.score;
     const st=maskStats(r.mask,r.W,r.H);const c=$('#eaiMaskC');if(c){c.width=r.W;c.height=r.H;const g=c.getContext('2d');const id=g.createImageData(r.W,r.H);for(let i=0;i<r.W*r.H;i++){if(r.mask[i]){id.data[i*4]=142;id.data[i*4+1]=123;id.data[i*4+2]=181;id.data[i*4+3]=105}}g.putImageData(id,0,0)}
-    const ok=st&&st.area>0.015&&st.area<0.8&&st.ratio>1.15&&st.ratio<3.4;P.classList.add('done');
-    say(ok?`귀를 찾았어요 · AI 확신도 ${Math.round((r.score||0)*100)}%`:'귀가 아닌 것 같아요. 귀를 다시 눌러 주세요');$('#eaiGo').disabled=!st;$('#eaiGo').textContent=ok?'이 귀로 분석하기':'그래도 이걸로 진행';try{track('ai_mask',{ok:ok?1:0},true)}catch(e){}}
-  catch(err){say('AI를 불러오지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요');console.warn(err)}
+    const ok=st&&st.area>0.015&&st.area<0.8&&st.ratio>1.15&&st.ratio<3.4;EAI.low=!ok||(r.score||0)<0.86;P.classList.add('done');
+    say(ok?`귀를 찾았어요 · AI 확신도 ${Math.round((r.score||0)*100)}%`:'귀가 아닌 것 같아요. 귀를 다시 눌러 주세요');$('#eaiGo').disabled=!st;$('#eaiGo').onclick=eaiConds;$('#eaiGo').textContent=ok?'이 귀로 분석하기':'그래도 이걸로 진행';try{track('ai_mask',{ok:ok?1:0},true)}catch(e){}}
+  catch(err){say('AI를 불러오지 못해 분석하지 못했어요. 인터넷 연결을 확인하고 귀를 다시 눌러 주세요');console.warn(err);const g=$('#eaiGo');if(g){g.disabled=false;g.textContent='사진 없이 기준 귀로 꾸미기';g.onclick=()=>{$('#eai').hidden=true;photoMode=false;stOpen()}}}
   EAI.busy=false;if(EAI.again){EAI.again=false;eaiSegment()}}
-function eaiConds(){EAI.W=EAI.mW||EAI.W;EAI.H=EAI.mH||EAI.H;buildEarPhoto();$('#eaiBody').innerHTML=`<p class="eai-step">② 오늘 컨디션은 어떤가요?</p><p class="eai-tip">직접 고른 컨디션으로만 메시지를 만들어요. 사진으로는 판단하지 않아요.</p>
+function eaiFree(){const r=EAI.runner;if(r&&r.kill){r.kill();EAI.runner=null;EAI.loaded=false;EAI.embedded=null}}
+function eaiConds(){EAI.W=EAI.mW||EAI.W;EAI.H=EAI.mH||EAI.H;eaiFree();try{buildEarPhoto();EAI.thumb=readThumb()}catch(err){console.warn(err);toast('귀 사진을 정리하지 못했어요. 다른 사진으로 다시 해볼까요?');eaiIntro();return}$('#eaiBody').innerHTML=`<p class="eai-step">② 오늘 컨디션은 어떤가요?</p><p class="eai-tip">직접 고른 컨디션으로만 메시지를 만들어요. 사진으로는 판단하지 않아요.</p>
   <div class="eai-conds">${COND.map((c,i)=>`<button data-c="${i}"><i>${c.e}</i>${esc(c.n)}</button>`).join('')}</div>`;
-  document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{EAI.cond=COND[+b.dataset.c].id;EAI.condI=+b.dataset.c;eaiResult()});
+  document.querySelectorAll('#eaiBody [data-c]').forEach(b=>b.onclick=e=>{e.preventDefault();e.stopPropagation();EAI.cond=COND[+b.dataset.c].id;EAI.condI=+b.dataset.c;try{eaiResult()}catch(err){console.warn(err);toast('결과를 만들다 문제가 생겼어요: '+(err&&err.message||err))}});
   if(EAI.ai&&eaiFn()&&!EAI.comment)eaiComment()}
 async function eaiComment(){EAI.comment={loading:true};const s=EAI.stats,sw=shapeWords(s);
   try{const r=await fetch(eaiFn(),{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY},body:JSON.stringify({image:EAI.sil,stats:{ratio:+s.ratio.toFixed(2),lobe:+s.lobe.toFixed(2),top:+s.top.toFixed(2),tilt:Math.round(s.tilt),form:sw.form,lobeWord:sw.lobe}})});
@@ -1812,20 +1959,53 @@ async function eaiComment(){EAI.comment={loading:true};const s=EAI.stats,sw=shap
   const box=$('#eaiCmt');if(box)box.outerHTML=cmtHTML()}
 function cmtHTML(){const c=EAI.comment;if(!EAI.ai||!c)return '';if(c.loading)return `<div class="eai-cmt" id="eaiCmt"><b>AI 스타일리스트가 귀 실루엣을 보는 중…</b></div>`;if(c.fail)return `<div class="eai-cmt" id="eaiCmt" hidden></div>`;
   return `<div class="eai-cmt" id="eaiCmt"><span class="en">AI Stylist · Claude</span><b>${esc(c.title)}</b><p>${esc(c.text)}</p></div>`}
-function eaiResult(){const L=eaiLook(),cd=COND[EAI.condI]||COND[COND.length-1];const s=EAI.stats;const its=L.items.map(i=>itemOf(i[0])).filter(Boolean);const uniq=[...new Map(its.map(i=>[i.no,i])).values()];
-  const tot=uniq.reduce((a,b)=>a+b.sell,0);try{track('ai_result',{cond:EAI.cond||'none',style:L.sw.style,ratio:+s.ratio.toFixed(2)},true)}catch(e){}
+function eaiIntro(){$('#eaiBody').innerHTML=`<div class="eai-hero"><div class="eai-ear"></div><p class="lead">내 귀 사진 한 장으로 <b>내 귀 위의 전통 이혈 포인트</b>를 살펴보고, 그 자리에 어울리는 주얼패치를 골라 바로 붙여봐요.</p></div>
+  <div class="eai-pbox on"><b>📱 기본 체험 · 이 기기 안에서만</b><ul>
+   <li>귀 윤곽 찾기는 <b>이 휴대폰 브라우저 안</b>에서 돌아가는 AI(SlimSAM)가 해요. 처음 한 번 AI 모델 파일만 내려받고, <b>사진은 어디로도 보내지 않아요.</b></li>
+   <li>사진과 분석 결과는 저장하지 않아요. 창을 닫거나 새로고침하면 사라져요.</li>
+   <li>사진으로 건강·컨디션을 판단하지 않아요. 컨디션은 직접 고르신 것만 써요.</li>
+   <li>사진 없이 ‘체험 단계·고른 컨디션·추천 스타일 이름’만 익명 통계로 남아요.</li></ul></div>
+  ${eaiFn()?`<label class="eai-pbox opt"><input type="checkbox" id="eaiAI"${EAI.ai?' checked':''}><span><b>🌐 (선택) 외부 AI 스타일 코멘트 · 기본 꺼짐</b><small>체크하면 사진 원본이 아닌 <b>귀 실루엣(단색 윤곽 그림)과 모양 수치</b>만 저희 서버(Supabase)를 거쳐 Anthropic의 Claude로 보내 한두 문장 코멘트를 받아요. 저희 서버는 저장하지 않으며, 전송된 데이터는 Anthropic API 정책에 따라 처리돼요. 체크하지 않아도 모든 체험이 그대로 돼요.</small></span></label>`:''}
+  <p class="eai-tip">본인 귀 사진만 올려 주세요. 다른 사람의 사진은 동의 없이 쓰면 안 돼요.</p>
+  <div class="eai-acts"><button class="buy" id="eaiShoot">귀 사진 찍기</button><button class="ghost" id="eaiAlbum">앨범에서 고르기</button></div>
+  <p class="eai-tip">TIP · 머리카락을 귀 뒤로 넘기고, 밝은 곳에서 귀가 화면 가운데 오도록 옆모습을 찍어 주세요.</p>`;
+  const ck=$('#eaiAI');if(ck)ck.onchange=e=>{EAI.ai=e.target.checked};$('#eaiShoot').onclick=()=>$('#eaiCam').click();$('#eaiAlbum').onclick=()=>$('#eaiFile').click()}
+function sideHTML(){return `<div class="eai-side" role="group" aria-label="어느 쪽 귀인가요"><span>어느 쪽 귀인가요?</span><button data-side="L" aria-pressed="${!EAI.flip}">왼쪽 귀</button><button data-side="R" aria-pressed="${!!EAI.flip}">오른쪽 귀</button></div>`}
+function bindSide(){document.querySelectorAll('[data-side]').forEach(b=>b.onclick=()=>{EAI.flip=b.dataset.side==='R';document.querySelectorAll('[data-side]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))})}
+function eaiResult(){const P=eaiPlan(),cd=COND[EAI.condI]||COND[COND.length-1];const B=planBill(P);EAI.plan=P;const low=EAI.low;
+  try{track('ai_result',{cond:EAI.cond||'none',style:P.sw.style},true)}catch(e){}
+  const lineOf=no=>B.ls.find(l=>l.it.no===no);
+  const ptp=P.pts.map(p=>p2pct(p.ph));const struct=STRUCT.map(([n,x,y])=>{const p=t2p(x,y);if(!p)return '';const [l,t]=p2pct(p);return l<2||l>98||t<2||t>98||ptp.some(q=>Math.hypot(q[0]-l,q[1]-t)<9)?'':`<i class="eai-st" style="left:${l}%;top:${t}%">${n}</i>`}).join('');
+  const dots=P.pts.map((p,i)=>{const [l,t]=p2pct(p.ph);return `<button class="eai-pt" data-pt="${i}" style="left:${l}%;top:${t}%" aria-label="${esc(p.n)}">${i+1}</button>`}).join('');
   $('#eaiBody').innerHTML=`<div class="eai-res"><div class="eai-msg"><h3>${esc(cd.h)}</h3><p>${esc(cd.b)}</p></div>
-   <div class="eai-read"><div class="eai-cut"><img src="${EARPHOTO.url}" alt="AI가 분리한 내 귀"></div><div><span class="en">AI가 읽은 내 귀</span><ul><li>${L.sw.form}</li><li>${L.sw.lobe}</li><li>${L.sw.rim}</li></ul><small>사진 속 귀 윤곽을 분리해 측정한 모양이에요 · 길이/폭 ${s.ratio.toFixed(2)}</small></div></div>
-   ${cmtHTML()}
-   <div class="eai-rec"><b>추천 이어룩 · ${esc(L.pr.n)}</b><small>${L.c?`‘${esc(cd.n)}’에 맞춰 전통 이혈 포인트 자리 + 내 귀 모양에 어울리는 자리를 골랐어요`:'내 귀 모양에 어울리는 레이어드예요'}</small>
-    <div class="eai-items">${uniq.map(i=>`<div><img src="${CUTS[i.no][0]}" alt=""><span>${esc(shortName(i.name))}</span><em>${won(i.sell)}</em></div>`).join('')}</div></div>
-   ${L.c?`<div class="eai-pts"><b>전통 이혈 참고 · ${L.c.pts.join(' · ')}</b><p>전통 이혈에서는 이 자리들을 ‘${esc(L.c.sit)}’ 살펴보던 위치로 불러요. 전통적인 개념을 소개하는 참고 정보이며, 주얼패치가 특정 효과를 낸다고 보장하지 않아요.</p></div>`:''}
+   ${low?`<div class="eai-low">AI가 귀 윤곽을 확실하게 찾지 못했어요${EAI.score?` (확신도 ${Math.round(EAI.score*100)}%)`:''}. 포인트가 어긋나 보이면 <b>위치 직접 맞추기</b>로 옮겨 주세요.</div>`:''}
+   <div class="eai-photo${EAI.adjOn?' adj':''}" id="eaiPhoto"><img src="${EAI.thumb}" alt="내 귀 사진과 AI가 찾은 윤곽">${struct}${dots}</div>
+   <div class="eai-ptbar">${P.pts.length?P.pts.map((p,i)=>`<button data-pt="${i}"><i>${i+1}</i>${esc(p.n)}</button>`).join('')+`<button class="adjb" id="eaiAdj" aria-pressed="${!!EAI.adjOn}">${EAI.adjOn?'위치 맞추기 끝':'✋ 위치 직접 맞추기'}</button>`:'<small>‘그냥 예쁘게’를 골라 이혈 포인트 없이 귀 모양으로만 추천했어요.</small>'}</div>
+   <div class="eai-ptinfo" id="eaiPtInfo" ${P.pts.length?'':'hidden'}>${P.pts.length?'번호를 누르면 그 자리의 이름과 전통적인 설명을 볼 수 있어요.':''}</div>
+   <p class="eai-note">흰 선은 AI가 사진에서 찾은 내 귀 윤곽, 번호는 그 윤곽에 표준 귀 지도를 겹쳐 그린 <b>참고 위치</b>예요. 실제 혈자리를 정확히 판별하거나 진단한 것이 아니에요.</p>
+   <section class="eai-sec"><h4><span>①</span> AI가 읽은 내 귀 모양</h4><div class="eai-chips"><em>${P.sw.form}</em><em>${P.sw.lobe}</em><em>${P.sw.rim}</em></div>${cmtHTML()}</section>
+   ${P.c?`<section class="eai-sec trad"><h4><span>②</span> 전통 이혈 이야기 · ${esc(cd.n)}</h4><p>전통 이혈에서는 ‘${esc(P.c.sit)}’ 아래 자리들을 살펴보곤 했어요.</p>
+     <ol>${P.pts.map((p,i)=>`<li><b>${esc(p.n)}</b><small>${esc(p.info[0])}</small><p>${esc(p.info[1])}</p></li>`).join('')}</ol><p class="eai-dis">전통 개념을 소개하는 참고 정보예요. 주얼패치가 특정 효과를 낸다고 보장하지 않아요.</p></section>`:''}
+   <section class="eai-sec"><h4><span>${P.c?'③':'②'}</span> 디자인 추천 · ${esc(P.pr.n)}</h4>
+     <div class="eai-recs">${P.recs.map(r=>{const it=itemOf(r.no),l=lineOf(r.no);return `<div class="eai-rc"><img src="${CUTS[r.no][0]}" alt=""><div><b>${esc(shortName(it.name))}</b><small>${r.mm}mm · ${r.pt?`📍 ${esc(r.pt)} 자리`:`✨ ${ZN[r.zone]} 포인트`}</small><p>${esc(r.why)}</p></div><em>${won(l?l.price:it.sell)}</em></div>`}).join('')}</div>
+     <div class="eai-sum"><div><span>추천 ${B.ls.length}종 · ${B.n}개</span><span>${won(B.base)}</span></div>${B.on?`<div class="d"><span>가든 단독 5% 할인</span><span>−${won(B.disc)}</span></div><div class="f"><span>최종 예상가</span><strong>${won(B.final)}</strong></div>`:`<div class="f"><span>합계</span><strong>${won(B.final)}</strong></div>`}
+     <small>${B.on?'결제 단계에서 이번 주 가든 할인코드를 입력하면 적용돼요':B.low?'5% 할인은 3만원 이상일 때 적용돼요':'붙여본 뒤 바로 장바구니에 담을 수 있어요'}</small></div></section>
    <div class="eai-acts"><button class="buy" id="eaiApply">내 귀 사진에 붙여보기</button><button class="ghost" id="eaiTpl">기준 귀로 꾸미기</button></div>
-   <p class="eai-tip">${uniq.length}종 ${won(tot)} · 붙여본 뒤 위치·크기·방향을 바꾸고 바로 장바구니에 담을 수 있어요${PROMO.live?' · 2개 이상 가든 단독 추가 5%':''}</p>
    <button class="eai-link" id="eaiAgain">다른 사진으로 다시 하기</button></div>`;
-  $('#eaiApply').onclick=()=>eaiApply(true);$('#eaiTpl').onclick=()=>eaiApply(false);$('#eaiAgain').onclick=eaiIntro}
-function eaiApply(withPhoto){const L=eaiLook();photoMode=!!withPhoto;look=L.items.map(([no,x,y,mm])=>{let nx=(x-VX)/VW,ny=(y-VY)/VH;if(withPhoto)[nx,ny]=snapIn(nx,ny);return {k:++uid,no,pi:0,x:nx,y:ny,mm:(mmOf(no,0).includes(mm)?mm:mmOf(no,0).slice(-1)[0]),r:0}});
-  sel=null;preset='';mode='style';store.set('mode',mode);saveLook();try{track('ai_apply',{photo:withPhoto?1:0},true)}catch(e){}$('#eai').hidden=true;stOpen();setTimeout(()=>{stRender();toast(withPhoto?'AI가 찾은 내 귀 윤곽 안쪽으로 자리를 맞췄어요 · 눌러서 옮기거나 크기·방향을 바꿔 보세요':'추천 조합을 기준 귀에 붙였어요')},60)}
+  const info=i=>{const p=P.pts[i];const el=$('#eaiPtInfo');el.innerHTML=`<b>${i+1}. ${esc(p.n)}</b> <small>${esc(p.info[0])}</small><p>${esc(p.info[1])}</p>`;document.querySelectorAll('[data-pt]').forEach(b=>b.classList.toggle('on',+b.dataset.pt===i))};
+  document.querySelectorAll('[data-pt]').forEach(b=>b.onclick=()=>{if(!EAI.adjOn)info(+b.dataset.pt)});
+  const ab=$('#eaiAdj');if(ab)ab.onclick=()=>{EAI.adjOn=!EAI.adjOn;eaiResult()};if(EAI.adjOn)bindAdj(P);
+  $('#eaiApply').onclick=()=>eaiApply(true);$('#eaiTpl').onclick=()=>eaiApply(false);$('#eaiAgain').onclick=()=>{EAI.adj=null;EAI.adjOn=false;eaiIntro()}}
+function bindAdj(P){const box=$('#eaiPhoto');box.querySelectorAll('.eai-pt').forEach(d=>{d.onpointerdown=e=>{e.preventDefault();d.setPointerCapture(e.pointerId);const i=+d.dataset.pt;
+  const mv=ev=>{const r=box.getBoundingClientRect();const l=Math.min(100,Math.max(0,(ev.clientX-r.left)/r.width*100)),t=Math.min(100,Math.max(0,(ev.clientY-r.top)/r.height*100));d.style.left=l+'%';d.style.top=t+'%';
+    const C=EAI.crop;EAI.adj=EAI.adj||{};EAI.adj[P.pts[i].n]=[C.x0+l/100*C.w,C.y0+t/100*C.h]};
+  const up=()=>{d.removeEventListener('pointermove',mv);d.removeEventListener('pointerup',up);try{track('ai_adjust',{},true)}catch(_){}const sc=$('.eai-in').scrollTop;eaiResult();$('.eai-in').scrollTop=sc};d.addEventListener('pointermove',mv);d.addEventListener('pointerup',up)}})}
+function eaiApply(withPhoto){const P=EAI.plan||eaiPlan();photoMode=!!withPhoto;
+  look=P.recs.map(r=>{let nx=(r.x-VX)/VW,ny=(r.y-VY)/VH;if(withPhoto&&!r.pt)[nx,ny]=snapIn(nx,ny);return {k:++uid,no:r.no,pi:0,x:nx,y:ny,mm:r.mm,r:0}});
+  P.recs.forEach(r=>{QTY[r.no]=1;delete OPT[r.no]});store.set('qty4',QTY);store.set('opt4',OPT);
+  sel=null;preset='';mode='style';store.set('mode',mode);saveLook();try{track('ai_apply',{photo:withPhoto?1:0},true)}catch(e){}$('#eai').hidden=true;stOpen();
+  setTimeout(()=>{stRender();toast(withPhoto?(EAI.flip?'오른쪽 귀는 표준 귀 지도에 맞추느라 좌우를 뒤집어 보여줘요 · ':'')+'추천 패치를 내 귀 사진 위 그 자리에 붙였어요 · 끌어서 옮기거나 바꿔 보세요':'추천 조합을 기준 귀에 붙였어요')},60)}
+
 /* studio: photo layer + toggle */
 function photoSync(){const z=$('#zoomer');if(!z)return;let im=$('#earPhoto');if(!im){im=document.createElement('img');im.id='earPhoto';im.className='earphoto';im.alt='내 귀 사진';z.insertBefore(im,z.firstChild)}
   const on=photoMode&&EARPHOTO;im.hidden=!on;if(on&&im.src!==EARPHOTO.url)im.src=EARPHOTO.url;$('#earSvg').style.opacity=on?0:'';
