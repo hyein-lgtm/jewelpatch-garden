@@ -640,6 +640,9 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 .eai-camv video{width:100%;height:100%;object-fit:cover;display:block}
 .eai-camv video.mir{transform:scaleX(-1)}
 .eai-guide{position:absolute;left:50%;top:50%;width:46%;height:62%;transform:translate(-50%,-50%);border:3px dashed rgba(255,255,255,.85);border-radius:50% 50% 45% 45%/40% 40% 60% 60%;box-shadow:0 0 0 999px rgba(0,0,0,.25);pointer-events:none}
+.eai-err{margin-top:10px;background:#FFF4E5;border:1px solid #F2D3A6;color:#7A4E12;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.55;display:grid;gap:4px}
+.eai-err small{color:#9A7A55;font-size:11px;word-break:break-all}
+.eai-err .eai-link{justify-self:start;padding:2px 0}
 </style>
 
 </head>
@@ -1827,9 +1830,9 @@ self.onmessage=async e=>{const m=e.data;try{
   const plane=new Uint8Array(W*H),off=bi*W*H,src=t.data;for(let i=0;i<W*H;i++)plane[i]=src[off+i]?1:0;self.postMessage({type:'mask',W,H,score:sc[bi],mask:plane},[plane.buffer])}
 }catch(err){self.postMessage({type:'error',msg:String(err&&err.message||err)})}};`;
 function eaiRunner(){if(EAI.runner)return EAI.runner;let w=null,cb=null;const send=(msg)=>new Promise((res,rej)=>{cb={res,rej,type:msg.type};w.postMessage(msg)});
-  try{w=new Worker(URL.createObjectURL(new Blob([EAI_WORKER],{type:'text/javascript'})),{type:'module'})}catch(e){w=null}
+  if(!EAI.noWorker){try{w=new Worker(URL.createObjectURL(new Blob([EAI_WORKER],{type:'text/javascript'})),{type:'module'})}catch(e){w=null}}
   if(w){w.onmessage=e=>{const d=e.data;if(d.type==='progress'){eaiProgress(d.p);return}if(!cb)return;const c=cb;cb=null;if(d.type==='error')c.rej(new Error(d.msg));else c.res(d)};
-    w.onerror=e=>{if(cb){const c=cb;cb=null;c.rej(new Error(e.message||'worker'))}};EAI.runner={send,kill:()=>{try{w.terminate()}catch(e){}}};return EAI.runner}
+    w.onerror=e=>{if(cb){const c=cb;cb=null;c.rej(new Error(e.message||'worker'))}};EAI.runner={send,worker:1,kill:()=>{try{w.terminate()}catch(e){}}};return EAI.runner}
   /* main-thread fallback */
   let lib=null,model,proc,emb,inp;EAI.runner={send:async m=>{if(!lib)lib=await import(EAI.lib);const {SamModel,AutoProcessor,RawImage,Tensor,env}=lib;env.allowLocalModels=false;
     if(m.type==='load'){if(!model){model=await SamModel.from_pretrained(EAI.id,{quantized:true,progress_callback:eaiProgress});proc=await AutoProcessor.from_pretrained(EAI.id)}return {type:'loaded'}}
@@ -1950,7 +1953,12 @@ async function eaiSegment(first){if(EAI.busy){EAI.again=true;return}EAI.busy=tru
     const st=maskStats(r.mask,r.W,r.H);const c=$('#eaiMaskC');if(c){c.width=r.W;c.height=r.H;const g=c.getContext('2d');const id=g.createImageData(r.W,r.H);for(let i=0;i<r.W*r.H;i++){if(r.mask[i]){id.data[i*4]=142;id.data[i*4+1]=123;id.data[i*4+2]=181;id.data[i*4+3]=105}}g.putImageData(id,0,0)}
     const ok=st&&st.area>0.015&&st.area<0.8&&st.ratio>1.15&&st.ratio<3.4;EAI.low=!ok||(r.score||0)<0.86;P.classList.add('done');
     say(ok?`귀를 찾았어요 · AI 확신도 ${Math.round((r.score||0)*100)}%`:'귀가 아닌 것 같아요. 귀를 다시 눌러 주세요');$('#eaiGo').disabled=!st;$('#eaiGo').onclick=eaiConds;$('#eaiGo').textContent=ok?'이 귀로 분석하기':'그래도 이걸로 진행';try{track('ai_mask',{ok:ok?1:0},true)}catch(e){}}
-  catch(err){say('AI를 불러오지 못해 분석하지 못했어요. 인터넷 연결을 확인하고 귀를 다시 눌러 주세요');console.warn(err);const g=$('#eaiGo');if(g){g.disabled=false;g.textContent='사진 없이 기준 귀로 꾸미기';g.onclick=()=>{$('#eai').hidden=true;photoMode=false;stOpen()}}}
+  catch(err){console.warn(err);const R0=EAI.runner;
+    if(R0&&R0.worker&&!EAI.noWorker){EAI.noWorker=true;try{R0.kill()}catch(_){}EAI.runner=null;EAI.loaded=false;EAI.embedded=null;EAI.busy=false;say('다른 방식으로 AI를 다시 불러오는 중…');return eaiSegment(true)}
+    const msg=String(err&&err.message||err).slice(0,90);say('AI를 불러오지 못해 분석하지 못했어요');EAI.runner=null;EAI.loaded=false;EAI.embedded=null;
+    const g=$('#eaiGo');if(g){g.disabled=false;g.textContent='AI 다시 시도';g.onclick=()=>{EAI.noWorker=false;eaiSegment(true)}}
+    const P2=$('#eaiProg');if(P2&&!$('#eaiErr'))P2.insertAdjacentHTML('afterend',`<div class="eai-err" id="eaiErr">이 브라우저에서 AI 모델을 열지 못했어요. 카카오톡·인스타 안에서 열었다면 <b>크롬이나 삼성 인터넷</b>으로 열어 주세요. 분석하지 못한 결과는 만들지 않아요.<small>오류: ${esc(msg)}</small><button class="eai-link" id="eaiNoAI">사진 없이 기준 귀로 꾸미기</button></div>`);
+    const na=$('#eaiNoAI');if(na)na.onclick=()=>{$('#eai').hidden=true;photoMode=false;stOpen()}}
   EAI.busy=false;if(EAI.again){EAI.again=false;eaiSegment()}}
 function eaiFree(){const r=EAI.runner;if(r&&r.kill){r.kill();EAI.runner=null;EAI.loaded=false;EAI.embedded=null}}
 function eaiConds(){EAI.W=EAI.mW||EAI.W;EAI.H=EAI.mH||EAI.H;eaiFree();try{buildEarPhoto();EAI.thumb=readThumb()}catch(err){console.warn(err);toast('귀 사진을 정리하지 못했어요. 다른 사진으로 다시 해볼까요?');eaiIntro();return}$('#eaiBody').innerHTML=`<p class="eai-step">② 오늘 컨디션은 어떤가요?</p><p class="eai-tip">직접 고른 컨디션으로만 메시지를 만들어요. 사진으로는 판단하지 않아요.</p>
