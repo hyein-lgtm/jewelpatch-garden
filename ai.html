@@ -731,7 +731,7 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 .pp.wait::after{content:"끌어 붙이기";position:absolute;left:50%;top:-34px;transform:translateX(-50%);font-size:9px;white-space:nowrap;color:#fff;background:rgba(78,35,56,.8);border-radius:6px;padding:1px 4px;pointer-events:none}
 .phtog small{flex-basis:100%;font-size:11.5px;color:var(--s-sub)}
 .phtog{flex-wrap:wrap}
-.zoomer.pview{width:100%}.stage:has(.zoomer.pview){max-height:62vh;margin:0 auto}
+.zoomer.pview{width:100%}.stage:has(.zoomer.pview){max-height:none;margin:0 auto;flex:none}
 /* landmark onboarding */
 .eai-mart{flex:0 0 92px}
 .eai-coach{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;white-space:nowrap;background:rgba(40,25,32,.82);color:#fff;font-size:13px;line-height:1.2;padding:8px 12px;border-radius:999px;pointer-events:none;z-index:3}
@@ -787,6 +787,10 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 .eai-basis,.eai-src,.eai-cap{margin:0;font-size:11px;color:#9A948F;line-height:1.5}.eai-src b{color:#7A7470}
 .eai-cond{margin:0;font-size:12px;color:#6B6764}
 .eai-msg.mini p{margin:3px 0 0;font-size:13px;color:var(--e-sub);line-height:1.5}
+
+@media (max-width:820px){.st-body:has(.zoomer.pview){grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)}
+ .st-body:has(.zoomer.pview) .stagewrap{display:flex;justify-content:center}
+ #studio:has(.zoomer.pview) .sit{display:none}}
 </style>
 
 <style>body.aimode{background:#fff}body.aimode>*:not(#eai):not(#studio):not(#result):not(#mbar):not(#selbar):not(#toast):not(#sheet):not(script):not(style){display:none!important}</style></head>
@@ -1559,9 +1563,17 @@ function buildManual(){const W=VW,H=VH,c=document.createElement('canvas');c.widt
   EAI.crop={x0,y0,w:cw,h:ch};EAI.thumb=tc.toDataURL('image/jpeg',0.86)}
 
 /* studio: photo layer + toggle */
+/* photo view: size the stage so the whole ear photo fits the visible column (phones especially) */
+function fitPhotoStage(){const st=$('#stage'),L=document.querySelector('#studio .st-left');if(!st||!L)return;const on=!!(photoMode&&EAI.aff&&EAI.crop);
+  if(!on){st.style.width='';st.style.height='';st.style.marginInline='';delete st.dataset.pv;return}const a=EAI.crop.w/EAI.crop.h,mob=matchMedia('(max-width:820px)').matches;
+  const sc=document.querySelector('#studio .st-in'),mb=document.querySelector('.mbar:not([hidden])'),mbH=mb&&mb.offsetParent!==null?mb.getBoundingClientRect().height:0;
+  const W=L.clientWidth;let H=mob?Math.min(L.clientHeight-4,innerHeight-mbH-10-(sc?(st.getBoundingClientRect().top+sc.scrollTop):st.getBoundingClientRect().top)):Math.min(innerHeight*0.62,W/a);H=Math.max(H,mob?300:240);
+  let w=W,h=w/a;if(h>H){h=H;w=h*a}st.style.width=Math.floor(w)+'px';st.style.height=Math.floor(h)+'px';st.style.marginInline='auto';
+  if(mob&&!st.dataset.pv){st.dataset.pv='1';L.scrollTop=0;requestAnimationFrame(()=>{const r=st.getBoundingClientRect(),lim=innerHeight-mbH-10;if(sc&&r.bottom>lim)sc.scrollBy({top:r.bottom-lim,behavior:'smooth'})})}}
+addEventListener('resize',()=>{try{if(photoMode)requestAnimationFrame(()=>{fitPhotoStage();stRender()})}catch(_){}});
 function photoSync(){const z=$('#zoomer');if(!z)return;let im=$('#earPhoto');if(!im){im=document.createElement('img');im.id='earPhoto';im.className='earphoto';im.alt='내 귀 사진';z.insertBefore(im,z.firstChild)}
   const can=!!(EAI.aff&&EAI.thumb);if(!can)photoMode=false;const on=photoMode&&can;im.hidden=!on;if(on&&im.src!==EAI.thumb)im.src=EAI.thumb;$('#earSvg').style.opacity=on?0:'';
-  z.style.aspectRatio=on?`${EAI.crop.w}/${EAI.crop.h}`:'';z.classList.toggle('pview',on);const stg=$('#stage');if(stg)stg.style.aspectRatio=on?`${EAI.crop.w}/${EAI.crop.h}`:'';if(typeof fitStage==='function')requestAnimationFrame(fitStage);
+  z.style.aspectRatio=on?`${EAI.crop.w}/${EAI.crop.h}`:'';z.classList.toggle('pview',on);const stg=$('#stage');if(stg)stg.style.aspectRatio=on?`${EAI.crop.w}/${EAI.crop.h}`:'';requestAnimationFrame(()=>{fitPhotoStage();if(typeof fitStage==='function')fitStage()});
   let t=$('#photoTog');if(!t){t=document.createElement('div');t.id='photoTog';t.className='phtog';const ch=document.querySelector('#studio .chooser');ch.parentNode.insertBefore(t,ch)}
   t.innerHTML=can?`<button data-pm="0" aria-pressed="${!photoMode}">기준 귀</button><button data-pm="1" aria-pressed="${!!photoMode}">📷 내 사진으로 보기</button>${on?'<small>내 귀 사진 위에 실제 크기 비율로 올렸어요 · 끌어서 자리를 옮겨 보세요</small>':''}`:`<button class="phnew" data-ai>📷 내 귀 사진으로 AI 추천받기</button>`;
   t.querySelectorAll('[data-pm]').forEach(b=>b.onclick=()=>{const v=b.dataset.pm==='1';if(v&&!photoMode)look.forEach(p=>{if(!p.pt&&!p.pv)p.wait=true});photoMode=v;sel=null;stRender()});const a=t.querySelector('[data-ai]');if(a)a.onclick=()=>{EAI.noBack=true;stClose();EAI.noBack=false;eaiOpen()}}
