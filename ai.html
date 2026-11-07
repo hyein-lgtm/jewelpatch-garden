@@ -793,6 +793,18 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
  #studio:has(.zoomer.pview) .sit{display:none}}
 
 .eai-coach.top{position:static;transform:none;justify-content:center;white-space:normal;margin:10px 0 8px;padding:9px 14px;font-size:14px;background:#4E2338;border-radius:12px;pointer-events:none}
+
+/* direct cart + gua sha routine */
+.eai-acts.v{flex-direction:column}.eai-acts.v .buy{display:block;text-align:center;text-decoration:none;font-weight:700;flex:none}
+.eai-acts.v .row{display:flex;gap:8px}.eai-acts.v .row .ghost{flex:1;padding:11px;font-size:13.5px}
+.eai-cnote{font-size:11px;color:#66745A;text-align:center}
+.eai-gua{background:linear-gradient(135deg,#FBF3F1,#F4EEF6);border-radius:16px;padding:12px 13px;display:grid;gap:8px}
+.eai-gua .hd{display:flex;gap:10px;align-items:center}.eai-gua .hd img{width:54px;height:54px;object-fit:contain;background:#fff;border-radius:12px;padding:4px}
+.eai-gua .hd small{display:block;font-size:11px;font-weight:700;color:#B0707E}.eai-gua .hd b{font-size:15px;color:#4E2338}
+.eai-gua ol{margin:0;padding-left:20px;font-size:13px;line-height:1.6;color:#4A4542}
+.eai-gua .add{display:flex;align-items:center;gap:8px;background:#fff;border-radius:12px;padding:9px 11px;font-size:13px;cursor:pointer}
+.eai-gua .add input{width:18px;height:18px;accent-color:#4E2338;flex:none}.eai-gua .add span{flex:1;line-height:1.35}.eai-gua .add em{font-style:normal;font-weight:700;color:#4E2338;white-space:nowrap}.eai-gua .add s{color:#AAA;font-weight:400;font-size:11.5px}
+.eai-gua .note{font-size:10.5px;color:#9A948F}
 </style>
 
 <style>body.aimode{background:#fff}body.aimode>*:not(#eai):not(#studio):not(#result):not(#mbar):not(#selbar):not(#toast):not(#sheet):not(script):not(style){display:none!important}</style></head>
@@ -1428,6 +1440,20 @@ function eaiIntro(){$('#eaiBody').innerHTML=`${inApp()?`<div class="eai-inapp"><
 function sideHTML(){return `<div class="eai-side" role="group" aria-label="어느 쪽 귀인가요"><span>어느 쪽 귀인가요?</span><button data-side="L" aria-pressed="${!EAI.flip}">왼쪽 귀</button><button data-side="R" aria-pressed="${!!EAI.flip}">오른쪽 귀</button></div>`}
 function bindSide(){document.querySelectorAll('[data-side]').forEach(b=>b.onclick=()=>{EAI.flip=b.dataset.side==='R';document.querySelectorAll('[data-side]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))})}
 function capsHTML(){const k=ANALYZERS.landmarks?null:EAI.manual?EAR_CAPS.manual:EAR_CAPS.silhouette;if(!k)return '';return `<div class="eai-caps"><div><b>AI가 읽은 것</b>${k.sees.map(x=>`<span>✓ ${x}</span>`).join('')}</div><div><b>아직 읽지 못하는 것</b>${k.cannot.map(x=>`<span>– ${x}</span>`).join('')}</div></div>`}
+/* ritual routine with the WBL heart gua sha (cross-sell) — routine wording only, no efficacy claims */
+const GUASHA={no:7341,code:'P0000KWJ000A'};
+const ROUTINES={face:{t:'아침 1분, 산뜻한 귀 리추얼',s:['추천 주얼패치를 귀에 붙여요','하트괄사로 귀 앞에서 턱선 쪽으로 가볍게 쓸어내려요','거울 앞에서 숨 한 번 깊게 쉬고 하루를 시작해요']},
+ sleep:{t:'잠들기 전 1분, 쉼표 리추얼',s:['조명을 낮추고 귀에 패치를 붙여요','하트괄사로 귓바퀴 둘레를 천천히 쓸어 줘요','눈을 감고 숨을 길게 내쉬어요']},
+ stress:{t:'오늘의 작은 쉼표 리추얼',s:['반짝이는 패치를 귀에 붙여요','하트괄사로 귀 뒤에서 목 옆을 부드럽게 쓸어 줘요','어깨 힘을 빼고 숨을 세 번 골라요']},
+ fatigue:{t:'하루 끝, 나를 돌보는 리추얼',s:['패치를 붙이고 잠시 편하게 앉아요','하트괄사로 귀 주변을 둥글게 쓸어 줘요','따뜻한 차 한 잔과 함께 쉬어 가요']},
+ _:{t:'나를 위한 1분 리추얼',s:['오늘의 이어룩을 귀에 붙여요','하트괄사로 귀 주변을 부드럽게 쓸어 줘요','거울 속 나에게 한 번 웃어 줘요']}};
+function guaHTML(){const G=itemOf(GUASHA.no);if(!G)return '';const r=ROUTINES[EAI.cond]||ROUTINES._;
+  return `<div class="eai-gua"><div class="hd"><img src="${G.th}" alt="WBL 릴렉싱 하트 세라믹 괄사"><div><small>오늘의 리추얼 루틴</small><b>${esc(r.t)}</b></div></div>
+   <ol>${r.s.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>
+   <label class="add"><input type="checkbox" id="eaiGua"${EAI.gua?' checked':''}><span><b>WBL 릴렉싱 하트 세라믹 괄사</b> 함께 담기</span><em>${G.list>G.sell?`<s>${won(G.list)}</s> `:''}${won(G.sell)}</em></label>
+   <small class="note">괄사는 피부에 가볍게 사용하고, 상처나 염증이 있는 곳은 피해 주세요.</small></div>`}
+function aiCartURL(P){const seen=new Set(),parts=[];P.recs.forEach(r=>{if(seen.has(r.no))return;seen.add(r.no);const vs=VARIANTS[r.no]||[];const v=vs.find(x=>x[2]===r.mm)||vs[0];if(v)parts.push(`${r.no}:${v[0]}:1`)});
+  if(EAI.gua)parts.push(`${GUASHA.no}:${GUASHA.code}:1`);return CART_URL+'#c='+parts.join(',')+'&s='+SID}
 function lookLayer(P){const K=photoK(),C=EAI.crop;if(!K||!C)return '';return P.recs.map(r=>{const q=t2p(r.x,r.y);if(!q)return '';const [l,t]=p2pct(q);const w=Math.max(4.5,r.mm*TPL_PER_MM*K/C.w*100);
   return `<img class="eai-vp" src="${CUTS[r.no][0]}" style="left:${l}%;top:${t}%;width:${w}%" alt="">`}).join('')}
 function eaiResult(){const R=earReport(),P=eaiPlan(),cd=COND[EAI.condI]||COND[COND.length-1];const B=planBill(P);EAI.plan=P;const low=EAI.low;
@@ -1452,12 +1478,15 @@ function eaiResult(){const R=earReport(),P=eaiPlan(),cd=COND[EAI.condI]||COND[CO
       <button class="adjb" id="eaiAdj" aria-pressed="${!!EAI.adjOn}">${EAI.adjOn?'옮기기 끝':'✋ 구역 옮기기'}</button></div></div>
     <div class="eai-ptinfo" id="eaiPtInfo" hidden></div>
     <p class="eai-src">번호 구역은 <b>조재숙 박사님 자문 ‘WBL 주얼패치 이혈테라피 가이드’</b> 도표 위치를 내 사진에 옮긴 <b>참고 구역</b>이에요. 정확한 혈자리로 단정할 수 없고, 효과를 보장하지 않아요.</p>`
-    :`<p class="eai-src">컨디션을 고르지 않아 이혈 위치 안내 없이 귀 모양으로만 추천했어요.</p>`}</section>
+    :`<p class="eai-src">컨디션을 고르지 않아 이혈 위치 안내 없이 귀 모양으로만 추천했어요.</p>`}
+    ${guaHTML()}</section>
    <section class="eai-blk c"><h3 class="eai-bh"><span>✦</span>내 귀 맞춤 추천 조합</h3>
     <p class="eai-cap">${onPhoto?'A의 내 귀 사진에 실제 크기 비율로 올려 둔 조합이에요.':'내 귀 분석 결과로 고른 조합이에요.'} 모두 현재 판매 중인 주얼패치예요. 자리가 어긋나 보이면 꾸미기 화면에서 끌어 옮길 수 있어요.</p>
     <div class="eai-recs">${P.recs.map(r=>{const it=itemOf(r.no),l=lineOf(r.no);return `<div class="eai-rc"><img src="${CUTS[r.no][0]}" alt=""><div><b>${esc(shortName(it.name))}</b><small>${ZN[r.zone]}${r.pt?` · ${esc(r.pt)} 참고 구역`:''} · ${r.mm}mm</small><p>${esc(r.why)}</p></div><em>${won(l?l.price:it.sell)}</em></div>`}).join('')}</div>
-    <div class="eai-sum1"><span>${B.ls.length}종 ${B.n}개${B.on?' · 가든 5% 할인가':''}</span><span>${B.on?`<s>${won(B.base)}</s> `:''}<strong>${won(total)}</strong></span></div>
-    <div class="eai-acts"><button class="buy" id="eaiApply">${EAI.aff?'내 사진에서 꾸미고 담기':'이 조합으로 꾸미고 담기'}</button>${EAI.aff?'<button class="ghost" id="eaiTpl">기준 귀로 보기</button>':''}</div></section>
+    <div class="eai-sum1" id="eaiSum"></div>
+    <div class="eai-acts v"><a class="buy" id="eaiCart" href="#" target="_blank" rel="noopener"></a>
+     <div class="row"><button class="ghost" id="eaiApply">${EAI.aff?'내 사진에서 꾸며 보기':'꾸미기 화면에서 보기'}</button>${EAI.aff?'<button class="ghost" id="eaiTpl">기준 귀로 보기</button>':''}</div>
+     ${B.on?'<small class="eai-cnote">가든 5% 할인코드는 담기를 누르면 자동으로 복사돼요 · 주얼패치에만 적용돼요</small>':''}</div></section>
    <section class="eai-share"><h4>📸 내 귀 리포트 공유하기</h4>
      <label class="ph"><input type="checkbox" id="eaiShPhoto"> 내 귀 사진 넣기 <small>끄면 기준 귀 그림으로 만들어요</small></label>
      <div class="sb"><button id="eaiShSave">이미지 저장</button>${navigator.share?'<button id="eaiShShare">공유하기</button>':''}</div>
@@ -1474,6 +1503,11 @@ function eaiResult(){const R=earReport(),P=eaiPlan(),cd=COND[EAI.condI]||COND[CO
   document.querySelectorAll('[data-pt]').forEach(b=>b.onclick=()=>{if(!EAI.adjOn)info(+b.dataset.pt)});
   const ab=$('#eaiAdj');if(ab)ab.onclick=()=>{EAI.adjOn=!EAI.adjOn;eaiResult()};if(EAI.adjOn)bindAdj(P);
   const rt=$('#eaiRetake');if(rt)rt.onclick=()=>{EAI.adj=null;EAI.adjOn=false;eaiIntro()};
+  const G=itemOf(GUASHA.no),cartA=$('#eaiCart');
+  const upd=()=>{const g=EAI.gua&&G?G.sell:0,tot=total+g;$('#eaiSum').innerHTML=`<span>주얼패치 ${B.ls.length}종 ${B.n}개${g?' + 하트괄사':''}${B.on?' · 가든 5% 할인가':''}</span><span>${B.on?`<s>${won(B.base+g)}</s> `:''}<strong>${won(tot)}</strong></span>`;
+    cartA.href=aiCartURL(P);cartA.textContent=`추천 조합 그대로 담기 · ${won(tot)}`};upd();
+  const gb=$('#eaiGua');if(gb)gb.onchange=()=>{EAI.gua=gb.checked;upd()};
+  cartA.onclick=()=>{if(B.on&&typeof copyCode==='function')copyCode();try{track('cart_click',{ai:1,n:B.ls.length,pcs:B.n,total:total+(EAI.gua&&G?G.sell:0),gua:EAI.gua?1:0,promo:B.on?1:0,nos:P.recs.map(r=>r.no).join(',')})}catch(e){}};
   $('#eaiApply').onclick=()=>eaiApply(!!EAI.aff);const tb=$('#eaiTpl');if(tb)tb.onclick=()=>eaiApply(false);
   $('#eaiShSave').onclick=()=>shareReport('save');const shb=$('#eaiShShare');if(shb)shb.onclick=()=>shareReport('share');
   $('#eaiAgain').onclick=()=>{EAI.adj=null;EAI.adjOn=false;eaiIntro()}}
@@ -1605,12 +1639,24 @@ const EAR_LOOKS={lobeBig:{t:'귓불 포인트가 예쁜 귀',k:'point',w:'귓불
  slim:{t:'세로 라인 레이어드가 예쁜 귀',k:'small',w:'폭이 슬림한 세로형이라 위에서 아래로 작은 파츠를 세로 라인으로 이으면 귀가 더 길어 보여요.'},
  balance:{t:'포인트 파츠가 잘 어울리는 귀',k:'point',w:'길이·폭·곡선 비율이 고르게 맞아 귓불에 포인트 파츠 하나, 귓바퀴에 작은 반짝임 하나면 충분히 완성돼요.'}};
 const EAR_KINDS={small:{n:'작은 파츠 레이어드',preset:'daily',cnt:3},point:{n:'포인트 파츠',preset:'pierce',cnt:3},layer:{n:'여러 개 레이어드',preset:'glam',cnt:5}};
-function earReport(){const F=[];let key='balance',best=0;const pick=(k,dev)=>{if(dev>best){best=dev;key=k}};let lobeW='적당한 귓불',rimW='완만한 윗귓바퀴',room={lobe:1,top:1,rim:1},tiltNote='';
+/* Result wording: deterministic from the measured differences D (lobe / upper / width vs the guide ear).
+   main phrase = strongest trait (two strengths), prefix = second notable trait, balanced ears get a phrase from the way they lean. */
+const TRAITS={lobe:{p:{m:'귓불 포인트가 예쁜 귀',s:'귓불 포인트가 주인공인 귀',k:'lobeBig',pre:'귓불이 길게 떨어지고',add:'귓불도 넉넉해서 아래쪽에 포인트 하나를 더해도 좋아요.',lean:'귓불 포인트 하나로 완성되는 귀'},
+   n:{m:'작은 파츠를 레이어드하기 좋은 귀',s:'미니 파츠 레이어드가 찰떡인 귀',k:'lobeSmall',pre:'귓불이 동글 아담하고',add:'귓불은 아담해서 아래쪽은 작은 3mm 파츠가 비율이 좋아요.',lean:'작은 스터드 하나가 예쁜 귀'},thr:0.08},
+ upper:{p:{m:'윗부분 레이어드가 잘 받는 귀',s:'윗귓바퀴가 넓은 캔버스인 귀',k:'upperBig',pre:'윗선이 높게 열려 있고',add:'윗귓바퀴 공간도 넉넉해 위쪽에 반짝임을 하나 더 얹어도 답답하지 않아요.',lean:'윗귓바퀴 한 점 포인트가 어울리는 귀'},
+   n:{m:'작은 파츠가 깔끔하게 어울리는 귀',s:'미니멀 2~3포인트가 정답인 귀',k:'upperSmall',pre:'윗선이 아담하게 말려 있고',add:'윗부분은 아담해서 위쪽은 작은 파츠 하나로 가볍게 마무리해요.',lean:'미니 파츠 한두 개가 예쁜 귀'},thr:0.08},
+ front:{p:{m:'여러 개 레이어드가 잘 받는 귀',s:'풀 레이어드도 소화하는 귀',k:'wide',pre:'폭이 넉넉하고',add:'폭도 넉넉해 귓바퀴 가장자리까지 이어 붙여도 균형이 맞아요.',lean:'어디에 붙여도 균형이 맞는 귀'},
+   n:{m:'세로 라인 레이어드가 예쁜 귀',s:'세로로 이어 붙이면 길어 보이는 귀',k:'slim',pre:'세로로 슬림하고',add:'폭이 슬림해서 세로 방향으로 이어 붙이면 더 길어 보여요.',lean:'세로로 두 점 포인트가 어울리는 귀'},thr:0.1}};
+function earTitle(D){const sc=Object.keys(TRAITS).map(k=>{const d=D[k]||0,t=TRAITS[k];return {k,d,v:d>=0?t.p:t.n,sc:Math.abs(d)-t.thr}}).sort((a,b)=>b.sc-a.sc);
+  const [a,b]=sc;if(a.sc<=0){if(Math.abs(a.d)<0.03)return {title:'포인트 파츠가 잘 어울리는 귀',why:EAR_LOOKS.balance.w,key:'balance'};
+    return {title:a.v.lean,why:EAR_LOOKS.balance.w+' 굳이 고르자면 '+a.v.add,key:'balance'}}
+  const main=a.sc>=0.12?a.v.s:a.v.m,pre=b&&b.sc>-0.02?b.v.pre+' ':'';return {title:pre+main,why:EAR_LOOKS[a.v.k].w+(pre?' '+b.v.add:''),key:a.v.k}}
+function earReport(){const F=[];let key='balance',best=0;const pick=(k,dev)=>{if(dev>best){best=dev;key=k}};let lobeW='적당한 귓불',rimW='완만한 윗귓바퀴',room={lobe:1,top:1,rim:1},D={lobe:0,upper:0,front:0},tiltNote='';
   const pct=v=>Math.round(Math.abs(v-1)*100);
   if(EAI.manual&&EAI.marks&&EAI.marks.length>=4){const T=MARKS.map(m=>m.t);
     const meas=P=>{const [a,b,c,d]=P;const L=Math.hypot(b[0]-a[0],b[1]-a[1]),ux=(b[0]-a[0])/L,uy=(b[1]-a[1])/L;const pr=q=>((q[0]-a[0])*ux+(q[1]-a[1])*uy)/L,pp=q=>Math.abs((q[0]-a[0])*uy-(q[1]-a[1])*ux)/L;
       const sg=q=>((q[0]-a[0])*uy-(q[1]-a[1])*ux)/L;return {upper:pr(d),lobe:1-pr(c),front:P[4]?Math.abs(sg(c)-sg(P[4])):pp(c),tilt:Math.atan2(b[0]-a[0],b[1]-a[1])*180/Math.PI}};
-    const n5=EAI.marks.length>=5?5:4,u=meas(EAI.marks.slice(0,n5)),s=meas(T.slice(0,n5));const r={upper:u.upper/s.upper,lobe:u.lobe/s.lobe,front:u.front/s.front};room={lobe:r.lobe,top:r.upper,rim:r.front};
+    const n5=EAI.marks.length>=5?5:4,u=meas(EAI.marks.slice(0,n5)),s=meas(T.slice(0,n5));const r={upper:u.upper/s.upper,lobe:u.lobe/s.lobe,front:u.front/s.front};room={lobe:r.lobe,top:r.upper,rim:r.front};D={lobe:r.lobe-1,upper:r.upper-1,front:r.front-1};
     F.push({k:'귀 윤곽',v:r.front>1.1?'폭이 넉넉한 형태':r.front<0.9?'세로로 슬림한 형태':'길이·폭이 고른 형태',s:r.front>1.1||r.front<0.9?`귀 길이 대비 폭(이주~귓바퀴 뒤쪽 끝)이 기준 귀보다 약 ${pct(r.front)}% ${r.front>1?'넓어요':'좁아요'}`:'귀 길이 대비 폭이 기준 귀와 비슷해요'});
     lobeW=r.lobe>1.08?'넉넉한 귓불':r.lobe<0.92?'아담한 귓불':'적당한 귓불';
     F.push({k:'귓불',v:r.lobe>1.08?'길게 내려온 넉넉한 귓불':r.lobe<0.92?'짧고 아담한 귓불':'보통 길이의 귓불',s:r.lobe>1.08||r.lobe<0.92?`이주~귓불 끝 길이가 기준 귀보다 약 ${pct(r.lobe)}% ${r.lobe>1?'길어요':'짧아요'}`:'이주~귓불 끝 길이가 기준 귀와 비슷해요'});
@@ -1618,14 +1664,14 @@ function earReport(){const F=[];let key='balance',best=0;const pick=(k,dev)=>{if
     F.push({k:'윗귓바퀴 공간',v:r.upper>1.08?'곡선이 높고 공간이 넉넉해요':r.upper<0.92?'아담하게 말린 편이에요':'고르게 둥근 편이에요',s:r.upper>1.08||r.upper<0.92?`귀 맨 위~삼각와 거리가 기준 귀보다 약 ${pct(r.upper)}% ${r.upper>1?'길어요':'짧아요'}`:'귀 맨 위~삼각와 거리가 기준 귀와 비슷해요'});
     const tl=Math.abs(u.tilt-s.tilt);if(tl>10)tiltNote=` 사진 속 귀가 약 ${Math.round(tl)}° 기울어 있어 기울기를 보정해서 비교했어요.`;
     pick(r.lobe>1?'lobeBig':'lobeSmall',Math.abs(r.lobe-1)-0.08);pick(r.upper>1?'upperBig':'upperSmall',Math.abs(r.upper-1)-0.08);pick(r.front>1?'wide':'slim',Math.abs(r.front-1)-0.1)}
-  else{const st=EAI.stats||{};
+  else{const st=EAI.stats||{};if(st.ratio)D.front=1.75/st.ratio-1;if(st.lobe!=null)D.lobe=st.lobe/0.55-1;if(st.top!=null)D.upper=st.top/0.65-1;
     if(st.ratio){F.push({k:'귀 윤곽',v:st.ratio>1.95?'세로로 슬림한 형태':st.ratio<1.55?'폭이 넉넉한 형태':'길이·폭이 고른 형태',s:`AI가 찾은 윤곽의 길이÷폭 = ${st.ratio.toFixed(2)}`});room.rim=1.75/st.ratio;pick(st.ratio>1.75?'slim':'wide',Math.abs(st.ratio-1.75)/1.75-0.1)}
     if(st.lobe!=null){lobeW=st.lobe>0.62?'넉넉한 귓불':st.lobe<0.45?'아담한 귓불':'적당한 귓불';F.push({k:'귓불',v:st.lobe>0.62?'폭이 넉넉한 귓불':st.lobe<0.45?'아담한 귓불':'보통 크기의 귓불',s:'AI가 찾은 윤곽 아랫부분 폭 기준'});room.lobe=st.lobe/0.55;pick(st.lobe>0.55?'lobeBig':'lobeSmall',Math.abs(st.lobe-0.55)*1.2-0.08)}
     if(st.top!=null){rimW=st.top>0.72?'넓은 윗귓바퀴':'완만한 윗귓바퀴';F.push({k:'윗귓바퀴 공간',v:st.top>0.72?'곡선 공간이 넉넉해요':'완만한 곡선이에요',s:'AI가 찾은 윤곽 윗부분 폭 기준'});room.top=st.top/0.65}}
   const ent=Object.entries(room).sort((a,b)=>b[1]-a[1]),order=ent.map(([z])=>ZN[z]);
   F.push(ent[0][1]-ent[2][1]<0.08?{k:'레이어드 영역',v:'귓불 · 귓바퀴 가장자리 · 윗귓바퀴',s:'세 영역 공간이 비슷해 어디든 고르게 붙이기 좋아요'}:{k:'레이어드 영역',v:order.join(' › '),s:'공간이 넉넉한 순서예요'});
-  const L=EAR_LOOKS[key],K=EAR_KINDS[L.k];
-  return {key,title:L.t,why:L.w,kind:L.k,kindN:K.n,feats:F,sw:{form:L.t,style:K.preset,kind:L.k,lobe:lobeW,rim:rimW},
+  const T=earTitle(D);key=T.key;const L=EAR_LOOKS[key],K=EAR_KINDS[L.k];
+  return {key,title:T.title,why:T.why,kind:L.k,kindN:K.n,feats:F,sw:{form:L.t,style:K.preset,kind:L.k,lobe:lobeW,rim:rimW},
     basis:(EAI.manual?'직접 짚은 기준점 5곳(귀 맨 위·귓불 끝·이주·삼각와·귓바퀴 뒤쪽 끝)을 조재숙 박사님 자문 가이드의 기준 귀와 비교했어요.':'AI가 사진에서 찾은 귀 바깥 윤곽으로 측정했어요.')+tiltNote}}
 function photoK(){return EAI.manual&&EAI.aff?Math.sqrt(Math.abs(EAI.aff.det)):EAI.al?1/EAI.al.s:null}
 const TPL_PER_MM=783/62;
@@ -1633,7 +1679,7 @@ const TPL_PER_MM=783/62;
 async function shareCard(withPhoto){const R=earReport(),P=EAI.plan,cd=COND[EAI.condI]||COND[COND.length-1];const W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
   const bg=g.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#FBF6F1');bg.addColorStop(0.6,'#F6EEF6');bg.addColorStop(1,'#EEF1EA');g.fillStyle=bg;g.fillRect(0,0,W,H);
   const F="'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif",S="'Gowun Batang',serif";g.textAlign='center';g.fillStyle='#8E7BB5';g.font=`italic 34px ${S}`;g.fillText('My Ear Report',W/2,96);
-  g.fillStyle='#4E2338';g.font=`800 ${R.title.length>13?52:62}px ${F}`;g.fillText(R.title,W/2,178);g.fillStyle='#66745A';g.font=`600 30px ${F}`;g.fillText(`추천 스타일 · ${R.kindN}`,W/2,230);
+  g.fillStyle='#4E2338';const tl=R.title.length>16;g.font=`800 ${tl?46:60}px ${F}`;if(tl)wrapText(g,R.title,W/2,150,W-160,54);else g.fillText(R.title,W/2,178);g.fillStyle='#66745A';g.font=`600 28px ${F}`;g.fillText(`추천 스타일 · ${R.kindN}`,W/2,240);
   const box=[90,260,W-180,560];g.fillStyle='#fff';rr(g,...box,36);g.fill();
   const loadImg=src=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src});
   if(withPhoto&&EAI.thumb){const im=await loadImg(EAI.thumb);if(im){const s=Math.min((box[2]-40)/im.width,(box[3]-40)/im.height),w=im.width*s,h=im.height*s,x=box[0]+(box[2]-w)/2,y=box[1]+(box[3]-h)/2;g.save();rr(g,x,y,w,h,24);g.clip();g.drawImage(im,x,y,w,h);g.restore();
