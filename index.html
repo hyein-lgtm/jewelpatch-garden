@@ -805,6 +805,75 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 .eai-gua .add{display:flex;align-items:center;gap:8px;background:#fff;border-radius:12px;padding:9px 11px;font-size:13px;cursor:pointer}
 .eai-gua .add input{width:18px;height:18px;accent-color:#4E2338;flex:none}.eai-gua .add span{flex:1;line-height:1.35}.eai-gua .add em{font-style:normal;font-weight:700;color:#4E2338;white-space:nowrap}.eai-gua .add s{color:#AAA;font-weight:400;font-size:11.5px}
 .eai-gua .note{font-size:10.5px;color:#9A948F}
+
+.eai-gate{display:grid;gap:12px;text-align:center;padding:26px 6px 10px;justify-items:center}
+.eai-gate .ic{font-size:40px}.eai-gate h3{margin:0;font-family:var(--f-display);font-size:22px;color:#4E2338;line-height:1.35}
+.eai-gate p{margin:0;font-size:14px;line-height:1.6;color:#5C5753;max-width:330px}.eai-gate .auto{color:#8E7BB5;font-weight:700}
+.eai-gate .how{text-align:left;margin:0;padding:12px 14px 12px 32px;background:#F6F1EC;border-radius:12px;font-size:14px;line-height:1.8;width:100%;max-width:330px;box-sizing:border-box}
+.eai-gate .buy{width:100%;max-width:330px;border:0;border-radius:12px;background:#4E2338;color:#fff;padding:14px;font:inherit;font-weight:700;font-size:15px}
+
+/* ===== phone: every AI step fits one screen (no page scroll) ===== */
+@media (max-width:640px){
+ .eai-in{height:100dvh;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+ .eai-in>.eai-h{flex:none;margin-bottom:6px}.eai-in>.eai-h .en{font-size:11px}.eai-in>.eai-h h2{font-size:19px;margin:0}
+ #eaiBody{flex:1;min-height:0;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;gap:8px}
+ #eaiBody>*{flex:none;margin-top:0;margin-bottom:0}
+ #eaiBody>.eai-pic{flex:1 1 0;min-height:150px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+ #eaiBody>.eai-pic .eai-fr{display:block;position:relative;max-width:100%}#eaiBody>.eai-pic .eai-fr>img{width:100%;height:100%;display:block;max-height:none;object-fit:fill}
+ /* marking */
+ .eai-mstep{padding:8px 10px;gap:10px;border-radius:14px}.eai-mstep .eai-mart{width:62px;height:72px;flex:none}.eai-mstep b{font-size:15px}.eai-mstep p{font-size:12.5px;margin:2px 0;line-height:1.4}.eai-mstep .eai-why{font-size:11px;line-height:1.35}.eai-mstep .eai-mno{font-size:11px;padding:1px 7px}
+ .eai-mlist{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;gap:5px}.eai-mlist::-webkit-scrollbar{display:none}.eai-mlist span{white-space:nowrap;font-size:11.5px;padding:4px 9px}
+ .eai-zoom{gap:6px}.eai-zoom button{padding:6px 10px;font-size:12px}
+ #eaiBody>.eai-acts{margin-top:0}.eai-acts .buy{padding:12px}
+ .eai-mintro .card{max-height:calc(100dvh - 32px);overflow-y:auto;padding:14px;gap:6px}.eai-mintro .demo{width:96px}.eai-mintro ol{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;padding:0;margin:0;list-style:none;counter-reset:mk}
+ .eai-mintro ol li{counter-increment:mk;background:#F6F1EC;border-radius:999px;padding:3px 9px;font-size:12px}.eai-mintro ol li:before{content:counter(mk) '. '}
+ .eai-mintro .eai-whybox{font-size:12.5px}.eai-mintro p{font-size:11.5px;margin:0}
+ /* result: three panes + bottom bar */
+ #eaiBody:has(.eai-res.v6){overflow:hidden}
+}
+.eai-res.v6{display:flex;flex-direction:column;gap:8px;min-height:0}
+@media (max-width:640px){.eai-res.v6{flex:1 1 0;min-height:0;overflow:hidden}}
+.eai-tabs{display:flex;gap:4px;background:#F4EFEA;border-radius:12px;padding:3px;flex:none}
+.eai-tabs button{flex:1;border:0;background:none;border-radius:9px;padding:8px 2px;font:inherit;font-size:12.5px;font-weight:700;color:#8A847F;display:flex;align-items:center;justify-content:center;gap:4px;cursor:pointer}
+.eai-tabs button i{font-style:normal;width:17px;height:17px;border-radius:50%;background:#DDD5CE;color:#fff;font-size:10.5px;display:grid;place-items:center}
+.eai-tabs button[aria-selected="true"]{background:#fff;color:#4E2338;box-shadow:0 1px 4px rgba(0,0,0,.08)}.eai-tabs button[aria-selected="true"] i{background:#4E2338}
+.eai-panes{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden}
+.eai-pane{display:flex;flex-direction:column;gap:8px}
+.eai-pane .eai-top{margin:0}
+.eai-pane .eai-verdict{padding:8px 12px}.eai-pane .eai-verdict b{font-size:17px}
+.eai-pane .eai-feats{gap:5px}.eai-pane .eai-feats>div{padding:5px 8px}.eai-pane .eai-feats b{font-size:12.5px}.eai-pane .eai-feats small{font-size:10px;line-height:1.3}
+.eai-pane .eai-sty{padding:8px 10px;font-size:12.5px;line-height:1.5}.eai-pane .eai-basis{font-size:10.5px}
+.eai-pane .eai-msg.mini{padding:10px 12px;margin:0}.eai-pane .eai-msg.mini b{font-size:14.5px}.eai-pane .eai-msg.mini p{font-size:12.5px;margin:2px 0}.eai-pane .eai-msg.mini small{font-size:10.5px;color:#8E7BB5}
+.eai-pane .eai-low{padding:6px 10px;font-size:12px;margin:0}
+.eai-photo{position:relative}.eai-ptinfo{position:absolute;left:6px;right:6px;bottom:6px;z-index:3;background:rgba(255,255,255,.96);border-radius:10px;padding:7px 9px;font-size:11.5px;line-height:1.4;box-shadow:0 4px 14px rgba(0,0,0,.18);margin:0}.eai-ptinfo p{margin:2px 0 0}
+.eai-pane .eai-src{font-size:10.5px;margin:0}.eai-pane .eai-src .eai-link{font-size:10.5px;padding:0;display:inline}
+.eai-gua.c{padding:9px 11px;gap:7px}.eai-gua.c .hd img{width:42px;height:42px}.eai-gua.c .hd small{font-size:11px}.eai-gua.c .hd p{margin:3px 0 0;display:flex;flex-wrap:wrap;gap:3px 8px;font-size:12px;color:#4A4542}
+.eai-gua.c .hd p i{font-style:normal;display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;background:#B0707E;color:#fff;font-size:9.5px;margin-right:3px}
+.eai-gua.c .add{padding:7px 10px;font-size:12.5px}
+.eai-chd{display:flex;gap:8px;align-items:flex-start}.eai-chd .eai-cap{flex:1;margin:0}.eai-shb{flex:none;border:1px solid #E4DCD5;background:#fff;border-radius:999px;padding:5px 11px;font:inherit;font-size:12px;font-weight:700;color:#4E2338;cursor:pointer}
+.eai-pane .eai-recs{gap:6px}.eai-pane .eai-rc{padding:7px 9px;gap:9px}.eai-pane .eai-rc img{width:44px;height:44px}.eai-pane .eai-rc b{font-size:13.5px}.eai-pane .eai-rc small{font-size:11px}
+.eai-pane .eai-rc p{font-size:11.5px;line-height:1.4;margin:2px 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.eai-pane .eai-rc em{font-size:13px}
+.eai-pane .eai-sum1{margin:0;padding:6px 2px}
+.eai-crow{display:flex;gap:8px}.eai-crow .ghost{flex:1;padding:10px;font-size:13px;border-radius:12px}
+.eai-cfoot{display:flex;flex-direction:column;align-items:center;gap:2px}.eai-cfoot .eai-link{font-size:12px}
+.eai-bbar{flex:none;padding-top:2px}.eai-bbar .buy{display:block;width:100%;box-sizing:border-box;border:0;border-radius:14px;background:#4E2338;color:#fff;padding:14px;font:inherit;font-weight:700;font-size:15px;text-align:center;text-decoration:none;cursor:pointer}
+.eai-sheet{position:fixed;inset:0;z-index:40;background:rgba(40,15,30,.45);display:flex;align-items:flex-end;justify-content:center}
+.eai-sheet[hidden]{display:none}.eai-sheet .sh-in{background:#fff;width:100%;max-width:560px;max-height:86dvh;overflow-y:auto;border-radius:20px 20px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom,0px));position:relative}
+.eai-sheet .x{position:absolute;right:12px;top:10px;border:0;background:#F4EFEA;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer}
+.eai-sheet .eai-more.open h4,.eai-sheet .eai-share h4{margin:0 0 8px;font-size:15px}
+@media (max-width:640px){#eaiBody>.eai-res.v6{flex:1 1 0;min-height:0}
+ .eai-pane.b .eai-top{grid-template-columns:42% minmax(0,1fr)}.eai-pane.a .eai-top{grid-template-columns:46% minmax(0,1fr)}
+ .eai-pane .eai-rc img{width:40px;height:40px}.eai-pane .eai-rc p{font-size:11px}}
+@media (max-width:640px){.eai-pane{gap:6px}.eai-pane .eai-msg.mini{padding:8px 11px}.eai-pane .eai-msg.mini p{margin:1px 0}
+ .eai-pane .eai-low{padding:4px 9px;font-size:11.5px}.eai-pane .eai-low .eai-link{padding:0;font-size:11.5px}
+ .eai-cfoot{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:0 8px}.eai-cfoot .eai-link{padding:2px 0}.eai-pane .eai-sum1{padding:3px 2px}.eai-crow .ghost{padding:8px}
+ .eai-pane .eai-rc{padding:6px 8px}.eai-tabs button{padding:7px 2px}}
+@media (max-width:640px) and (max-height:680px){.eai-in>.eai-h .en{display:none}.eai-in>.eai-h h2{font-size:17px}
+ .eai-pane.a .eai-top,.eai-pane.b .eai-top{grid-template-columns:38% minmax(0,1fr)}.eai-pane .eai-feats small{display:none}.eai-pane .eai-sty{font-size:12px;padding:6px 9px}
+ .eai-pane .eai-verdict b{font-size:15.5px}.eai-pane .eai-msg.mini small,.eai-pane .eai-basis{display:none}.eai-pane .eai-rc p{-webkit-line-clamp:1}.eai-pane .eai-cap{font-size:10.5px}
+ .eai-bbar .buy{padding:12px}}
+@media (max-width:640px) and (max-height:680px){.eai-pane.b .eai-top{grid-template-columns:34% minmax(0,1fr)}.eai-gua.c .hd img{width:34px;height:34px}.eai-gua.c .hd p{font-size:11px}.eai-pane .eai-src{font-size:10px;line-height:1.35}}
+@media (max-width:640px) and (max-height:680px){.eai-pane{gap:4px}}
 </style>
 
 </head>
@@ -1773,7 +1842,7 @@ $('#heartBtn').onclick=()=>{if(!entered)return;myHeart=Date.now();popHeart(playe
 
 /* ---------- analytics (funnel) ---------- */
 const SID=(()=>{try{let s=sessionStorage.getItem('jp_sid');if(!s){s=Math.random().toString(36).slice(2,12);sessionStorage.setItem('jp_sid',s)}return s}catch(e){return Math.random().toString(36).slice(2,12)}})();
-const UTM=(()=>{try{const q=new URLSearchParams(location.search);const o={};['utm_source','utm_medium','utm_campaign','utm_content'].forEach(k=>{if(q.get(k))o[k]=q.get(k).slice(0,60)});return o}catch(e){return{}}})();
+const UTM=(()=>{try{const q=new URLSearchParams(location.search);const o={};['utm_source','utm_medium','utm_campaign','utm_content'].forEach(k=>{if(q.get(k))o[k]=q.get(k).slice(0,60)});try{const u=navigator.userAgent;o.br=/KAKAOTALK/i.test(u)?'kakao':/Instagram/i.test(u)?'insta':/NAVER\(inapp/i.test(u)?'naver':/FBAN|FBAV|Line\/|DaumApps|BAND\//i.test(u)?'inapp':'web';const f=q.get('from');if(f)o.from=f.slice(0,12)}catch(e){}return o}catch(e){return{}}})();
 const sent=new Set();
 function track(ev,props,once){if(once){if(sent.has(ev))return;sent.add(ev)}const p=Object.assign({},UTM,props||{});
   try{(window.dataLayer=window.dataLayer||[]).push(Object.assign({event:'jp_'+ev},p));if(window.gtag)window.gtag('event','jp_'+ev,p)}catch(e){}
@@ -2147,17 +2216,32 @@ function planBill(P){const sv=[look,QTY,OPT];look=P.recs.map(r=>({k:0,no:r.no,pi
 /* --- UI --- */
 (function(){const el=document.createElement('div');el.className='eai';el.id='eai';el.hidden=true;el.setAttribute('role','dialog');el.setAttribute('aria-label','AI가 읽어주는 나의 귀 이야기');
   el.innerHTML=`<div class="eai-in"><div class="eai-h"><div><span class="en">AI Ear Ritual</span><h2>AI가 읽어주는 나의 귀 이야기</h2></div><button class="x" id="eaiX" aria-label="닫기">×</button></div><div id="eaiBody"></div></div>
-  <input type="file" accept="image/*" id="eaiFile" hidden><input type="file" accept="image/*" capture="user" id="eaiCam" hidden>`;document.body.appendChild(el);
+  <input type="file" accept="image/*" id="eaiFile" hidden><input type="file" accept="image/*" capture="user" id="eaiCam" hidden>`;try{new MutationObserver(()=>requestAnimationFrame(fitPics)).observe(el.querySelector('#eaiBody'),{childList:true})}catch(_){}document.body.appendChild(el);
   $('#eaiX').onclick=eaiClose;$('#eaiFile').onchange=e=>eaiPick(e.target.files[0]);$('#eaiCam').onchange=e=>eaiPick(e.target.files[0])})();
-function inApp(){const u=navigator.userAgent;return /KAKAOTALK/i.test(u)?'kakao':/Instagram|FBAN|FBAV|NAVER\(inapp|Line\//i.test(u)?'other':''}
-function openOutside(){const u=location.href;if(inApp()==='kakao'){location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(u);return}
-  if(/Android/i.test(navigator.userAgent)){location.href='intent://'+u.replace(/^https?:\/\//,'')+'#Intent;scheme=https;package=com.android.chrome;end';return}
-  try{navigator.clipboard.writeText(u);toast('주소를 복사했어요 · 사파리나 크롬에 붙여넣어 열어 주세요')}catch(e){toast('오른쪽 아래 ··· 메뉴에서 ‘다른 브라우저로 열기’를 눌러 주세요')}}
+function inApp(){const u=navigator.userAgent;return /KAKAOTALK/i.test(u)?'kakao':/Instagram/i.test(u)?'insta':/FBAN|FBAV|NAVER\(inapp|Line\/|DaumApps|everytimeApp|BAND\//i.test(u)?'other':''}
+/* the AI page in the visitor's default browser (keeps utm_* so the channel is still counted there) */
+function aiURL(){const q=new URLSearchParams(location.search);q.set('from',inApp()||'web');return location.origin+location.pathname.replace(/[^/]*$/,'')+'ai.html?'+q.toString()}
+function openOutside(){const u=aiURL();if(inApp()==='kakao'){location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(u);return true}
+  if(/Android/i.test(navigator.userAgent)){location.href='intent://'+u.replace(/^https?:\/\//,'')+'#Intent;scheme=https;package=com.android.chrome;end';return true}
+  try{navigator.clipboard.writeText(u).then(()=>toast('주소를 복사했어요 · 사파리 주소창에 붙여 넣어 열어 주세요'),()=>toast('오른쪽 위 ··· 메뉴에서 ‘외부 브라우저에서 열기’를 눌러 주세요'))}catch(e){toast('오른쪽 위 ··· 메뉴에서 ‘외부 브라우저에서 열기’를 눌러 주세요')}return false}
+/* in-app browsers (KakaoTalk, Instagram…): the AI step only runs in the default browser — garden, studio and checkout stay available here */
+function fitPics(){if(!matchMedia('(max-width:640px)').matches)return;document.querySelectorAll('#eaiBody .eai-pic').forEach(pc=>{const fr=pc.querySelector('.eai-fr'),im=fr&&fr.querySelector('img');if(!im)return;
+  const go=()=>{const ar=im.naturalWidth/im.naturalHeight;if(!ar)return;fr.style.width='';fr.style.height='';const W=pc.clientWidth,H=pc.clientHeight;if(!W||!H)return;let w=W,h=w/ar;if(h>H){h=H;w=h*ar}fr.style.width=Math.floor(w)+'px';fr.style.height=Math.floor(h)+'px'};if(im.complete&&im.naturalWidth)go();else im.addEventListener('load',go,{once:true})})}
+addEventListener('resize',()=>requestAnimationFrame(fitPics));
+function eaiGate(){const k=inApp(),auto=k==='kakao'||/Android/i.test(navigator.userAgent),nm=k==='kakao'?'카카오톡':k==='insta'?'인스타그램':'앱';
+  $('#eai').hidden=false;$('#bar').hidden=true;
+  $('#eaiBody').innerHTML=`<div class="eai-gate"><div class="ic">🧭</div><h3>AI 귀 분석은<br>기본 브라우저에서 열려요</h3>
+   <p>${nm} 안의 브라우저에서는 카메라와 사진 분석이 자주 멈춰서 <b>사파리·크롬</b>에서 진행해요. 정원 구경, 내 귀 꾸미기, 구매는 여기서도 그대로 할 수 있어요.</p>
+   ${auto?'<p class="auto" id="eaiAuto">기본 브라우저로 이동하고 있어요…</p>':`<ol class="how"><li>화면 오른쪽 위 <b>···</b> 버튼을 눌러요</li><li><b>외부 브라우저에서 열기</b>를 골라요</li></ol>`}
+   <button class="buy" id="eaiOut">${auto?'기본 브라우저로 열기':'링크 복사해서 사파리로 열기'}</button>
+   <button class="eai-link" id="eaiGateBack">정원으로 돌아가기</button></div>`;
+  $('#eaiOut').onclick=()=>{try{track('ai_start',{gate:k,tap:1})}catch(e){}openOutside()};$('#eaiGateBack').onclick=()=>{if(AIPAGE){location.href='./'+location.search;return}$('#eai').hidden=true;$('#bar').hidden=false};
+  try{track('ai_start',{gate:k},true)}catch(e){}if(auto)setTimeout(openOutside,400)}
 const PHONE=/iPhone|iPad|Android|Mobi/i.test(navigator.userAgent);const AIPAGE=!!window.__AIPAGE;
 function onPages(){try{return !!SB_URL}catch(e){return false}}
 function freeGL(){if(!PHONE||EAI.glFreed||AIPAGE)return;EAI.glFreed=true;try{renderer.setSize(2,2,false);renderer.dispose();renderer.forceContextLoss()}catch(e){}try{renderer.domElement.style.visibility='hidden'}catch(e){}}
 function backToGarden(){if(EAI.noBack)return false;if(AIPAGE){location.href='./'+location.search;return true}if(!EAI.glFreed)return false;try{sessionStorage.setItem('garden_back',String(Date.now()))}catch(e){}location.reload();return true}
-function eaiOpen(){if(PHONE&&!AIPAGE&&onPages()){try{track('ai_start',{},true)}catch(e){}location.href='ai.html'+location.search;return}freeGL();$('#eai').hidden=false;$('#bar').hidden=true;try{track('ai_start',{},true)}catch(e){}eaiIntro()}
+function eaiOpen(){if(PHONE&&inApp()&&onPages())return eaiGate();if(PHONE&&!AIPAGE&&onPages()){try{track('ai_start',{},true)}catch(e){}location.href='ai.html'+location.search;return}freeGL();$('#eai').hidden=false;$('#bar').hidden=true;try{track('ai_start',{},true)}catch(e){}eaiIntro()}
 function eaiClose(){camStop();if(backToGarden())return;$('#eai').hidden=true;barKey=''}
 async function eaiPick(f){clearResume();if(!f)return;$('#eaiFile').value='';$('#eaiCam').value='';const url=URL.createObjectURL(f);const im=new Image();im.src=url;try{await im.decode()}catch(e){toast('사진을 열 수 없어요. 다른 사진으로 해볼까요?');return}
   const M=1600,s=Math.min(1,M/Math.max(im.naturalWidth,im.naturalHeight));const c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*s);c.height=Math.round(im.naturalHeight*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
@@ -2203,7 +2287,7 @@ function pickCand(i){const c=EAI.cands[i];if(!c)return;EAI.ci=i;EAI.mask=c.m;EAI
 function eaiFree(){const r=EAI.runner;if(r&&r.kill){r.kill();EAI.runner=null;EAI.loaded=false;EAI.embedded=null}}
 function eaiConds(){if(EAI.manual){try{buildManual()}catch(err){console.warn(err);toast('사진을 정리하지 못했어요. 다시 짚어 볼까요?');return eaiMarks()}return condsUI()}
   EAI.W=EAI.mW||EAI.W;EAI.H=EAI.mH||EAI.H;eaiFree();try{buildEarPhoto();EAI.thumb=readThumb()}catch(err){console.warn(err);toast('귀 사진을 정리하지 못했어요. 다른 사진으로 다시 해볼까요?');eaiIntro();return}condsUI()}
-function condsUI(){$('#eaiBody').innerHTML=`<p class="eai-step">② 오늘 컨디션은 어떤가요?</p><p class="eai-tip">직접 고른 컨디션으로만 메시지를 만들어요. 사진으로는 판단하지 않아요.</p>
+function condsUI(){EAI.tab=0;$('#eaiBody').innerHTML=`<p class="eai-step">② 오늘 컨디션은 어떤가요?</p><p class="eai-tip">직접 고른 컨디션으로만 메시지를 만들어요. 사진으로는 판단하지 않아요.</p>
   <div class="eai-conds">${COND.map((c,i)=>`<button data-c="${i}"><i>${c.e}</i>${esc(c.n)}</button>`).join('')}</div>`;
   document.querySelectorAll('#eaiBody [data-c]').forEach(b=>b.onclick=e=>{e.preventDefault();e.stopPropagation();EAI.cond=COND[+b.dataset.c].id;EAI.condI=+b.dataset.c;try{eaiResult()}catch(err){console.warn(err);toast('결과를 만들다 문제가 생겼어요: '+(err&&err.message||err))}});
   if(EAI.ai&&eaiFn()&&!EAI.comment&&!EAI.manual)eaiComment()}
@@ -2217,7 +2301,7 @@ function earArt(){const pr=[[7661,650,935,8],[7777,724,878,3],[7660,800,262,5],[
   return `<svg viewBox="470 225 550 805" aria-hidden="true">${EARSVG}</svg>${pr.filter(([n])=>CUTS[n]).map(([n,x,y,mm])=>`<img src="${CUTS[n][0]}" alt="" style="left:${(x-470)/550*100}%;top:${(y-225)/805*100}%;width:${mm*783/62/550*100}%">`).join('')}`}
 function eaiIntro(){$('#eaiBody').innerHTML=`${inApp()?`<div class="eai-inapp"><b>${inApp()==='kakao'?'카카오톡':'앱'} 안의 브라우저에서는 AI 분석이 잘 안 돼요</b><span>크롬·사파리 같은 기본 브라우저로 열면 바로 할 수 있어요.</span><button class="buy" id="eaiOut">기본 브라우저로 열기</button></div>`:''}<div class="eai-hero"><div class="eai-ear">${earArt()}</div><p class="lead">내 귀 사진 위에서 <b>국제이혈건강관리 협회장 조재숙 박사님</b>의 자문 이혈 가이드의 포인트 구역을 살펴보고, 어울리는 주얼패치를 골라 바로 붙여봐요.</p></div>
   <div class="eai-pbox on"><b>📱 기본 체험 · 이 기기 안에서만</b><ul>
-   <li>귀 윤곽 찾기는 <b>이 휴대폰 브라우저 안</b>에서 돌아가는 AI(SlimSAM)가 해요. 처음 한 번 AI 모델 파일만 내려받고, <b>사진은 어디로도 보내지 않아요.</b></li>
+   <li>점 찍기와 분석은 <b>이 휴대폰 브라우저 안</b>에서만 계산돼요. <b>사진은 어디로도 보내지 않아요.</b></li>
    <li>사진과 분석 결과는 저장하지 않아요. 창을 닫거나 새로고침하면 사라져요.</li>
    <li>사진으로 건강·컨디션을 판단하지 않아요. 컨디션은 직접 고르신 것만 써요.</li>
    <li>사진 없이 ‘체험 단계·고른 컨디션·추천 스타일 이름’만 익명 통계로 남아요.</li></ul></div>
@@ -2231,11 +2315,11 @@ function bindSide(){document.querySelectorAll('[data-side]').forEach(b=>b.onclic
 function capsHTML(){const k=ANALYZERS.landmarks?null:EAI.manual?EAR_CAPS.manual:EAR_CAPS.silhouette;if(!k)return '';return `<div class="eai-caps"><div><b>AI가 읽은 것</b>${k.sees.map(x=>`<span>✓ ${x}</span>`).join('')}</div><div><b>아직 읽지 못하는 것</b>${k.cannot.map(x=>`<span>– ${x}</span>`).join('')}</div></div>`}
 /* ritual routine with the WBL heart gua sha (cross-sell) — routine wording only, no efficacy claims */
 const GUASHA={no:7341,code:'P0000KWJ000A'};
-const ROUTINES={face:{t:'아침 1분, 산뜻한 귀 리추얼',s:['추천 주얼패치를 귀에 붙여요','하트괄사로 귀 앞에서 턱선 쪽으로 가볍게 쓸어내려요','거울 앞에서 숨 한 번 깊게 쉬고 하루를 시작해요']},
- sleep:{t:'잠들기 전 1분, 쉼표 리추얼',s:['조명을 낮추고 귀에 패치를 붙여요','하트괄사로 귓바퀴 둘레를 천천히 쓸어 줘요','눈을 감고 숨을 길게 내쉬어요']},
- stress:{t:'오늘의 작은 쉼표 리추얼',s:['반짝이는 패치를 귀에 붙여요','하트괄사로 귀 뒤에서 목 옆을 부드럽게 쓸어 줘요','어깨 힘을 빼고 숨을 세 번 골라요']},
- fatigue:{t:'하루 끝, 나를 돌보는 리추얼',s:['패치를 붙이고 잠시 편하게 앉아요','하트괄사로 귀 주변을 둥글게 쓸어 줘요','따뜻한 차 한 잔과 함께 쉬어 가요']},
- _:{t:'나를 위한 1분 리추얼',s:['오늘의 이어룩을 귀에 붙여요','하트괄사로 귀 주변을 부드럽게 쓸어 줘요','거울 속 나에게 한 번 웃어 줘요']}};
+const ROUTINES={face:{t:'아침 1분',s:['패치 붙이기','괄사로 귀 앞→턱선 가볍게','숨 한 번 깊게']},
+ sleep:{t:'잠들기 전 1분',s:['조명 낮추고 패치','괄사로 귓바퀴 둘레 천천히','숨 길게 내쉬기']},
+ stress:{t:'작은 쉼표 1분',s:['반짝이 패치 하나','괄사로 귀 뒤→목 옆','숨 세 번 고르기']},
+ fatigue:{t:'하루 끝 1분',s:['패치 붙이고 앉기','괄사로 귀 주변 둥글게','따뜻한 차 한 잔']},
+ _:{t:'나를 위한 1분',s:['이어룩 붙이기','괄사로 귀 주변 부드럽게','거울 보며 미소']}};
 function guaHTML(){const G=itemOf(GUASHA.no);if(!G)return '';const r=ROUTINES[EAI.cond]||ROUTINES._;
   return `<div class="eai-gua"><div class="hd"><img src="${G.th}" alt="WBL 릴렉싱 하트 세라믹 괄사"><div><small>오늘의 리추얼 루틴</small><b>${esc(r.t)}</b></div></div>
    <ol>${r.s.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>
@@ -2245,61 +2329,67 @@ function aiCartURL(P){const seen=new Set(),parts=[];P.recs.forEach(r=>{if(seen.h
   if(EAI.gua)parts.push(`${GUASHA.no}:${GUASHA.code}:1`);return CART_URL+'#c='+parts.join(',')+'&s='+SID}
 function lookLayer(P){const K=photoK(),C=EAI.crop;if(!K||!C)return '';return P.recs.map(r=>{const q=t2p(r.x,r.y);if(!q)return '';const [l,t]=p2pct(q);const w=Math.max(4.5,r.mm*TPL_PER_MM*K/C.w*100);
   return `<img class="eai-vp" src="${CUTS[r.no][0]}" style="left:${l}%;top:${t}%;width:${w}%" alt="">`}).join('')}
-function eaiResult(){const R=earReport(),P=eaiPlan(),cd=COND[EAI.condI]||COND[COND.length-1];const B=planBill(P);EAI.plan=P;const low=EAI.low;
+function eaiResult(){const R=earReport(),P=eaiPlan(),cd=COND[EAI.condI]||COND[COND.length-1];const B=planBill(P);EAI.plan=P;const low=EAI.low;const tab=EAI.tab||0;
   try{track('ai_result',{cond:EAI.cond||'none',style:P.sw.style},true)}catch(e){}
   const lineOf=no=>B.ls.find(l=>l.it.no===no);const A=analyzer();
   const dots=P.pts.map((p,i)=>{const [l,t]=p2pct(p.ph);return `<button class="eai-pt ${p.mode==='exact'?'':'zone'}" data-pt="${i}" style="left:${l}%;top:${t}%" aria-label="${esc(p.n)} 참고 구역">${i+1}</button>`}).join('');
   const chart=P.pts.length?`<div class="eai-chart"><div class="ear"><svg viewBox="153 223 865 957" aria-hidden="true">${EARSVG}</svg>${P.pts.map((p,i)=>`<i style="left:${(p.pt.chart.x-153)/865*100}%;top:${(p.pt.chart.y-223)/957*100}%">${i+1}</i>`).join('')}</div><small>가이드 도표 원본 위치</small></div>`:'';
-  const total=B.final;const vp=lookLayer(P);const onPhoto=!!(EAI.aff&&vp);
-  $('#eaiBody').innerHTML=`<div class="eai-res v5">
-   <section class="eai-blk a"><h3 class="eai-bh"><span>A</span>내 귀에서 읽은 특징</h3>
+  const total=B.final;const vp=lookLayer(P);const onPhoto=!!(EAI.aff&&vp);const G=itemOf(GUASHA.no),rt=ROUTINES[EAI.cond]||ROUTINES._;
+  const TABS=['내 귀 특징','오늘의 리추얼','추천 조합'];
+  const paneA=`<section class="eai-pane a"${tab===0?'':' hidden'}>
     <div class="eai-verdict"><small>내 귀 사진 분석 결과</small><b>${esc(R.title)}</b></div>
     <div class="eai-top"><div class="eai-photo look" id="eaiLook"><img src="${EAI.thumb}" alt="내 귀 사진">${vp}</div>
      <div class="eai-feats">${R.feats.map(f=>`<div><span>${esc(f.k)}</span><b>${esc(f.v)}</b><small>${esc(f.s)}</small></div>`).join('')}</div></div>
     <p class="eai-sty"><b>추천 스타일 · ${esc(R.kindN)}</b>${esc(R.why)}</p>
-    <p class="eai-basis">${esc(R.basis)} 사진으로 건강·컨디션을 판단하지 않아요.</p></section>
-   <section class="eai-blk b"><h3 class="eai-bh"><span>B</span>오늘의 이혈 리추얼</h3>
-    <div class="eai-msg mini"><b>${esc(cd.h)}</b><p>${esc(cd.b)}</p></div>
-    <p class="eai-cond">💬 직접 고른 컨디션 ‘${esc(cd.n)}’ 기준이에요 · 귀 사진으로 컨디션을 판단하지 않아요</p>
-    ${P.pts.length?`${low?`<div class="eai-low">구역이 어긋나 보이면 <b>직접 옮기거나</b> 다시 찍어 주세요. <button class="eai-link" id="eaiRetake">다시 찍기</button></div>`:''}
-    <div class="eai-top"><div class="eai-photo${EAI.adjOn?' adj':''}" id="eaiPhoto"><img src="${EAI.thumb}" alt="내 귀 사진">${dots}</div>
+    <p class="eai-basis">${EAI.manual?'직접 짚은 기준점 5곳을 조재숙 박사님 자문 가이드의 기준 귀와 비교했어요.':'AI가 찾은 귀 윤곽으로 측정했어요.'} 사진으로 건강·컨디션을 판단하지 않아요.</p></section>`;
+  const paneB=`<section class="eai-pane b"${tab===1?'':' hidden'}>
+    <div class="eai-msg mini"><b>${esc(cd.h)}</b><p>${esc(cd.b)}</p><small>💬 직접 고른 컨디션 기준 · 사진으로 판단하지 않아요</small></div>
+    ${P.pts.length?`${low?`<div class="eai-low">구역이 어긋나 보이면 <b>직접 옮기거나</b> <button class="eai-link" id="eaiRetake">다시 찍기</button></div>`:''}
+    <div class="eai-top"><div class="eai-photo${EAI.adjOn?' adj':''}" id="eaiPhoto"><img src="${EAI.thumb}" alt="내 귀 사진">${dots}<div class="eai-ptinfo" id="eaiPtInfo" hidden></div></div>
      <div class="eai-side2"><div class="eai-k"><span>전통 이혈 참고 위치</span><div class="eai-plist">${P.pts.map((p,i)=>`<button data-pt="${i}"><i>${i+1}</i>${esc(p.n)}</button>`).join('')}</div></div>
       <button class="adjb" id="eaiAdj" aria-pressed="${!!EAI.adjOn}">${EAI.adjOn?'옮기기 끝':'✋ 구역 옮기기'}</button></div></div>
-    <div class="eai-ptinfo" id="eaiPtInfo" hidden></div>
-    <p class="eai-src">번호 구역은 <b>조재숙 박사님 자문 ‘WBL 주얼패치 이혈테라피 가이드’</b> 도표 위치를 내 사진에 옮긴 <b>참고 구역</b>이에요. 정확한 혈자리로 단정할 수 없고, 효과를 보장하지 않아요.</p>`
+    <p class="eai-src">조재숙 박사님 자문 ‘WBL 주얼패치 이혈테라피 가이드’ 도표 위치를 옮긴 <b>참고 구역</b>이에요. 정확한 혈자리로 단정할 수 없고, 효과를 보장하지 않아요. <button class="eai-link" id="eaiMoreB">출처 자세히</button></p>`
     :`<p class="eai-src">컨디션을 고르지 않아 이혈 위치 안내 없이 귀 모양으로만 추천했어요.</p>`}
-    ${guaHTML()}</section>
-   <section class="eai-blk c"><h3 class="eai-bh"><span>✦</span>내 귀 맞춤 추천 조합</h3>
-    <p class="eai-cap">${onPhoto?'A의 내 귀 사진에 실제 크기 비율로 올려 둔 조합이에요.':'내 귀 분석 결과로 고른 조합이에요.'} 모두 현재 판매 중인 주얼패치예요. 자리가 어긋나 보이면 꾸미기 화면에서 끌어 옮길 수 있어요.</p>
+    ${G?`<div class="eai-gua c"><div class="hd"><img src="${G.th}" alt="WBL 릴렉싱 하트 세라믹 괄사"><div><small>오늘의 리추얼 루틴 · ${esc(rt.t)}</small><p>${rt.s.map((x,i)=>`<span><i>${i+1}</i>${esc(x)}</span>`).join('')}</p></div></div>
+     <label class="add"><input type="checkbox" id="eaiGua"${EAI.gua?' checked':''}><span><b>하트 세라믹 괄사</b> 함께 담기</span><em>${G.list>G.sell?`<s>${won(G.list)}</s> `:''}${won(G.sell)}</em></label></div>`:''}</section>`;
+  const paneC=`<section class="eai-pane c"${tab===2?'':' hidden'}>
+    <div class="eai-chd"><p class="eai-cap">${onPhoto?'‘내 귀 특징’ 사진에 실제 크기 비율로 올려 둔 조합이에요.':'내 귀 분석 결과로 고른 조합이에요.'} 모두 판매 중인 주얼패치예요.</p><button class="eai-shb" id="eaiShOpen">📸 공유</button></div>
     <div class="eai-recs">${P.recs.map(r=>{const it=itemOf(r.no),l=lineOf(r.no);return `<div class="eai-rc"><img src="${CUTS[r.no][0]}" alt=""><div><b>${esc(shortName(it.name))}</b><small>${ZN[r.zone]}${r.pt?` · ${esc(r.pt)} 참고 구역`:''} · ${r.mm}mm</small><p>${esc(r.why)}</p></div><em>${won(l?l.price:it.sell)}</em></div>`}).join('')}</div>
     <div class="eai-sum1" id="eaiSum"></div>
-    <div class="eai-acts v"><a class="buy" id="eaiCart" href="#" target="_blank" rel="noopener"></a>
-     <div class="row"><button class="ghost" id="eaiApply">${EAI.aff?'내 사진에서 꾸며 보기':'꾸미기 화면에서 보기'}</button>${EAI.aff?'<button class="ghost" id="eaiTpl">기준 귀로 보기</button>':''}</div>
-     ${B.on?'<small class="eai-cnote">가든 5% 할인코드는 담기를 누르면 자동으로 복사돼요 · 주얼패치에만 적용돼요</small>':''}</div></section>
-   <section class="eai-share"><h4>📸 내 귀 리포트 공유하기</h4>
+    <div class="eai-crow"><button class="ghost" id="eaiApply">${EAI.aff?'내 사진에서 꾸며 보기':'꾸미기 화면에서 보기'}</button>${EAI.aff?'<button class="ghost" id="eaiTpl">기준 귀로 보기</button>':''}</div>
+    <div class="eai-cfoot">${B.on?'<small class="eai-cnote">가든 5% 할인코드는 담기를 누르면 자동 복사돼요 · 주얼패치에만 적용</small>':''}<button class="eai-link" id="eaiAgain">다른 사진으로 다시 하기</button></div></section>`;
+  const shareHTML=`<section class="eai-share"><h4>📸 내 귀 리포트 공유하기</h4>
      <label class="ph"><input type="checkbox" id="eaiShPhoto"> 내 귀 사진 넣기 <small>끄면 기준 귀 그림으로 만들어요</small></label>
      <div class="sb"><button id="eaiShSave">이미지 저장</button>${navigator.share?'<button id="eaiShShare">공유하기</button>':''}</div>
      <img id="eaiShPrev" alt="공유 이미지 미리보기" hidden>
-     <p>이미지는 이 기기 안에서만 만들어지고, 사진은 서버에 저장되지 않아요.</p></section>
-   <details class="eai-more"><summary>표시 근거 · 출처 자세히</summary>
+     <p>이미지는 이 기기 안에서만 만들어지고, 사진은 서버에 저장되지 않아요.</p></section>`;
+  const moreHTML=`<div class="eai-more open"><h4>표시 근거 · 출처</h4>
      ${chart?`<div class="eai-mrow">${chart}<p class="eai-note">${EAI.manual?'번호 구역은 <b>직접 짚은 기준점 5곳</b>에 맞춰':'번호 구역은 AI가 찾은 귀 윤곽에 맞춰'} <b>조재숙 박사님 자문 가이드 도표</b>(왼쪽 그림)의 위치를 옮긴 <b>참고 구역</b>이에요. 정확한 혈자리 위치로 단정할 수 없어요.</p></div>`:''}
      ${capsHTML()}${cmtHTML()}
      ${P.c?`<div class="eai-sec trad"><p>WBL 주얼패치 이혈테라피 가이드(국제이혈건강관리 협회장 조재숙 박사님 자문)는 ‘${esc(P.c.sit)}’ ${P.pts.map(p=>esc(p.n)+(p.pt.hanja?`(${esc(p.pt.hanja)})`:'')).join(' · ')} 포인트에 붙이도록 안내해요.</p>
        <p class="eai-dis">출처: ${esc(SRC_GUIDE.title)}${SRC_GUIDE.page?` · p.${SRC_GUIDE.page}`:''}. 전통 개념을 소개하는 참고 정보이며, 주얼패치가 특정 효과를 낸다고 보장하지 않아요.</p></div>`:''}
-   </details>
-   <button class="eai-link" id="eaiAgain">다른 사진으로 다시 하기</button></div>`;
-  const info=i=>{const p=P.pts[i];const el=$('#eaiPtInfo');el.hidden=false;el.innerHTML=`<b>${i+1}. ${esc(p.n)}</b> ${p.pt.hanja?`<small>${esc(p.pt.hanja)}</small>`:''}<p>${p.pt.note?esc(p.pt.note)+'<br>':''}<span class="basis">표시 근거 · ${p.mode==='manual'?'직접 옮긴 위치':esc(A.basis)} · 출처: 자문 가이드 도표${p.pt.status==='expert_verified'?'':' · 전문가 사진 검증 전'}</span></p>`;document.querySelectorAll('[data-pt]').forEach(b=>b.classList.toggle('on',+b.dataset.pt===i))};
-  document.querySelectorAll('[data-pt]').forEach(b=>b.onclick=()=>{if(!EAI.adjOn)info(+b.dataset.pt)});
-  const ab=$('#eaiAdj');if(ab)ab.onclick=()=>{EAI.adjOn=!EAI.adjOn;eaiResult()};if(EAI.adjOn)bindAdj(P);
-  const rt=$('#eaiRetake');if(rt)rt.onclick=()=>{EAI.adj=null;EAI.adjOn=false;eaiIntro()};
-  const G=itemOf(GUASHA.no),cartA=$('#eaiCart');
-  const upd=()=>{const g=EAI.gua&&G?G.sell:0,tot=total+g;$('#eaiSum').innerHTML=`<span>주얼패치 ${B.ls.length}종 ${B.n}개${g?' + 하트괄사':''}${B.on?' · 가든 5% 할인가':''}</span><span>${B.on?`<s>${won(B.base+g)}</s> `:''}<strong>${won(tot)}</strong></span>`;
-    cartA.href=aiCartURL(P);cartA.textContent=`추천 조합 그대로 담기 · ${won(tot)}`};upd();
+     ${G?'<p class="eai-dis">괄사는 피부에 가볍게 사용하고, 상처나 염증이 있는 곳은 피해 주세요.</p>':''}</div>`;
+  const nextLbl=['오늘의 이혈 리추얼 보기 →','내 귀 맞춤 추천 조합 보기 →'];
+  $('#eaiBody').innerHTML=`<div class="eai-res v6">
+   <div class="eai-tabs" role="tablist">${TABS.map((t,i)=>`<button role="tab" data-tab="${i}" aria-selected="${i===tab}"><i>${i+1}</i>${t}</button>`).join('')}</div>
+   <div class="eai-panes">${paneA}${paneB}${paneC}</div>
+   <div class="eai-bbar">${tab<2?`<button class="buy" id="eaiNext">${nextLbl[tab]}</button>`:`<a class="buy" id="eaiCart" href="#" target="_blank" rel="noopener"></a>`}</div>
+   <div class="eai-sheet" id="eaiSheet" hidden><div class="sh-in"><button class="x" id="eaiShX" aria-label="닫기">×</button><div id="eaiShBody"></div></div></div></div>`;
+  const sheet=(html,bind)=>{$('#eaiShBody').innerHTML=html;$('#eaiSheet').hidden=false;if(bind)bind()};$('#eaiShX').onclick=()=>{$('#eaiSheet').hidden=true};$('#eaiSheet').onclick=e=>{if(e.target.id==='eaiSheet')$('#eaiSheet').hidden=true};
+  const goTab=i=>{EAI.tab=i;EAI.adjOn=false;eaiResult();const ps=document.querySelector('.eai-panes');if(ps)ps.scrollTop=0};
+  document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>goTab(+b.dataset.tab));const nx=$('#eaiNext');if(nx)nx.onclick=()=>goTab(tab+1);
+  const info=i=>{const p=P.pts[i];const el=$('#eaiPtInfo');el.hidden=false;el.innerHTML=`<b>${i+1}. ${esc(p.n)}</b> ${p.pt.hanja?`<small>${esc(p.pt.hanja)}</small>`:''}<p>${p.pt.note?esc(p.pt.note):''} <span class="basis">${p.mode==='manual'?'직접 옮긴 위치':'자문 가이드 도표 기준'}${p.pt.status==='expert_verified'?'':' · 전문가 사진 검증 전'}</span></p>`;el.onclick=()=>{el.hidden=true};document.querySelectorAll('[data-pt]').forEach(b=>b.classList.toggle('on',+b.dataset.pt===i))};
+  document.querySelectorAll('[data-pt]').forEach(b=>b.onclick=e=>{e.stopPropagation();if(!EAI.adjOn)info(+b.dataset.pt)});
+  const ab=$('#eaiAdj');if(ab)ab.onclick=()=>{EAI.adjOn=!EAI.adjOn;eaiResult()};if(EAI.adjOn&&tab===1)bindAdj(P);
+  const rt2=$('#eaiRetake');if(rt2)rt2.onclick=()=>{EAI.adj=null;EAI.adjOn=false;EAI.tab=0;eaiIntro()};
+  const mb=$('#eaiMoreB');if(mb)mb.onclick=()=>sheet(moreHTML);
+  $('#eaiShOpen').onclick=()=>sheet(shareHTML,()=>{$('#eaiShSave').onclick=()=>shareReport('save');const shb=$('#eaiShShare');if(shb)shb.onclick=()=>shareReport('share')});
+  const cartA=$('#eaiCart');const upd=()=>{const g=EAI.gua&&G?G.sell:0,tot=total+g;const sm=$('#eaiSum');if(sm)sm.innerHTML=`<span>주얼패치 ${B.ls.length}종 ${B.n}개${g?' + 하트괄사':''}${B.on?' · 가든 5% 할인가':''}</span><span>${B.on?`<s>${won(B.base+g)}</s> `:''}<strong>${won(tot)}</strong></span>`;
+    if(cartA){cartA.href=aiCartURL(P);cartA.textContent=`추천 조합 그대로 담기 · ${won(tot)}`}};upd();
   const gb=$('#eaiGua');if(gb)gb.onchange=()=>{EAI.gua=gb.checked;upd()};
-  cartA.onclick=()=>{if(B.on&&typeof copyCode==='function')copyCode();try{track('cart_click',{ai:1,n:B.ls.length,pcs:B.n,total:total+(EAI.gua&&G?G.sell:0),gua:EAI.gua?1:0,promo:B.on?1:0,nos:P.recs.map(r=>r.no).join(',')})}catch(e){}};
+  if(cartA)cartA.onclick=()=>{if(B.on&&typeof copyCode==='function')copyCode();try{track('cart_click',{ai:1,n:B.ls.length,pcs:B.n,total:total+(EAI.gua&&G?G.sell:0),gua:EAI.gua?1:0,promo:B.on?1:0,nos:P.recs.map(r=>r.no).join(',')})}catch(e){}};
   $('#eaiApply').onclick=()=>eaiApply(!!EAI.aff);const tb=$('#eaiTpl');if(tb)tb.onclick=()=>eaiApply(false);
-  $('#eaiShSave').onclick=()=>shareReport('save');const shb=$('#eaiShShare');if(shb)shb.onclick=()=>shareReport('share');
-  $('#eaiAgain').onclick=()=>{EAI.adj=null;EAI.adjOn=false;eaiIntro()}}
+  $('#eaiAgain').onclick=()=>{EAI.adj=null;EAI.adjOn=false;EAI.tab=0;eaiIntro()}}
 function bindAdj(P){const box=$('#eaiPhoto');box.querySelectorAll('.eai-pt').forEach(d=>{d.onpointerdown=e=>{e.preventDefault();d.setPointerCapture(e.pointerId);const i=+d.dataset.pt;
   const mv=ev=>{const r=box.getBoundingClientRect();const l=Math.min(100,Math.max(0,(ev.clientX-r.left)/r.width*100)),t=Math.min(100,Math.max(0,(ev.clientY-r.top)/r.height*100));d.style.left=l+'%';d.style.top=t+'%';
     const C=EAI.crop;EAI.adj=EAI.adj||{};EAI.adj[P.pts[i].n]=[C.x0+l/100*C.w,C.y0+t/100*C.h]};
@@ -2365,7 +2455,6 @@ function markIntro(){return `<div class="eai-mintro" id="eaiMintro"><div class="
 function markArt(i){const m=MARKS[i];return `<div class="eai-mart"><svg viewBox="470 200 580 860" aria-hidden="true">${EARSVG}<circle cx="${m.t[0]}" cy="${m.t[1]}" r="34" class="pulse"/><circle cx="${m.t[0]}" cy="${m.t[1]}" r="17" class="dot"/></svg></div>`}
 function eaiMarks(){EAI.manual=true;EAI.marks=EAI.marks||[];const i=Math.min(EAI.marks.length,NM-1),done=EAI.marks.length>=NM,m=MARKS[i];const pred=null;
   $('#eaiBody').innerHTML=`<div class="eai-mstep">${done?`<div class="eai-mdone"><b>기준점 5곳을 모두 짚었어요 ✓</b><span>점이 조금 어긋났다면 끌어서 옮길 수 있어요.</span></div>`:`${markArt(i)}<div><span class="eai-mno">${i+1} / ${NM}</span><b>${m.n}</b><p>${m.d}</p><small class="eai-why">왜? ${m.w}</small></div>`}</div>
-   ${done?'':`<div class="eai-coach top"><span class="hand">👆</span><span><b>${i+1}. ${m.n}</b>를 사진에서 눌러 주세요</span></div>`}
    <div class="eai-pic"><span class="eai-fr" id="eaiMk"><img src="${EAI.url}" alt="확대한 귀 사진">${EAI.marks.map((p,j)=>`<i class="eai-mk" data-mk="${j}" style="left:${p[0]/EAI.W*100}%;top:${p[1]/EAI.H*100}%">${j+1}</i>`).join('')}
      ${pred?`<i class="eai-ghost" style="left:${pred[0]/EAI.W*100}%;top:${pred[1]/EAI.H*100}%"><em>여기쯤일 거예요</em></i>`:''}
 </span></div>
@@ -2373,8 +2462,8 @@ function eaiMarks(){EAI.manual=true;EAI.marks=EAI.marks||[];const i=Math.min(EAI
    <div class="eai-mlist">${MARKS.map((x,j)=>`<span class="${j<EAI.marks.length?'ok':j===i&&!done?'cur':''}">${j+1}. ${x.n}</span>`).join('')}</div>
    ${EAI.full?`<div class="eai-zoom"><button id="eaiZin">🔍 더 가까이</button><button id="eaiZout">더 넓게</button><button id="eaiZback">전체 사진에서 다시 고르기</button></div>`:''}
    <div class="eai-acts"><button class="buy" id="eaiMgo" ${done?'':'disabled'}>이 위치로 내 귀 살펴보기</button><button class="ghost" id="eaiMundo" ${EAI.marks.length?'':'disabled'}>한 단계 되돌리기</button></div>
-   <p class="eai-tip">짚은 5곳을 기준으로 조재숙 박사님 자문 가이드 도표를 내 귀에 맞춰요. 사진은 이 기기 밖으로 나가지 않아요.</p>
-   <button class="eai-link" id="eaiAuto">AI 자동 인식으로 하기 (PC 권장 · 휴대폰에선 꺼질 수 있어요)</button>`;
+   ${PHONE?'':`<p class="eai-tip">짚은 5곳을 기준으로 조재숙 박사님 자문 가이드 도표를 내 귀에 맞춰요. 사진은 이 기기 밖으로 나가지 않아요.</p>
+   <button class="eai-link" id="eaiAuto">AI 자동 인식으로 하기 (PC 권장)</button>`}`;
   const pk=$('#eaiPredOk');if(pk)pk.onclick=()=>{EAI.marks.push(pred);eaiMarks()};const pf=$('#eaiPredFlip');if(pf)pf.onclick=()=>{EAI.markFlip=!EAI.markFlip;eaiMarks()};
   if(!EAI.introSeen&&!EAI.marks.length){$('#eaiBody').insertAdjacentHTML('beforeend',markIntro());$('#eaiMintroGo').onclick=()=>{EAI.introSeen=true;$('#eaiMintro').remove()}}
   const box=$('#eaiMk');box.onclick=e=>{if(EAI.marks.length>=NM||e.target.closest('.eai-mk'))return;const r=box.getBoundingClientRect();EAI.marks.push([(e.clientX-r.left)/r.width*EAI.W,(e.clientY-r.top)/r.height*EAI.H]);try{navigator.vibrate&&navigator.vibrate(20)}catch(_){}eaiMarks()};
@@ -2386,7 +2475,7 @@ function eaiMarks(){EAI.manual=true;EAI.marks=EAI.marks||[];const i=Math.min(EAI
     const sc=Math.sqrt(Math.abs(F.det));EAI.aff=F;EAI.low=F.res/(sc*783)>0.06;
     const L=Math.hypot(EAI.marks[0][0]-EAI.marks[1][0],EAI.marks[0][1]-EAI.marks[1][1]);if(L<EAI.H*0.15){toast('귀가 너무 작게 잡혔어요. 귀 맨 위와 귓불 끝을 다시 확인해 주세요');return}
     try{track('ai_mask',{ok:EAI.low?0:1,manual:1},true)}catch(_){}eaiConds()};
-  $('#eaiAuto').onclick=()=>{EAI.manual=false;EAI.aff=null;eaiAim()};
+  {const au=$('#eaiAuto');if(au)au.onclick=()=>{EAI.manual=false;EAI.aff=null;eaiAim()}}
   if(EAI.full){$('#eaiZin').onclick=()=>{EAI.zs=Math.max(0.16,EAI.zs*0.7);EAI.marks=[];zoomCrop()};$('#eaiZout').onclick=()=>{EAI.zs=Math.min(0.9,EAI.zs*1.4);EAI.marks=[];zoomCrop()};$('#eaiZback').onclick=()=>{EAI.marks=[];eaiFind()}}}
 /* template-space photo + result thumbnail for the manual path (no cut-out mask: the ear outline of the guide chart is used as a soft frame) */
 function buildManual(){const W=VW,H=VH,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');const I=EAI.aff.inv;
