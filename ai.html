@@ -165,6 +165,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .entry-card .cred{font-size:11.5px;color:var(--rose-deep);margin:-8px 0 14px;font-weight:600}
 .entry{overflow:auto;padding-block:16px}
 .go{width:100%;border:0;border-radius:12px;padding:14px;font-weight:600;font-size:15px;color:var(--ivory);background:linear-gradient(135deg,#5E2A43,#3E1C2E)}
+.go.ghost.sm{padding:10px 0;font-size:14px}.go.ghost{margin-top:8px;background:#fff;color:#4E2338;border:1.5px solid #D9CBD1}
 .skip{display:block;width:100%;margin-top:4px;border:0;background:none;font-size:12.5px;color:var(--rose-deep);text-decoration:underline;padding:6px}
 @media (prefers-reduced-motion:reduce){.sheet-in,.bar{animation:none}}
 .studio{position:fixed;inset:0;z-index:12;background:rgba(40,15,30,.55);display:flex;justify-content:center;align-items:stretch;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
@@ -528,6 +529,14 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 .bar.mini .dk-mid{padding:0 10px}
 .bar.mini .dk-mid b{font-family:inherit;font-size:13.5px;font-weight:700}
 .bar.mini .dk-mid{min-width:max-content}.bar.mini .dk-mid b{overflow:visible}
+
+/* garden rewards */
+.foundchip small{font-weight:500;opacity:.85}.foundchip.done{background:#4E2338;color:#fff}
+.hl{display:grid;gap:10px;justify-items:center;text-align:center}.hl>img{width:min(240px,62vw);border-radius:20px;background:#fff;box-shadow:0 8px 24px rgba(78,35,56,.12)}
+.hl p{margin:0;font-size:14px;line-height:1.55;color:#4A4542}.hl-strip{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}.hl-strip span{display:grid;justify-items:center;gap:2px;width:68px}
+.hl-strip img{width:48px;height:48px;object-fit:contain;background:#fff;border-radius:50%;padding:4px;box-shadow:0 2px 8px rgba(0,0,0,.08)}.hl-strip b{font-size:11px;line-height:1.25;font-weight:600;color:#3E3A37}
+.hl .go2{width:100%}
+.hl .go2{border-radius:12px;padding:12px;font-weight:700;background:#fff;border:1.5px solid #D9CBD1;color:#4E2338}
 .eai{position:fixed;inset:0;z-index:14;background:rgba(40,15,30,.55);display:flex;justify-content:center;align-items:stretch;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   --e-ink:#454342;--e-sub:#6B6764;--e-line:#E3DED6;--e-lav:#8E7BB5;--e-lav-t:#F1ECF8;--e-ivory:#F8F5F0;--e-sage-d:#66745A}
 .eai[hidden]{display:none}
@@ -907,6 +916,13 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 @media (max-width:640px) and (max-height:680px){.eai-pane .eai-feats small{display:none}.eai-pane .eai-verdict b{font-size:17px}.eai-pane .eai-sty{font-size:12.5px}
  .eai-pane .eai-rc p{-webkit-line-clamp:1}.eai-pane .eai-rc{padding:5px 8px}.eai-pane .eai-msg.mini p{display:none}.eai-gua.c .hd p{font-size:12px}.eai-pane.b .eai-top{grid-template-columns:34% minmax(0,1fr)}
  .eai-pane .eai-plist button{padding:4px 8px;font-size:13px}.eai-pane .eai-src{font-size:11px}}
+
+.eai-verdict .lk{display:flex;align-items:center;gap:8px;background:#fff;border-radius:10px;padding:6px 9px;margin-bottom:7px;flex-wrap:wrap}
+.eai-verdict .lk>span{font-size:22px;line-height:1}.eai-verdict .lk small{display:block;font-size:10.5px!important;color:#9A4E5E!important;font-weight:700}.eai-verdict .lk b{font-size:15.5px!important;color:#4E2338;font-family:var(--f-display)}
+.eai-verdict .lk em{font-style:normal;font-size:11.5px;color:#625C57;margin-left:auto}
+@media (max-width:640px) and (max-height:680px){.eai-verdict .lk em{display:none}}
+
+.eai-cmt.v2{margin:8px 0;padding:10px 12px;border-radius:12px;background:#F4EEFA;border:1.5px solid #C9B6E4}.eai-cmt.v2 .en{display:block;font-size:11px;color:#6B4E9B;font-weight:700;letter-spacing:.04em;font-style:italic}.eai-cmt.v2 b{display:block;font-size:14px;color:#3A2350;margin:2px 0}.eai-cmt.v2 p{margin:0;font-size:13px;color:#3A2E40;line-height:1.45}.eai-cmt.v2 small{display:block;margin-top:4px;font-size:11px;color:#6B5A78}.eai-cmt.v2.ld b{color:#6B4E9B;animation:eaiBl 1.2s ease-in-out infinite}@keyframes eaiBl{50%{opacity:.45}}.eai-pbox.opt small.d{display:block;margin-top:3px;font-size:12px;line-height:1.5;color:#4A3A40}
 </style>
 
 <style>body.aimode{background:#fff}body.aimode>*:not(#eai):not(#studio):not(#result):not(#mbar):not(#selbar):not(#toast):not(#sheet):not(script):not(style){display:none!important}</style></head>
@@ -993,13 +1009,14 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 </div>
 <div class="entry" id="entry">
   <form class="entry-card" id="entryForm">
-    <div class="eyebrow">이혈테라피를 주얼리로 풀어낸 WBL 주얼패치</div>
-    <h1>내 귀에 피어싱 없이<br>주얼리 레이어드하기 ✨</h1>
-    <p>고민에 맞는 위치를 찾고, 나만의 이어룩을 완성해 보세요.</p>
+    <div class="eyebrow">WBL JEWEL PATCH GARDEN</div>
+    <h1>내 귀에는 어떤<br>주얼패치가 어울릴까?</h1>
+    <p>이혈테라피를 주얼리로 풀어낸 주얼패치</p>
     <div class="hero-ear" id="heroEar" aria-hidden="true"></div>
     <button class="go" type="button" id="skipStudio">내 귀 꾸며보기</button>
-    <p class="tiny">로그인 없이 바로 · 약 1분이면 완성</p>
-    <div class="sub2"><button class="go2" type="submit">3D 정원 둘러보기</button><button class="go2" type="button" id="skipBtn">주얼패치 48종 보기</button></div>
+    <button class="go ghost sm" type="submit">주얼패치 가든 둘러보기</button>
+    <p class="tiny">로그인 없이 바로 시작해요</p>
+    <div class="sub2"><button class="go2" type="button" id="entryAI">📷 내 귀 사진으로 추천받기</button><button class="go2" type="button" id="skipBtn">주얼패치 48종 보기</button></div>
   </form>
 </div>
 
@@ -1261,23 +1278,44 @@ async function earCanvas(W,H){const c=document.createElement('canvas');c.width=W
   return c}
 function wrapPills(g,list,x,y,maxW,h){let cx=x,cy=y;g.font='600 30px "IBM Plex Sans KR",sans-serif';list.forEach(t=>{const w=g.measureText(t).width+44;if(cx+w>x+maxW){cx=x;cy+=h+14}
   g.fillStyle='#EEF1EA';g.beginPath();g.roundRect?g.roundRect(cx,cy,w,h,h/2):g.rect(cx,cy,w,h);g.fill();g.fillStyle='#454342';g.fillText(t,cx+22,cy+h/2+10);cx+=w+12});return cy+h}
-async function storyImage(){try{await document.fonts.ready}catch(e){}const W=1080,H=1920,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
-  const bg=g.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#FBF8F3');bg.addColorStop(1,'#EFE6DE');g.fillStyle=bg;g.fillRect(0,0,W,H);
-  g.fillStyle='#66745A';g.font='italic 500 34px "Gowun Batang",serif';g.fillText('My Ear Look',80,130);
-  g.fillStyle='#454342';g.font='700 70px "Gowun Batang",serif';g.fillText('나의 오늘의 이어룩',80,215);
-  const title=($('#rsName').value||SUGG[0]).slice(0,24);g.fillStyle='#8E5A60';g.font='600 40px "IBM Plex Sans KR",sans-serif';g.fillText(title,80,285);
-  const ear=await earCanvas(920,1150);g.save();g.beginPath();g.roundRect?g.roundRect(80,330,920,1150,48):g.rect(80,330,920,1150);g.fillStyle='#F7F5F0';g.fill();g.clip();g.drawImage(ear,80,330);g.restore();
-  const its=lookProducts();g.fillStyle='#454342';g.font='700 34px "IBM Plex Sans KR",sans-serif';g.fillText(`내가 선택한 주얼패치 ${its.length}종`,80,1550);
-  const end=wrapPills(g,its.map(it=>shortName(it.name)),80,1578,920,58);
-  g.fillStyle='#6B6764';g.font='400 28px "IBM Plex Sans KR",sans-serif';g.fillText('이혈테라피를 주얼리로 풀어낸 WBL 주얼패치',80,Math.max(end+70,1800));
-  g.fillStyle='#454342';g.font='700 28px "IBM Plex Sans KR",sans-serif';g.fillText('wblbeauty.com  ·  @wbl_beauty.ritual',80,Math.max(end+112,1845));
+/* ===== Story card (1080x1920, Instagram story safe areas): look name, worn combo, small brand mark ===== */
+function rrp(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+function archPath(g,x,y,w,h){const r=w/2;g.beginPath();g.moveTo(x,y+r);g.arc(x+r,y+r,r,Math.PI,0);g.lineTo(x+w,y+h-36);g.arcTo(x+w,y+h,x+w-36,y+h,36);g.lineTo(x+36,y+h);g.arcTo(x,y+h,x,y+h-36,36);g.closePath()}
+function star4(g,x,y,r,col){g.save();g.translate(x,y);g.fillStyle=col;g.beginPath();for(let i=0;i<8;i++){const a=i*Math.PI/4,rr=i%2?r*0.28:r;g.lineTo(Math.cos(a)*rr,Math.sin(a)*rr)}g.closePath();g.fill();g.restore()}
+function wrapC(g,t,x,y,mw,lh,max){const ws=String(t).split(' ');let line='',yy=y,n=0;for(const w of ws){const tt=line?line+' '+w:w;if(g.measureText(tt).width>mw&&line){g.fillText(line,x,yy);n++;if(max&&n>=max)return yy;line=w;yy+=lh}else line=tt}g.fillText(line,x,yy);return yy}
+async function drawLookStory(o){try{await document.fonts.ready}catch(e){}const W=1080,H=1920,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
+  const S="'Gowun Batang',serif",F="'IBM Plex Sans KR','Pretendard','Apple SD Gothic Neo',sans-serif";
+  const bg=g.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#F6E9EC');bg.addColorStop(0.5,'#FBF7F2');bg.addColorStop(1,'#ECF0E6');g.fillStyle=bg;g.fillRect(0,0,W,H);
+  const blob=(x,y,r,col)=>{const rg=g.createRadialGradient(x,y,0,x,y,r);rg.addColorStop(0,col);rg.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=rg;g.fillRect(x-r,y-r,r*2,r*2)};
+  blob(900,380,420,o.tint||'rgba(232,184,196,.55)');blob(160,1520,460,'rgba(184,204,170,.5)');
+  [[120,300,14],[960,760,18],[90,980,10],[1000,1260,12],[180,1820,9],[880,170,10],[540,560,8]].forEach(([x,y,r])=>star4(g,x,y,r,'rgba(201,169,110,.7)'));
+  g.textAlign='left';g.fillStyle='#4E2338';g.font=`700 44px ${S}`;g.fillText('wbL',96,196);g.textAlign='right';g.fillStyle='#8E7BB5';g.font=`600 22px ${F}`;g.fillText('J E W E L   P A T C H   G A R D E N',W-96,190);
+  g.textAlign='center';g.fillStyle='#8E7BB5';g.font=`italic 400 34px ${S}`;g.fillText(o.kicker||'My Ear Look',W/2,300);
+  g.fillStyle='#3B1A2B';const nm=String(o.name||'나의 오늘의 이어룩');g.font=`800 ${nm.length>12?70:84}px ${S}`;const ny=wrapC(g,nm,W/2,392,W-200,nm.length>12?84:98,2);
+  let y=ny+58;if(o.sub){g.fillStyle='#5E5853';g.font=`500 32px ${F}`;y=wrapC(g,o.sub,W/2,y,W-240,44,2)+20}if(o.msg){g.fillStyle='#8E5A6A';g.font=`italic 400 30px ${S}`;y=wrapC(g,o.msg,W/2,y+6,W-240,42,2)+18}
+  const ax=190,aw=700,ay=y+26,ah=Math.max(640,Math.min(900,1420-ay));
+  g.save();g.shadowColor='rgba(78,35,56,.18)';g.shadowBlur=60;g.shadowOffsetY=24;archPath(g,ax,ay,aw,ah);g.fillStyle='#FFFFFF';g.fill();g.restore();
+  g.save();archPath(g,ax,ay,aw,ah);g.clip();if(o.art){const a=o.art,s=Math.max(aw/a.width,ah/a.height)*(o.fit==='contain'?0:1)||Math.min(aw/a.width,ah/a.height);const dw=a.width*s,dh=a.height*s;g.drawImage(a,ax+(aw-dw)/2,ay+(ah-dh)/2+(o.fit==='contain'?20:0),dw,dh)}g.restore();
+  g.save();archPath(g,ax+14,ay+14,aw-28,ah-28);g.strokeStyle='rgba(201,169,110,.75)';g.lineWidth=3;g.stroke();g.restore();
+  if(o.badge){g.save();g.translate(ax+aw-30,ay+120);g.rotate(-0.21);g.fillStyle='#4E2338';g.beginPath();g.arc(0,0,92,0,7);g.fill();g.strokeStyle='#E9D7A8';g.lineWidth=3;g.setLineDash([6,7]);g.beginPath();g.arc(0,0,80,0,7);g.stroke();g.setLineDash([]);
+    g.fillStyle='#F6E7C3';g.font=`700 26px ${S}`;g.fillText(o.badge[0],0,-6);g.font=`600 20px ${F}`;g.fillStyle='#fff';g.fillText(o.badge[1]||'',0,26);g.restore()}
+  const its=(o.items||[]).slice(0,5),n=its.length;let iy=ay+ah+70;
+  if(n){g.fillStyle='#8E7BB5';g.font=`700 24px ${F}`;g.fillText(o.itemsLabel||'오늘의 착용 조합',W/2,iy);const cw=150,gap=26,x0=(W-(n*cw+(n-1)*gap))/2;iy+=24;
+    for(let i=0;i<n;i++){const it=itemOf(its[i].no);const cx=x0+i*(cw+gap)+cw/2,cy=iy+66;g.save();g.shadowColor='rgba(78,35,56,.14)';g.shadowBlur=18;g.shadowOffsetY=6;g.fillStyle='#fff';g.beginPath();g.arc(cx,cy,62,0,7);g.fill();g.restore();
+      try{const im=new Image();im.src=CUTS[its[i].no][its[i].pi||0];await im.decode();const s=Math.min(84/im.naturalWidth,84/im.naturalHeight);g.drawImage(im,cx-im.naturalWidth*s/2,cy-im.naturalHeight*s/2,im.naturalWidth*s,im.naturalHeight*s)}catch(e){}
+      g.fillStyle='#3E3A37';{let nm2=shortName(it?it.name:''),fs=23;g.font=`700 ${fs}px ${F}`;while(g.measureText(nm2).width>cw-4&&fs>17){fs--;g.font=`700 ${fs}px ${F}`}while(g.measureText(nm2).width>cw-4&&nm2.length>2)nm2=nm2.slice(0,-1);g.fillText(nm2,cx,cy+100)}if(its[i].mm){g.fillStyle='#8A847F';g.font=`500 20px ${F}`;g.fillText(its[i].mm+'mm',cx,cy+128)}}
+    if((o.items||[]).length>5){g.fillStyle='#8A847F';g.font=`600 22px ${F}`;g.fillText(`+${o.items.length-5}`,W-70,iy+72)}}
+  g.fillStyle='#66745A';g.font=`700 24px ${F}`;g.fillText('wbL 주얼패치 가든  ·  garden.wblbeauty.com',W/2,1772);
   return new Promise(r=>c.toBlob(r,'image/png'))}
+async function storyImage(){const nm=($('#rsName').value||SUGG[0]).slice(0,24);const ear=await earCanvas(700,860);
+  const seen=new Set(),items=[];look.forEach(p=>{if(seen.has(p.no))return;seen.add(p.no);items.push({no:p.no,pi:p.pi,mm:p.mm})});
+  const ex=store.get('explorer',0)||window.__explorer;return drawLookStory({name:nm,kicker:'My Ear Look · '+new Date().toLocaleDateString('ko-KR').replace(/\s/g,'').replace(/\.$/,''),sub:window.__aiLook?window.__aiLook.sub:'',art:ear,fit:'contain',items,badge:ex?['Garden','Explorer ✦']:null,tint:window.__aiLook?window.__aiLook.tint:null})}
 async function refreshResult(){const im=$('#rsImg');im.style.opacity=.3;rsBlob=await storyImage();const u=URL.createObjectURL(rsBlob);const old=im.dataset.u;im.onload=()=>{im.style.opacity=1;if(old)URL.revokeObjectURL(old)};im.src=u;im.dataset.u=u}
 function openResult(){if(!look.length){toast('먼저 패치를 하나 이상 붙여주세요');return}sel=null;stRender();
   const its=lookProducts();const tot=bill().final;track('look_complete',{n:its.length,patches:look.length,total:tot,mode});
   $('#result').hidden=false;$('#mbar').hidden=true;$('#selbar').hidden=true;
-  const nm=$('#rsName');nm.value=lookTitle||SUGG[0];
-  $('#rsSugg').innerHTML=[lookName(),...SUGG].filter((v,i,a)=>v&&a.indexOf(v)===i).slice(0,4).map(s=>`<button type="button" data-sg="${esc(s)}">${esc(s)}</button>`).join('');
+  const nm=$('#rsName');nm.value=lookTitle||(window.__aiLook&&window.__aiLook.name)||SUGG[0];
+  $('#rsSugg').innerHTML=[window.__aiLook&&window.__aiLook.name,lookName(),...SUGG].filter((v,i,a)=>v&&a.indexOf(v)===i).slice(0,4).map(s=>`<button type="button" data-sg="${esc(s)}">${esc(s)}</button>`).join('');
   document.querySelectorAll('[data-sg]').forEach(b=>b.onclick=()=>{nm.value=b.dataset.sg;lookTitle=nm.value;store.set('lookTitle',lookTitle);refreshResult()});
   renderBill();
   const canShare=!window.claude&&navigator.canShare&&(()=>{try{return navigator.canShare({files:[new File([new Blob(['x'],{type:'image/png'})],'a.png',{type:'image/png'})]})}catch(e){return false}})();
@@ -1300,7 +1338,7 @@ $('#rsSave').onclick=async()=>{try{const b=rsBlob||await storyImage();track('sav
 $('#rsShare').onclick=async()=>{try{const b=rsBlob||await storyImage();const f=new File([b],'my-ear-look.png',{type:'image/png'});track('share',{});
   await navigator.share({files:[f],title:'나의 오늘의 이어룩',text:'WBL 주얼패치로 꾸민 나의 이어룩 ✨ @wbl_beauty.ritual'})}catch(e){}};
 (async function(){try{if(!window.claude||!window.claude.use){DL='anchor';return}const d=await window.claude.use('downloads');if(d)DL=d}catch(e){}})();
-$('#skipStudio').onclick=()=>{$('#entry').hidden=true;stOpen()};
+$('#skipStudio').onclick=()=>{$('#entry').hidden=true;stOpen()};{const ea=$('#entryAI');if(ea)ea.onclick=()=>{try{track('ai_start',{from:'entry'})}catch(e){}const f=$('#entryForm');if(f&&f.requestSubmit)f.requestSubmit();else $('#entry').hidden=true;setTimeout(()=>{if(typeof eaiOpen==='function')eaiOpen()},250)}}
 $('#studioBtn').onclick=()=>{$('#entry').hidden=true;closeSheet();stOpen()};
 try{const io=new IntersectionObserver(es=>es.forEach(e=>$('#rsSticky').classList.toggle('off',e.isIntersecting)),{root:document.querySelector('.rs-in'),threshold:0.3});io.observe($('#rsBuy'))}catch(e){}
 
@@ -1315,8 +1353,11 @@ const EAI={id:'Xenova/slimsam-77-uniform',lib:'https://cdn.jsdelivr.net/npm/@xen
 var EARPHOTO=null; /* {img, alpha:Uint8ClampedArray, K, cw, ch} in template (viewBox) space */
 var photoMode=false;
 /* optional external AI comment: off until the quick-endpoint Edge Function is updated (live check 2026-11-08: CORS fails for garden.wblbeauty.com) */
-const AI_COMMENT_ON=false;
-function eaiFn(){try{return AI_COMMENT_ON&&SB_URL?SB_URL+'/functions/v1/quick-endpoint':''}catch(e){return ''}}
+const AI_COMMENT_ON=true;
+function eaiFnURL(){try{return AI_COMMENT_ON&&SB_URL?SB_URL+'/functions/v1/quick-endpoint':''}catch(e){return ''}}
+function eaiFn(){return EAI.fnOK?eaiFnURL():''}
+function eaiProbe(){const u=eaiFnURL();if(!u||EAI.fnProbe)return;EAI.fnProbe=1;
+  fetch(u,{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY},body:JSON.stringify({ping:1})}).then(r=>r.json()).then(j=>{if(j&&j.ok&&j.v>=2){EAI.fnOK=true;const b=$('#eaiAIslot');if(b)b.outerHTML=aiOptHTML(),bindAiOpt()}}).catch(()=>{})}
 const COND=[{id:'fatigue',n:'몸이 무겁고 피곤해요',e:'☁️',h:'하루가 유난히 길게 느껴지는 날이 있죠.',b:'몸이 무겁다고 고르셨어요. 오늘은 귀에 작은 반짝임을 얹고 잠깐 숨을 고르는 시간을 가져 봐요.'},
  {id:'sleep',n:'잠이 부족해요',e:'🌙',h:'요즘 밤마다 생각이 많아지는 편인가요?',b:'잠이 부족하다고 고르셨어요. 오늘 밤엔 차분한 이어룩과 함께 나만의 쉼표 리추얼을 만들어 봐요.'},
  {id:'stress',n:'스트레스가 많아요',e:'🌿',h:'오늘은 나에게 작은 쉼표가 필요한 날이에요.',b:'스트레스가 많다고 고르셨어요. 반짝이는 포인트 하나로 기분을 가볍게 환기해 봐요.'},
@@ -1536,13 +1577,19 @@ function eaiConds(){if(EAI.manual){try{buildManual()}catch(err){console.warn(err
 function condsUI(){EAI.tab=0;$('#eaiBody').innerHTML=`<p class="eai-step">② 오늘 컨디션은 어떤가요?</p><p class="eai-tip">직접 고른 컨디션으로만 메시지를 만들어요. 사진으로는 판단하지 않아요.</p>
   <div class="eai-conds">${COND.map((c,i)=>`<button data-c="${i}"><i>${c.e}</i>${esc(c.n)}</button>`).join('')}</div>`;
   document.querySelectorAll('#eaiBody [data-c]').forEach(b=>b.onclick=e=>{e.preventDefault();e.stopPropagation();EAI.cond=COND[+b.dataset.c].id;EAI.condI=+b.dataset.c;try{eaiResult()}catch(err){console.warn(err);toast('결과를 만들다 문제가 생겼어요: '+(err&&err.message||err))}});
-  if(EAI.ai&&eaiFn()&&!EAI.comment&&!EAI.manual)eaiComment()}
-async function eaiComment(){EAI.comment={loading:true};const s=EAI.stats,sw=shapeWords(s);
-  try{const r=await fetch(eaiFn(),{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY},body:JSON.stringify({image:EAI.sil,stats:{ratio:+s.ratio.toFixed(2),lobe:+s.lobe.toFixed(2),top:+s.top.toFixed(2),tilt:Math.round(s.tilt),form:sw.form,lobeWord:sw.lobe}})});
-    const j=await r.json();EAI.comment=j&&j.ok?{title:String(j.title||'').slice(0,40),text:String(j.comment||'').slice(0,220)}:{fail:true}}catch(e){EAI.comment={fail:true}}
+  if(EAI.ai&&eaiFn()&&!EAI.comment)eaiComment()}
+async function eaiComment(){EAI.comment={loading:true};let body;
+  try{const R=earReport();body={v:2,stats:{feats:R.feats.map(f=>({k:f.k,v:f.v,s:f.s})),title:R.title,style:R.kindN}}}catch(e){EAI.comment={fail:true};return}
+  try{const r=await fetch(eaiFn(),{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY},body:JSON.stringify(body)});
+    const j=await r.json();EAI.comment=j&&j.ok?{title:String(j.title||'').slice(0,40),text:cmtTrim(j.comment)}:{fail:true};if(EAI.comment.text==='')EAI.comment={fail:true}}catch(e){EAI.comment={fail:true}}
+  try{track('ai_comment',{ok:EAI.comment.fail?0:1},true)}catch(_){}
   const box=$('#eaiCmt');if(box)box.outerHTML=cmtHTML()}
-function cmtHTML(){const c=EAI.comment;if(!EAI.ai||!c)return '';if(c.loading)return `<div class="eai-cmt" id="eaiCmt"><b>AI 스타일리스트가 귀 실루엣을 보는 중…</b></div>`;if(c.fail)return `<div class="eai-cmt" id="eaiCmt" hidden></div>`;
-  return `<div class="eai-cmt" id="eaiCmt"><span class="en">AI Stylist · Claude</span><b>${esc(c.title)}</b><p>${esc(c.text)}</p></div>`}
+/* keep only whole sentences (a reply cut off mid-word is trimmed back to the last sentence end) */
+function cmtTrim(t){t=String(t||'').trim().slice(0,220);if(/[.!?~)✨💕🌸]$|요$/.test(t))return t;const m=t.match(/^[\s\S]*(요[.!~]?|[.!?])\s?/);return m&&m[0].trim().length>=15?m[0].trim():''}
+function cmtHTML(){const c=EAI.comment;if(!EAI.ai||!c)return '';if(c.loading)return `<div class="eai-cmt v2 ld" id="eaiCmt"><span class="en">AI Stylist · Claude</span><b>AI가 내 귀 측정값을 읽는 중…</b></div>`;if(c.fail)return `<div class="eai-cmt" id="eaiCmt" hidden></div>`;
+  return `<div class="eai-cmt v2" id="eaiCmt"><span class="en">AI Stylist · Claude</span><b>${esc(c.title)}</b><p>${esc(c.text)}</p><small>🤖 동의하신 귀 측정값을 보고 AI가 쓴 코멘트예요</small></div>`}
+function aiOptHTML(){return `<label class="eai-pbox opt"><input type="checkbox" id="eaiAI"${EAI.ai?' checked':''}><span><b>🤖 (선택) AI 스타일 코멘트 받기 · 기본 꺼짐</b><small class="d">체크하면 <b>사진은 보내지 않고</b>, 직접 짚은 기준점으로 잰 <b>귀 모양 수치</b>만 Claude AI에 보내 한두 문장 코멘트를 받아요. 저장하거나 학습에 쓰지 않아요. 체크하지 않아도 모든 체험이 그대로 돼요.</small></span></label>`}
+function bindAiOpt(){const ck=$('#eaiAI');if(ck)ck.onchange=e=>{EAI.ai=e.target.checked;try{track('ai_comment_opt',{on:EAI.ai?1:0},true)}catch(_){}}}
 function earArt(){const pr=[[7661,650,935,8],[7777,724,878,3],[7660,800,262,5],[7343,905,300,4]];
   return `<svg viewBox="470 225 550 805" aria-hidden="true">${EARSVG}</svg>${pr.filter(([n])=>CUTS[n]).map(([n,x,y,mm])=>`<img src="${CUTS[n][0]}" alt="" style="left:${(x-470)/550*100}%;top:${(y-225)/805*100}%;width:${mm*783/62/550*100}%">`).join('')}`}
 function eaiIntro(){$('#eaiBody').innerHTML=`${inApp()?`<div class="eai-inapp"><b>${inApp()==='kakao'?'카카오톡':'앱'} 안의 브라우저에서는 AI 분석이 잘 안 돼요</b><span>크롬·사파리 같은 기본 브라우저로 열면 바로 할 수 있어요.</span><button class="buy" id="eaiOut">기본 브라우저로 열기</button></div>`:''}<div class="eai-hero"><div class="eai-ear">${earArt()}</div><p class="lead">내 귀 사진 위에서 <b>국제이혈건강관리 협회장 조재숙 박사님</b>의 자문 이혈 가이드의 포인트 구역을 살펴보고, 어울리는 주얼패치를 골라 바로 붙여봐요.</p></div>
@@ -1550,11 +1597,11 @@ function eaiIntro(){$('#eaiBody').innerHTML=`${inApp()?`<div class="eai-inapp"><
    <li>분석은 이 브라우저 안에서만 계산하고, 사진과 결과는 저장하지 않아요.</li>
    <li>사진으로 건강·컨디션을 판단하지 않아요.</li></ul>
    <details><summary>자세히</summary><ul><li>창을 닫거나 새로고침하면 사진과 결과가 사라져요.</li><li>컨디션은 직접 고르신 것만 써요.</li><li>사진 없이 ‘체험 단계·고른 컨디션·추천 스타일 이름’만 익명 통계로 남아요.</li></ul></details></div>
-  ${eaiFn()?`<label class="eai-pbox opt"><input type="checkbox" id="eaiAI"${EAI.ai?' checked':''}><span><b>🌐 (선택) 외부 AI 스타일 코멘트 · 기본 꺼짐</b><details><summary>무엇이 전송되나요?</summary><small>체크하면 사진 원본이 아닌 <b>귀 실루엣(단색 윤곽 그림)과 모양 수치</b>만 저희 서버(Supabase)를 거쳐 Anthropic의 Claude로 보내 한두 문장 코멘트를 받아요. 저희 서버는 저장하지 않으며, 전송된 데이터는 Anthropic API 정책에 따라 처리돼요. 체크하지 않아도 모든 체험이 그대로 돼요.</small></details></span></label>`:''}
+  ${eaiFn()?aiOptHTML():'<i id="eaiAIslot" hidden></i>'}
   <p class="eai-tip">본인 귀 사진만 올려 주세요. 다른 사람의 사진은 동의 없이 쓰면 안 돼요.</p>
   <div class="eai-acts start"><button class="buy" id="eaiShoot">📷 화면 안에서 찍기</button><button class="ghost" id="eaiAlbum">앨범에서 고르기</button></div>
   <p class="eai-tip">TIP · 머리카락을 귀 뒤로 넘기고, 밝은 곳에서 귀가 화면 가운데 오도록 옆모습을 찍어 주세요.</p>`;
-  const eo=$('#eaiOut');if(eo)eo.onclick=openOutside;const ck=$('#eaiAI');if(ck)ck.onchange=e=>{EAI.ai=e.target.checked};$('#eaiShoot').onclick=eaiCamera;$('#eaiAlbum').onclick=()=>{markResume();$('#eaiFile').click()}}
+  const eo=$('#eaiOut');if(eo)eo.onclick=openOutside;bindAiOpt();eaiProbe();$('#eaiShoot').onclick=eaiCamera;$('#eaiAlbum').onclick=()=>{markResume();$('#eaiFile').click()}}
 function sideHTML(){return `<div class="eai-side" role="group" aria-label="어느 쪽 귀인가요"><span>어느 쪽 귀인가요?</span><button data-side="L" aria-pressed="${!EAI.flip}">왼쪽 귀</button><button data-side="R" aria-pressed="${!!EAI.flip}">오른쪽 귀</button></div>`}
 function bindSide(){document.querySelectorAll('[data-side]').forEach(b=>b.onclick=()=>{EAI.flip=b.dataset.side==='R';document.querySelectorAll('[data-side]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))})}
 function capsHTML(){const k=ANALYZERS.landmarks?null:EAI.manual?EAR_CAPS.manual:EAR_CAPS.silhouette;if(!k)return '';return `<div class="eai-caps"><div><b>AI가 읽은 것</b>${k.sees.map(x=>`<span>✓ ${x}</span>`).join('')}</div><div><b>아직 읽지 못하는 것</b>${k.cannot.map(x=>`<span>– ${x}</span>`).join('')}</div></div>`}
@@ -1574,15 +1621,16 @@ function aiCartURL(P){const seen=new Set(),parts=[];P.recs.forEach(r=>{if(seen.h
   if(EAI.gua)parts.push(`${GUASHA.no}:${GUASHA.code}:1`);return CART_URL+'#c='+parts.join(',')+'&s='+SID}
 function lookLayer(P){const K=photoK(),C=EAI.crop;if(!K||!C)return '';return P.recs.map(r=>{const q=t2p(r.x,r.y);if(!q)return '';const [l,t]=p2pct(q);const w=Math.max(4.5,r.mm*TPL_PER_MM*K/C.w*100);
   return `<img class="eai-vp" src="${CUTS[r.no][0]}" style="left:${l}%;top:${t}%;width:${w}%" alt="">`}).join('')}
-function eaiResult(){const R=earReport(),P=eaiPlan(),cd=COND[EAI.condI]||COND[COND.length-1];const B=planBill(P);EAI.plan=P;const low=EAI.low;const tab=EAI.tab||0;
+function eaiResult(){const R=earReport(),L=aiLook(R);window.__aiLook=L;const P=eaiPlan(),cd=COND[EAI.condI]||COND[COND.length-1];const B=planBill(P);EAI.plan=P;const low=EAI.low;const tab=EAI.tab||0;
   try{track('ai_result',{cond:EAI.cond||'none',style:P.sw.style},true)}catch(e){}
   const lineOf=no=>B.ls.find(l=>l.it.no===no);const A=analyzer();
   const dots=P.pts.map((p,i)=>{const [l,t]=p2pct(p.ph);return `<button class="eai-pt ${p.mode==='exact'?'':'zone'}" data-pt="${i}" style="left:${l}%;top:${t}%" aria-label="${esc(p.n)} 참고 구역">${i+1}</button>`}).join('');
   const chart=P.pts.length?`<div class="eai-chart"><div class="ear"><svg viewBox="153 223 865 957" aria-hidden="true">${EARSVG}</svg>${P.pts.map((p,i)=>`<i style="left:${(p.pt.chart.x-153)/865*100}%;top:${(p.pt.chart.y-223)/957*100}%">${i+1}</i>`).join('')}</div><small>가이드 도표 원본 위치</small></div>`:'';
   const total=B.final;const vp=lookLayer(P);const onPhoto=!!(EAI.aff&&vp);const G=itemOf(GUASHA.no),rt=ROUTINES[EAI.cond]||ROUTINES._;
-  const TABS=['내 귀 특징','오늘의 리추얼','추천 조합'];
+  const TABS=['내 귀 특징','오늘의 리추얼','어울리는 조합'];
   const paneA=`<section class="eai-pane a"${tab===0?'':' hidden'}>
-    <div class="eai-verdict"><small>내 귀 사진 분석 결과</small><b>${esc(R.title)}</b></div>
+    <div class="eai-verdict"><div class="lk"><span>${L.e}</span><div><small>오늘의 이어룩</small><b>${esc(L.name)}</b></div><em>${esc(L.mood)}</em></div><small>내 귀 사진 분석 결과</small><b>${esc(R.title)}</b></div>
+    ${cmtHTML()}
     <div class="eai-top"><div class="eai-photo look" id="eaiLook"><img src="${EAI.thumb}" alt="내 귀 사진">${vp}</div>
      <div class="eai-feats">${R.feats.map(f=>`<div><span>${esc(f.k)}</span><b>${esc(f.v)}</b><small>${esc(f.s)}</small></div>`).join('')}</div></div>
     <p class="eai-sty"><b>추천 스타일 · ${esc(R.kindN)}</b>${esc(R.why)}</p>
@@ -1610,7 +1658,7 @@ function eaiResult(){const R=earReport(),P=eaiPlan(),cd=COND[EAI.condI]||COND[CO
      <p>이미지는 이 기기 안에서만 만들어지고, 사진은 서버에 저장되지 않아요.</p></section>`;
   const moreHTML=`<div class="eai-more open"><h4>표시 근거 · 출처</h4>
      ${chart?`<div class="eai-mrow">${chart}<p class="eai-note">${EAI.manual?'번호 구역은 <b>직접 짚은 기준점 5곳</b>에 맞춰':'번호 구역은 AI가 찾은 귀 윤곽에 맞춰'} <b>조재숙 박사님 자문 가이드 도표</b>(왼쪽 그림)의 위치를 옮긴 <b>참고 구역</b>이에요. 정확한 혈자리 위치로 단정할 수 없어요.</p></div>`:''}
-     ${capsHTML()}${cmtHTML()}
+     ${capsHTML()}
      ${P.c?`<div class="eai-sec trad"><p>WBL 주얼패치 이혈테라피 가이드(국제이혈건강관리 협회장 조재숙 박사님 자문)는 ‘${esc(P.c.sit)}’ ${P.pts.map(p=>esc(p.n)+(p.pt.hanja?`(${esc(p.pt.hanja)})`:'')).join(' · ')} 포인트에 붙이도록 안내해요.</p>
        <p class="eai-dis">출처: ${esc(SRC_GUIDE.title)}${SRC_GUIDE.page?` · p.${SRC_GUIDE.page}`:''}. 전통 개념을 소개하는 참고 정보이며, 주얼패치가 특정 효과를 낸다고 보장하지 않아요.</p></div>`:''}
      ${G?'<p class="eai-dis">괄사는 피부에 가볍게 사용하고, 상처나 염증이 있는 곳은 피해 주세요.</p>':''}</div>`;
@@ -1770,6 +1818,13 @@ const TRAITS={lobe:{p:{m:'귓불 포인트가 예쁜 귀',s:'귓불 포인트가
    n:{m:'작은 파츠가 깔끔하게 어울리는 귀',s:'미니멀 2~3포인트가 정답인 귀',k:'upperSmall',pre:'윗선이 아담하게 말려 있고',add:'윗부분은 아담해서 위쪽은 작은 파츠 하나로 가볍게 마무리해요.',lean:'미니 파츠 한두 개가 예쁜 귀'},thr:0.08},
  front:{p:{m:'여러 개 레이어드가 잘 받는 귀',s:'풀 레이어드도 소화하는 귀',k:'wide',pre:'폭이 넉넉하고',add:'폭도 넉넉해 귓바퀴 가장자리까지 이어 붙여도 균형이 맞아요.',lean:'어디에 붙여도 균형이 맞는 귀'},
    n:{m:'세로 라인 레이어드가 예쁜 귀',s:'세로로 이어 붙이면 길어 보이는 귀',k:'slim',pre:'세로로 슬림하고',add:'폭이 슬림해서 세로 방향으로 이어 붙이면 더 길어 보여요.',lean:'세로로 두 점 포인트가 어울리는 귀'},thr:0.1}};
+/* fun layer: today's ear-look mood from the condition the visitor picked (styling mood only — never a health reading) */
+const MOODS={face:{n:'모닝 글로우',e:'🌤',d:'산뜻하게 반짝이는 아침 무드',t:'rgba(243,201,168,.6)'},sleep:{n:'문라이트',e:'🌙',d:'은은하게 빛나는 차분한 무드',t:'rgba(185,180,218,.6)'},
+ stress:{n:'브리즈',e:'🍃',d:'가볍게 숨 고르는 산들바람 무드',t:'rgba(191,214,192,.6)'},fatigue:{n:'코지 이브닝',e:'🕯',d:'포근하게 쉬어 가는 저녁 무드',t:'rgba(232,198,166,.6)'},
+ head:{n:'클리어 스카이',e:'☁️',d:'맑게 정돈된 하늘빛 무드',t:'rgba(191,211,230,.6)'},digest:{n:'소프트 밸런스',e:'🫧',d:'편안하고 부드러운 무드',t:'rgba(216,226,200,.6)'},
+ monthly:{n:'로지 케어',e:'🌷',d:'나를 다정하게 토닥이는 로즈 무드',t:'rgba(241,188,197,.6)'},_:{n:'샤이니 데이',e:'✨',d:'오늘은 반짝이고 싶은 날',t:'rgba(242,217,160,.6)'}};
+const KIND_WORD={small:'미니멀',point:'포인트',layer:'레이어드'};
+function aiLook(R){const m=MOODS[EAI.cond]||MOODS._;return {name:`${m.n} ${KIND_WORD[R.kind]||''}`.trim(),e:m.e,mood:m.d,tint:m.t,sub:R.title}}
 function earTitle(D){const sc=Object.keys(TRAITS).map(k=>{const d=D[k]||0,t=TRAITS[k];return {k,d,v:d>=0?t.p:t.n,sc:Math.abs(d)-t.thr}}).sort((a,b)=>b.sc-a.sc);
   const [a,b]=sc;if(a.sc<=0){if(Math.abs(a.d)<0.03)return {title:'포인트 파츠가 잘 어울리는 귀',why:EAR_LOOKS.balance.w,key:'balance'};
     return {title:a.v.lean,why:EAR_LOOKS.balance.w+' 굳이 고르자면 '+a.v.add,key:'balance'}}
@@ -1799,25 +1854,18 @@ function earReport(){const F=[];let key='balance',best=0;const pick=(k,dev)=>{if
 function photoK(){return EAI.manual&&EAI.aff?Math.sqrt(Math.abs(EAI.aff.det)):EAI.al?1/EAI.al.s:null}
 const TPL_PER_MM=783/62;
 /* share card: type name, today's ritual message, recommended combo, garden URL — photo only if the visitor chooses */
-async function shareCard(withPhoto){const R=earReport(),P=EAI.plan,cd=COND[EAI.condI]||COND[COND.length-1];const W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
-  const bg=g.createLinearGradient(0,0,W,H);bg.addColorStop(0,'#FBF6F1');bg.addColorStop(0.6,'#F6EEF6');bg.addColorStop(1,'#EEF1EA');g.fillStyle=bg;g.fillRect(0,0,W,H);
-  const F="'Pretendard','Apple SD Gothic Neo','Noto Sans KR',sans-serif",S="'Gowun Batang',serif";g.textAlign='center';g.fillStyle='#8E7BB5';g.font=`italic 34px ${S}`;g.fillText('My Ear Report',W/2,96);
-  g.fillStyle='#4E2338';const tl=R.title.length>16;g.font=`800 ${tl?46:60}px ${F}`;if(tl)wrapText(g,R.title,W/2,150,W-160,54);else g.fillText(R.title,W/2,178);g.fillStyle='#66745A';g.font=`600 28px ${F}`;g.fillText(`추천 스타일 · ${R.kindN}`,W/2,240);
-  const box=[90,260,W-180,560];g.fillStyle='#fff';rr(g,...box,36);g.fill();
+async function shareCard(withPhoto){const R=earReport(),L=aiLook(R),P=EAI.plan,cd=COND[EAI.condI]||COND[COND.length-1];let art=null;
   const loadImg=src=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src});
-  if(withPhoto&&EAI.thumb){const im=await loadImg(EAI.thumb);if(im){const s=Math.min((box[2]-40)/im.width,(box[3]-40)/im.height),w=im.width*s,h=im.height*s,x=box[0]+(box[2]-w)/2,y=box[1]+(box[3]-h)/2;g.save();rr(g,x,y,w,h,24);g.clip();g.drawImage(im,x,y,w,h);g.restore();
-      const C=EAI.crop,K=photoK();if(K)for(const r of P.recs){const q=t2p(r.x,r.y);if(!q)continue;const pi=await loadImg(CUTS[r.no][0]);if(!pi)continue;const px=x+(q[0]-C.x0)/C.w*w,py=y+(q[1]-C.y0)/C.h*h,sz=Math.max(w*0.045,r.mm*TPL_PER_MM*K/C.w*w),sc=sz/Math.max(pi.width,pi.height);
-        g.save();g.shadowColor='rgba(0,0,0,.25)';g.shadowBlur=6;g.drawImage(pi,px-pi.width*sc/2,py-pi.height*sc/2,pi.width*sc,pi.height*sc);g.restore()}}}
-  else{const sv=look;look=P.recs.map(r=>({k:0,no:r.no,pi:0,x:(r.x-VX)/VW,y:(r.y-VY)/VH,mm:r.mm,r:0}));try{const ec=await earCanvas(box[2]-60,box[3]-40);g.drawImage(ec,box[0]+30,box[1]+20)}finally{look=sv}}
-  g.fillStyle='#4E2338';g.font=`700 40px ${F}`;wrapText(g,cd.h,W/2,895,W-200,52);g.fillStyle='#6B6764';g.font=`400 30px ${F}`;wrapText(g,cd.b,W/2,950,W-220,42);g.fillStyle='#8E7BB5';g.font=`700 26px ${F}`;g.fillText('오늘의 추천 주얼패치 조합',W/2,1050);
-  const its=P.recs.slice(0,5),n=its.length,cw=130,gap=22,x0=(W-(n*cw+(n-1)*gap))/2;for(let i=0;i<n;i++){const it=itemOf(its[i].no),im=await loadImg(CUTS[its[i].no][0]);const x=x0+i*(cw+gap),y=1072;g.fillStyle='#fff';rr(g,x,y,cw,cw,24);g.fill();
-    if(im){const s=Math.min(96/im.width,96/im.height);g.drawImage(im,x+(cw-im.width*s)/2,y+(cw-im.height*s)/2,im.width*s,im.height*s)}g.fillStyle='#4A4542';g.font=`600 22px ${F}`;g.fillText(shortName(it.name).slice(0,8),x+cw/2,y+cw+30)}
-  g.fillStyle='#66745A';g.font=`700 28px ${F}`;g.fillText('wbL 주얼패치 가든 · garden.wblbeauty.com',W/2,H-36);
-  return await new Promise(r=>c.toBlob(r,'image/png'))}
+  if(withPhoto&&EAI.thumb){const im=await loadImg(EAI.thumb);if(im){const c=document.createElement('canvas');c.width=im.width;c.height=im.height;const g=c.getContext('2d');g.drawImage(im,0,0);const C=EAI.crop,K=photoK(),k=c.width/C.w;
+      if(K)for(const r of P.recs){const q=t2p(r.x,r.y);if(!q)continue;const pi=await loadImg(CUTS[r.no][0]);if(!pi)continue;const px=(q[0]-C.x0)*k,py=(q[1]-C.y0)*k,sz=Math.max(c.width*0.05,r.mm*TPL_PER_MM*K*k),sc=sz/Math.max(pi.width,pi.height);
+        g.save();g.shadowColor='rgba(0,0,0,.3)';g.shadowBlur=6;g.drawImage(pi,px-pi.width*sc/2,py-pi.height*sc/2,pi.width*sc,pi.height*sc);g.restore()}art=c}}
+  if(!art){const sv=look;look=P.recs.map(r=>({k:0,no:r.no,pi:0,x:(r.x-VX)/VW,y:(r.y-VY)/VH,mm:r.mm,r:0}));try{art=await earCanvas(700,860)}finally{look=sv}}
+  const seen=new Set(),items=[];P.recs.forEach(r=>{if(seen.has(r.no))return;seen.add(r.no);items.push({no:r.no,mm:r.mm})});
+  return drawLookStory({name:L.name,kicker:'My Ear Report · '+L.e,sub:R.title,msg:'“'+cd.h+'”',art,fit:withPhoto?'cover':'contain',items,itemsLabel:'내 귀에 어울리는 조합',tint:L.tint})}
 function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
 function wrapText(g,t,x,y,mw,lh){const words=String(t).split(' ');let line='',yy=y;for(const w of words){const test=line?line+' '+w:w;if(g.measureText(test).width>mw&&line){g.fillText(line,x,yy);line=w;yy+=lh}else line=test}g.fillText(line,x,yy)}
 async function shareReport(mode){const wp=!!($('#eaiShPhoto')&&$('#eaiShPhoto').checked);try{const b=await shareCard(wp);const pv=$('#eaiShPrev');if(pv){pv.src=URL.createObjectURL(b);pv.hidden=false}try{track(mode==='share'?'share':'save_image',{ai:1,photo:wp?1:0},true)}catch(_){}
-  if(mode==='share'&&navigator.canShare){const f=new File([b],'my-ear-report.png',{type:'image/png'});if(navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'나의 귀 리포트',text:'AI가 읽어준 나의 귀 이야기 ✨ garden.wblbeauty.com @wbl_beauty.ritual'});return}}
+  if(mode==='share'&&navigator.canShare){const f=new File([b],'my-ear-report.png',{type:'image/png'});if(navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'나의 귀 리포트',text:'오늘의 이어룩 ✨ garden.wblbeauty.com @wbl_beauty.ritual'});return}}
   if(typeof DL!=='undefined'&&DL&&DL!=='anchor'){await DL.save({filename:'my-ear-report.png',data:b});toast('이미지를 저장했어요');return}
   const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='my-ear-report.png';document.body.appendChild(a);a.click();a.remove();toast('이미지를 저장했어요')}catch(e){if(e&&e.name==='AbortError')return;console.warn(e);toast('이미지를 만들지 못했어요. 다시 눌러 주세요')}}
 
