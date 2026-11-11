@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>AI 이어 리추얼 | 주얼패치 가든</title>
+<title>AI 귀 사진 추천 | 주얼패치 가든</title>
 <meta name="description" content="이혈테라피를 주얼리로 풀어낸 WBL 주얼패치. 내 고민에 맞는 이혈 포인트를 찾고, 실제 크기로 붙여보며 레이어드하는 3D 온라인 팝업스토어.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="AI가 읽어주는 나의 귀 이야기 | WBL 주얼패치 가든">
-<meta property="og:description" content="내 귀 사진으로 귀 모양을 읽고, 어울리는 주얼패치와 오늘의 이혈 리추얼을 추천해요. 사진은 휴대폰 밖으로 나가지 않아요.">
+<meta property="og:title" content="AI 귀 사진 추천 · 내 귀에 어울리는 주얼패치 찾기 | WBL">
+<meta property="og:description" content="내 귀 사진으로 귀 모양을 읽고, 어울리는 주얼패치와 붙이는 자리를 추천해요. 사진은 휴대폰 밖으로 나가지 않아요.">
 <meta property="og:url" content="https://garden.wblbeauty.com/ai.html">
 <meta property="og:image" content="https://garden.wblbeauty.com/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -923,6 +923,10 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 @media (max-width:640px) and (max-height:680px){.eai-verdict .lk em{display:none}}
 
 .eai-cmt.v2{margin:8px 0;padding:10px 12px;border-radius:12px;background:#F4EEFA;border:1.5px solid #C9B6E4}.eai-cmt.v2 .en{display:block;font-size:11px;color:#6B4E9B;font-weight:700;letter-spacing:.04em;font-style:italic}.eai-cmt.v2 b{display:block;font-size:14px;color:#3A2350;margin:2px 0}.eai-cmt.v2 p{margin:0;font-size:13px;color:#3A2E40;line-height:1.45}.eai-cmt.v2 small{display:block;margin-top:4px;font-size:11px;color:#6B5A78}.eai-cmt.v2.ld b{color:#6B4E9B;animation:eaiBl 1.2s ease-in-out infinite}@keyframes eaiBl{50%{opacity:.45}}.eai-pbox.opt small.d{display:block;margin-top:3px;font-size:12px;line-height:1.5;color:#4A3A40}
+
+.eai-3s{display:flex;gap:6px;list-style:none;margin:10px 0 0;padding:0}.eai-3s li{flex:1;display:flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;color:#4E2338;background:#fff;border:1px solid #EAD9DF;border-radius:999px;padding:6px 8px;white-space:nowrap}.eai-3s i{font-style:normal;display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#4E2338;color:#fff;font-size:11px}
+
+.eai-pre{margin:6px 0 8px;font-size:12.5px;color:#4E2338;background:#F6ECEF;border-radius:10px;padding:8px 10px}.eai-conds button.pre{border:2px solid #4E2338!important;background:#FBF3F5!important}
 </style>
 
 <style>body.aimode{background:#fff}body.aimode>*:not(#eai):not(#studio):not(#result):not(#mbar):not(#selbar):not(#toast):not(#sheet):not(script):not(style){display:none!important}</style></head>
@@ -1501,8 +1505,8 @@ function planBill(P){const sv=[look,QTY,OPT];look=P.recs.map(r=>({k:0,no:r.no,pi
   let B;try{B=bill()}finally{look=sv[0];QTY=sv[1];OPT=sv[2]}return B}
 
 /* --- UI --- */
-(function(){const el=document.createElement('div');el.className='eai';el.id='eai';el.hidden=true;el.setAttribute('role','dialog');el.setAttribute('aria-label','AI가 읽어주는 나의 귀 이야기');
-  el.innerHTML=`<div class="eai-in"><div class="eai-h"><div><span class="en">AI Ear Ritual</span><h2>AI가 읽어주는 나의 귀 이야기</h2></div><button class="x" id="eaiX" aria-label="닫기">×</button></div><div id="eaiBody"></div></div>
+(function(){const el=document.createElement('div');el.className='eai';el.id='eai';el.hidden=true;el.setAttribute('role','dialog');el.setAttribute('aria-label','AI 귀 사진 추천');
+  el.innerHTML=`<div class="eai-in"><div class="eai-h"><div><span class="en">AI Ear Styling</span><h2>사진 한 장으로 찾는 내 귀 이어룩</h2></div><button class="x" id="eaiX" aria-label="닫기">×</button></div><div id="eaiBody"></div></div>
   <input type="file" accept="image/*" id="eaiFile" hidden><input type="file" accept="image/*" capture="user" id="eaiCam" hidden>`;try{new MutationObserver(()=>requestAnimationFrame(fitPics)).observe(el.querySelector('#eaiBody'),{childList:true})}catch(_){}document.body.appendChild(el);
   $('#eaiX').onclick=eaiClose;$('#eaiFile').onchange=e=>eaiPick(e.target.files[0]);$('#eaiCam').onchange=e=>eaiPick(e.target.files[0])})();
 function inApp(){const u=navigator.userAgent;return /KAKAOTALK/i.test(u)?'kakao':/Instagram/i.test(u)?'insta':/FBAN|FBAV|NAVER\(inapp|Line\/|DaumApps|everytimeApp|BAND\//i.test(u)?'other':''}
@@ -1574,8 +1578,11 @@ function pickCand(i){const c=EAI.cands[i];if(!c)return;EAI.ci=i;EAI.mask=c.m;EAI
 function eaiFree(){const r=EAI.runner;if(r&&r.kill){r.kill();EAI.runner=null;EAI.loaded=false;EAI.embedded=null}}
 function eaiConds(){if(EAI.manual){try{buildManual()}catch(err){console.warn(err);toast('사진을 정리하지 못했어요. 다시 짚어 볼까요?');return eaiMarks()}return condsUI()}
   EAI.W=EAI.mW||EAI.W;EAI.H=EAI.mH||EAI.H;eaiFree();try{buildEarPhoto();EAI.thumb=readThumb()}catch(err){console.warn(err);toast('귀 사진을 정리하지 못했어요. 다른 사진으로 다시 해볼까요?');eaiIntro();return}condsUI()}
-function condsUI(){EAI.tab=0;$('#eaiBody').innerHTML=`<p class="eai-step">② 오늘 컨디션은 어떤가요?</p><p class="eai-tip">직접 고른 컨디션으로만 메시지를 만들어요. 사진으로는 판단하지 않아요.</p>
-  <div class="eai-conds">${COND.map((c,i)=>`<button data-c="${i}"><i>${c.e}</i>${esc(c.n)}</button>`).join('')}</div>`;
+/* ?c=<concern id> from the printed-guide QR page pre-marks that concern */
+function preC(){try{const c=new URLSearchParams(location.search).get('c');return c?COND.findIndex(x=>x.id&&x.id===c):-1}catch(e){return -1}}
+function condsUI(){EAI.tab=0;$('#eaiBody').innerHTML=`<p class="eai-step">② 오늘 컨디션은 어떤가요?</p><p class="eai-tip">고른 컨디션에 맞춰 붙이는 자리를 알려 드려요. 사진으로는 판단하지 않아요.</p>
+  ${preC()>=0?`<p class="eai-pre">📖 가이드에서 고른 고민이에요 · <b>${esc(COND[preC()].n)}</b><br>다른 걸 골라도 돼요.</p>`:''}
+  <div class="eai-conds">${COND.map((c,i)=>`<button data-c="${i}"${i===preC()?' class="pre"':''}><i>${c.e}</i>${esc(c.n)}</button>`).join('')}</div>`;
   document.querySelectorAll('#eaiBody [data-c]').forEach(b=>b.onclick=e=>{e.preventDefault();e.stopPropagation();EAI.cond=COND[+b.dataset.c].id;EAI.condI=+b.dataset.c;try{eaiResult()}catch(err){console.warn(err);toast('결과를 만들다 문제가 생겼어요: '+(err&&err.message||err))}});
   if(EAI.ai&&eaiFn()&&!EAI.comment)eaiComment()}
 async function eaiComment(){EAI.comment={loading:true};let body;
@@ -1592,7 +1599,7 @@ function aiOptHTML(){return `<label class="eai-pbox opt"><input type="checkbox" 
 function bindAiOpt(){const ck=$('#eaiAI');if(ck)ck.onchange=e=>{EAI.ai=e.target.checked;try{track('ai_comment_opt',{on:EAI.ai?1:0},true)}catch(_){}}}
 function earArt(){const pr=[[7661,650,935,8],[7777,724,878,3],[7660,800,262,5],[7343,905,300,4]];
   return `<svg viewBox="470 225 550 805" aria-hidden="true">${EARSVG}</svg>${pr.filter(([n])=>CUTS[n]).map(([n,x,y,mm])=>`<img src="${CUTS[n][0]}" alt="" style="left:${(x-470)/550*100}%;top:${(y-225)/805*100}%;width:${mm*783/62/550*100}%">`).join('')}`}
-function eaiIntro(){$('#eaiBody').innerHTML=`${inApp()?`<div class="eai-inapp"><b>${inApp()==='kakao'?'카카오톡':'앱'} 안의 브라우저에서는 AI 분석이 잘 안 돼요</b><span>크롬·사파리 같은 기본 브라우저로 열면 바로 할 수 있어요.</span><button class="buy" id="eaiOut">기본 브라우저로 열기</button></div>`:''}<div class="eai-hero"><div class="eai-ear">${earArt()}</div><p class="lead">내 귀 사진 위에서 <b>국제이혈건강관리 협회장 조재숙 박사님</b>의 자문 이혈 가이드의 포인트 구역을 살펴보고, 어울리는 주얼패치를 골라 바로 붙여봐요.</p></div>
+function eaiIntro(){$('#eaiBody').innerHTML=`${inApp()?`<div class="eai-inapp"><b>${inApp()==='kakao'?'카카오톡':'앱'} 안의 브라우저에서는 AI 분석이 잘 안 돼요</b><span>크롬·사파리 같은 기본 브라우저로 열면 바로 할 수 있어요.</span><button class="buy" id="eaiOut">기본 브라우저로 열기</button></div>`:''}<div class="eai-hero"><div class="eai-ear">${earArt()}</div><p class="lead">귀 옆모습을 찍고 <b>5곳만 톡톡</b> 짚으면, 내 귀 모양에 어울리는 주얼패치를 골라 드려요.</p></div><ol class="eai-3s"><li><i>1</i>귀 사진 찍기</li><li><i>2</i>5곳 짚기</li><li><i>3</i>추천 받기</li></ol>
   <div class="eai-pbox on"><b>📱 사진은 이 기기 밖으로 나가지 않아요</b><ul>
    <li>분석은 이 브라우저 안에서만 계산하고, 사진과 결과는 저장하지 않아요.</li>
    <li>사진으로 건강·컨디션을 판단하지 않아요.</li></ul>
@@ -1613,7 +1620,7 @@ const ROUTINES={face:{t:'아침 1분',s:['패치 붙이기','괄사로 귀 앞�
  fatigue:{t:'하루 끝 1분',s:['패치 붙이고 앉기','괄사로 귀 주변 둥글게','따뜻한 차 한 잔']},
  _:{t:'나를 위한 1분',s:['이어룩 붙이기','괄사로 귀 주변 부드럽게','거울 보며 미소']}};
 function guaHTML(){const G=itemOf(GUASHA.no);if(!G)return '';const r=ROUTINES[EAI.cond]||ROUTINES._;
-  return `<div class="eai-gua"><div class="hd"><img src="${G.th}" alt="WBL 릴렉싱 하트 세라믹 괄사"><div><small>오늘의 리추얼 루틴</small><b>${esc(r.t)}</b></div></div>
+  return `<div class="eai-gua"><div class="hd"><img src="${G.th}" alt="WBL 릴렉싱 하트 세라믹 괄사"><div><small>괄사로 마무리하기</small><b>${esc(r.t)}</b></div></div>
    <ol>${r.s.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>
    <label class="add"><input type="checkbox" id="eaiGua"${EAI.gua?' checked':''}><span><b>WBL 릴렉싱 하트 세라믹 괄사</b> 함께 담기</span><em>${G.list>G.sell?`<s>${won(G.list)}</s> `:''}${won(G.sell)}</em></label>
    <small class="note">괄사는 피부에 가볍게 사용하고, 상처나 염증이 있는 곳은 피해 주세요.</small></div>`}
@@ -1627,7 +1634,7 @@ function eaiResult(){const R=earReport(),L=aiLook(R);window.__aiLook=L;const P=e
   const dots=P.pts.map((p,i)=>{const [l,t]=p2pct(p.ph);return `<button class="eai-pt ${p.mode==='exact'?'':'zone'}" data-pt="${i}" style="left:${l}%;top:${t}%" aria-label="${esc(p.n)} 참고 구역">${i+1}</button>`}).join('');
   const chart=P.pts.length?`<div class="eai-chart"><div class="ear"><svg viewBox="153 223 865 957" aria-hidden="true">${EARSVG}</svg>${P.pts.map((p,i)=>`<i style="left:${(p.pt.chart.x-153)/865*100}%;top:${(p.pt.chart.y-223)/957*100}%">${i+1}</i>`).join('')}</div><small>가이드 도표 원본 위치</small></div>`:'';
   const total=B.final;const vp=lookLayer(P);const onPhoto=!!(EAI.aff&&vp);const G=itemOf(GUASHA.no),rt=ROUTINES[EAI.cond]||ROUTINES._;
-  const TABS=['내 귀 특징','오늘의 리추얼','어울리는 조합'];
+  const TABS=['내 귀 모양','붙이는 자리','추천 조합'];
   const paneA=`<section class="eai-pane a"${tab===0?'':' hidden'}>
     <div class="eai-verdict"><div class="lk"><span>${L.e}</span><div><small>오늘의 이어룩</small><b>${esc(L.name)}</b></div><em>${esc(L.mood)}</em></div><small>내 귀 사진 분석 결과</small><b>${esc(R.title)}</b></div>
     ${cmtHTML()}
@@ -1643,7 +1650,7 @@ function eaiResult(){const R=earReport(),L=aiLook(R);window.__aiLook=L;const P=e
       <button class="adjb" id="eaiAdj" aria-pressed="${!!EAI.adjOn}">${EAI.adjOn?'옮기기 끝':'✋ 구역 옮기기'}</button></div></div>
     <p class="eai-src">조재숙 박사님 자문 가이드 도표를 옮긴 <b>참고 구역</b>이에요 · 정확한 혈자리로 단정하지 않고 효과를 보장하지 않아요 <button class="eai-link" id="eaiMoreB">출처 보기</button></p>`
     :`<p class="eai-src">컨디션을 고르지 않아 이혈 위치 안내 없이 귀 모양으로만 추천했어요.</p>`}
-    ${G?`<div class="eai-gua c"><div class="hd"><img src="${G.th}" alt="WBL 릴렉싱 하트 세라믹 괄사"><div><small>오늘의 리추얼 루틴 · ${esc(rt.t)}</small><p>${rt.s.map((x,i)=>`<span><i>${i+1}</i>${esc(x)}</span>`).join('')}</p></div></div>
+    ${G?`<div class="eai-gua c"><div class="hd"><img src="${G.th}" alt="WBL 릴렉싱 하트 세라믹 괄사"><div><small>괄사로 마무리하기 · ${esc(rt.t)}</small><p>${rt.s.map((x,i)=>`<span><i>${i+1}</i>${esc(x)}</span>`).join('')}</p></div></div>
      <label class="add"><input type="checkbox" id="eaiGua"${EAI.gua?' checked':''}><span><b>하트 세라믹 괄사</b> 함께 담기</span><em>${G.list>G.sell?`<s>${won(G.list)}</s> `:''}${won(G.sell)}</em></label></div>`:''}</section>`;
   const paneC=`<section class="eai-pane c"${tab===2?'':' hidden'}>
     <div class="eai-chd"><p class="eai-cap">${onPhoto?'①번 사진에 실제 크기로 올린 조합이에요':'내 귀 분석으로 고른 조합이에요'} · 모두 판매 중</p><button class="eai-shb" id="eaiShOpen">📸 공유</button><button class="eai-shb" id="eaiAgain" aria-label="다른 사진으로 다시 하기">↺ 다시</button></div>
@@ -1662,7 +1669,7 @@ function eaiResult(){const R=earReport(),L=aiLook(R);window.__aiLook=L;const P=e
      ${P.c?`<div class="eai-sec trad"><p>WBL 주얼패치 이혈테라피 가이드(국제이혈건강관리 협회장 조재숙 박사님 자문)는 ‘${esc(P.c.sit)}’ ${P.pts.map(p=>esc(p.n)+(p.pt.hanja?`(${esc(p.pt.hanja)})`:'')).join(' · ')} 포인트에 붙이도록 안내해요.</p>
        <p class="eai-dis">출처: ${esc(SRC_GUIDE.title)}${SRC_GUIDE.page?` · p.${SRC_GUIDE.page}`:''}. 전통 개념을 소개하는 참고 정보이며, 주얼패치가 특정 효과를 낸다고 보장하지 않아요.</p></div>`:''}
      ${G?'<p class="eai-dis">괄사는 피부에 가볍게 사용하고, 상처나 염증이 있는 곳은 피해 주세요.</p>':''}</div>`;
-  const nextLbl=['오늘의 이혈 리추얼 보기 →','내 귀 맞춤 추천 조합 보기 →'];
+  const nextLbl=['붙이는 자리 보기 →','추천 조합 보기 →'];
   $('#eaiBody').innerHTML=`<div class="eai-res v6">
    <div class="eai-tabs" role="tablist">${TABS.map((t,i)=>`<button role="tab" data-tab="${i}" aria-selected="${i===tab}"><i>${i+1}</i>${t}</button>`).join('')}</div>
    <div class="eai-panes">${paneA}${paneB}${paneC}</div>
@@ -1755,7 +1762,7 @@ function eaiMarks(){EAI.manual=true;EAI.marks=EAI.marks||[];const i=Math.min(EAI
    <div class="eai-mlist">${MARKS.map((x,j)=>`<span class="${j<EAI.marks.length?'ok':j===i&&!done?'cur':''}">${j+1}. ${x.n}</span>`).join('')}</div>
    ${EAI.full?`<div class="eai-zoom"><button id="eaiZin">🔍 더 가까이</button><button id="eaiZout">더 넓게</button><button id="eaiZback">전체 사진에서 다시 고르기</button></div>`:''}
    <div class="eai-acts"><button class="buy" id="eaiMgo" ${done?'':'disabled'}>이 위치로 내 귀 살펴보기</button><button class="ghost" id="eaiMundo" ${EAI.marks.length?'':'disabled'}>한 단계 되돌리기</button></div>
-   ${PHONE?'':`<p class="eai-tip">짚은 5곳을 기준으로 조재숙 박사님 자문 가이드 도표를 내 귀에 맞춰요. 사진은 이 기기 밖으로 나가지 않아요.</p>
+   ${PHONE?'':`<p class="eai-tip">짚은 5곳에 맞춰 붙이는 자리를 내 귀 사진 위에 표시해요. 사진은 이 기기 밖으로 나가지 않아요.</p>
    <button class="eai-link" id="eaiAuto">AI 자동 인식으로 하기 (PC 권장)</button>`}`;
   const pk=$('#eaiPredOk');if(pk)pk.onclick=()=>{EAI.marks.push(pred);eaiMarks()};const pf=$('#eaiPredFlip');if(pf)pf.onclick=()=>{EAI.markFlip=!EAI.markFlip;eaiMarks()};
   if(!EAI.introSeen&&!EAI.marks.length){$('#eaiBody').insertAdjacentHTML('beforeend',markIntro());$('#eaiMintroGo').onclick=()=>{EAI.introSeen=true;$('#eaiMintro').remove()}}
