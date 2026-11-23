@@ -1933,7 +1933,7 @@ $('#shopBtn').onclick=()=>{$('#entry').hidden=true;openShop('best')};
 $('#heartBtn').onclick=()=>{if(!entered)return;myHeart=Date.now();popHeart(player);sendPresence()};
 
 /* ---------- analytics (funnel) ---------- */
-const SID=(()=>{try{let s=sessionStorage.getItem('jp_sid');if(!s){s=Math.random().toString(36).slice(2,12);sessionStorage.setItem('jp_sid',s)}return s}catch(e){return Math.random().toString(36).slice(2,12)}})();
+const SID=(()=>{try{/* in-app → browser handoff carries the session id so one visitor stays one session */const u=new URLSearchParams(location.search).get('sid');if(u&&/^[a-z0-9]{6,16}$/.test(u))sessionStorage.setItem('jp_sid',u);let s=sessionStorage.getItem('jp_sid');if(!s){s=Math.random().toString(36).slice(2,12);sessionStorage.setItem('jp_sid',s)}return s}catch(e){return Math.random().toString(36).slice(2,12)}})();
 const UTM=(()=>{try{const q=new URLSearchParams(location.search);const o={};['utm_source','utm_medium','utm_campaign','utm_content'].forEach(k=>{if(q.get(k))o[k]=q.get(k).slice(0,60)});try{const u=navigator.userAgent;o.br=/KAKAOTALK/i.test(u)?'kakao':/Instagram/i.test(u)?'insta':/NAVER\(inapp/i.test(u)?'naver':/FBAN|FBAV|Line\/|DaumApps|BAND\//i.test(u)?'inapp':'web';const f=q.get('from');if(f)o.from=f.slice(0,12)}catch(e){}return o}catch(e){return{}}})();
 const sent=new Set();
 function track(ev,props,once){if(once){if(sent.has(ev))return;sent.add(ev)}const p=Object.assign({},UTM,props||{});
@@ -2338,7 +2338,7 @@ function planBill(P){const sv=[look,QTY,OPT];look=P.recs.map(r=>({k:0,no:r.no,pi
   $('#eaiX').onclick=eaiClose;$('#eaiFile').onchange=e=>eaiPick(e.target.files[0]);$('#eaiCam').onchange=e=>eaiPick(e.target.files[0])})();
 function inApp(){const u=navigator.userAgent;return /KAKAOTALK/i.test(u)?'kakao':/Instagram/i.test(u)?'insta':/FBAN|FBAV|NAVER\(inapp|Line\/|DaumApps|everytimeApp|BAND\//i.test(u)?'other':''}
 /* the AI page in the visitor's default browser (keeps utm_* so the channel is still counted there) */
-function aiURL(){const q=new URLSearchParams(location.search);q.set('from',inApp()||'web');return location.origin+location.pathname.replace(/[^/]*$/,'')+'ai.html?'+q.toString()}
+function aiURL(){const q=new URLSearchParams(location.search);q.set('from',inApp()||'web');try{q.set('sid',SID)}catch(e){}return location.origin+location.pathname.replace(/[^/]*$/,'')+'ai.html?'+q.toString()}
 function openOutside(){const u=aiURL();if(inApp()==='kakao'){location.href='kakaotalk://web/openExternal?url='+encodeURIComponent(u);return true}
   if(/Android/i.test(navigator.userAgent)){location.href='intent://'+u.replace(/^https?:\/\//,'')+'#Intent;scheme=https;package=com.android.chrome;end';return true}
   try{navigator.clipboard.writeText(u).then(()=>toast('주소를 복사했어요 · 사파리 주소창에 붙여 넣어 열어 주세요'),()=>toast('오른쪽 위 ··· 메뉴에서 ‘외부 브라우저에서 열기’를 눌러 주세요'))}catch(e){toast('오른쪽 위 ··· 메뉴에서 ‘외부 브라우저에서 열기’를 눌러 주세요')}return false}
@@ -2361,7 +2361,7 @@ function freeGL(){if(!PHONE||EAI.glFreed||AIPAGE)return;EAI.glFreed=true;try{ren
 function backToGarden(){if(EAI.noBack)return false;if(AIPAGE){location.href='./'+location.search;return true}if(!EAI.glFreed)return false;try{sessionStorage.setItem('garden_back',String(Date.now()))}catch(e){}location.reload();return true}
 function eaiOpen(){if(PHONE&&inApp()&&onPages())return eaiGate();if(PHONE&&!AIPAGE&&onPages()){try{track('ai_start',{},true)}catch(e){}location.href='ai.html'+location.search;return}freeGL();$('#eai').hidden=false;$('#bar').hidden=true;try{track('ai_start',{},true)}catch(e){}eaiIntro()}
 function eaiClose(){camStop();if(backToGarden())return;$('#eai').hidden=true;barKey=''}
-async function eaiPick(f){clearResume();if(!f)return;$('#eaiFile').value='';$('#eaiCam').value='';const url=URL.createObjectURL(f);const im=new Image();im.src=url;try{await im.decode()}catch(e){toast('사진을 열 수 없어요. 다른 사진으로 해볼까요?');return}
+async function eaiPick(f){clearResume();if(!f)return;try{track('ai_photo',{},true)}catch(e){}$('#eaiFile').value='';$('#eaiCam').value='';const url=URL.createObjectURL(f);const im=new Image();im.src=url;try{await im.decode()}catch(e){toast('사진을 열 수 없어요. 다른 사진으로 해볼까요?');return}
   const M=1600,s=Math.min(1,M/Math.max(im.naturalWidth,im.naturalHeight));const c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*s);c.height=Math.round(im.naturalHeight*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
   setFull(c)}
 /* the photo can be a normal profile selfie: the visitor taps the ear on the whole photo, we zoom in around it */
