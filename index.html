@@ -950,7 +950,7 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 <canvas id="scene" tabindex="0" aria-label="주얼패치 정원 3D 공간"></canvas>
 
 <div class="hud-top">
-  <div class="brand"><span>WBL · Jewelpatch Garden</span><b>주얼패치 쇼룸</b></div>
+  <div class="brand"><span>WBL · Jewelpatch Showroom</span><b>주얼패치 쇼룸</b></div>
   <div class="tr">
     <div class="chip" id="vis"><span class="dot"></span><span id="visTxt">실시간 연결 확인 중…</span></div>
     <button class="chip studiobtn" id="studioBtn">내 귀 꾸미기</button>
@@ -1029,7 +1029,7 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 </div>
 <div class="entry" id="entry">
   <form class="entry-card" id="entryForm">
-    <div class="eyebrow">WBL JEWEL PATCH GARDEN</div>
+    <div class="eyebrow">WBL JEWEL PATCH SHOWROOM</div>
     <h1>내 귀에는 어떤<br>주얼패치가 어울릴까?</h1>
     <p>이혈테라피를 주얼리로 풀어낸 주얼패치</p>
     <div class="hero-ear" id="heroEar" aria-hidden="true"></div>
@@ -1722,7 +1722,7 @@ function frame(){
   if(wantF&&FOC.pd!==near){FOC.pd=near;yawGoal=Math.atan2(P.x-near.x,P.z-near.z)}if(!wantF&&FOC.k<0.05)FOC.pd=null;if(player)player.visible=FOC.k<0.45;
   const pitchE=camPitch+(0.42-camPitch)*FOC.k,cd=entered?camDist+(Math.min(camDist,7.4)-camDist)*FOC.k:30,fx=entered?P.x+(near?(near.x-P.x)*0.35*FOC.k:0):0,fz=entered?P.z+(near?(near.z-P.z)*0.35*FOC.k:0):4;
   const cx=fx+Math.sin(camYaw)*Math.cos(pitchE)*cd,cz=fz+Math.cos(camYaw)*Math.cos(pitchE)*cd,cy=Math.sin(pitchE)*cd+(entered?0.6:2);
-  if(SHOW&&entered){showHideCenter();/* standing in the middle of the ring: every design at the same distance, drag turns the carousel */const ly=5.2+(camPitch-0.72)*2.2;camera.position.lerp(tmpV.set(-Math.sin(camYaw)*1.6,5.3,-Math.cos(camYaw)*1.6),Math.min(1,dt*5));camera.lookAt(Math.sin(camYaw)*10,ly,Math.cos(camYaw)*10);if(player)player.visible=false;if(!drag&&!pinch0&&yawGoal==null&&performance.now()-SHOWIDLE>5000)camYaw+=dt*0.06;showTick(t)}
+  if(SHOW)showHideCenter();if(SHOW&&entered){/* standing in the middle of the ring: every design at the same distance, drag turns the carousel */const ly=5.2+(camPitch-0.72)*2.2;camera.position.lerp(tmpV.set(-Math.sin(camYaw)*1.6,5.3,-Math.cos(camYaw)*1.6),Math.min(1,dt*5));camera.lookAt(Math.sin(camYaw)*10,ly,Math.cos(camYaw)*10);if(player)player.visible=false;if(!drag&&!pinch0&&yawGoal==null&&performance.now()-SHOWIDLE>5000)camYaw+=dt*0.06;showTick(t)}
   else{camera.position.lerp(tmpV.set(cx,cy,cz),Math.min(1,dt*(entered?6:1.2)));camera.lookAt(fx,entered?1.1:0,fz)}
   if(!entered)camYaw+=dt*0.05;else if(yawGoal!=null&&!drag){let dy=yawGoal-camYaw;dy=Math.atan2(Math.sin(dy),Math.cos(dy));camYaw+=dy*Math.min(1,dt*2.5);if(Math.abs(dy)<0.01)yawGoal=null}
   earGroup.rotation.y=Math.sin(t*0.35)*0.6;earGroup.position.y=1.35+Math.sin(t*1.1)*0.05;
