@@ -956,7 +956,6 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 <div class="hud-top">
   <div class="brand"><span>WBL · Jewelpatch Showroom</span><b>주얼패치 쇼룸</b></div>
   <div class="tr">
-    <div class="chip" id="vis"><span class="dot"></span><span id="visTxt">실시간 연결 확인 중…</span></div>
     <button class="chip studiobtn" id="studioBtn">내 귀 꾸미기</button>
     <button class="chip shopbtn" id="shopBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>전체 주얼패치</button>
   </div>
@@ -966,7 +965,6 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 <div class="chip foundchip" id="foundChip"></div>
 <div class="coach" id="coach" hidden></div><div class="tjoy" id="tjoy" hidden><i id="tknob"></i></div>
 <div class="joy" id="joy" aria-hidden="true"><i id="knob"></i></div>
-<button class="heart" id="heartBtn" aria-label="하트 보내기"><svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2z" fill="#C2475A"/></svg></button>
 <div class="keys">드래그로 돌려 보기 · 패치를 누르면 상품 보기</div>
 <div class="toast" id="toast" hidden></div>
 <div class="sheet" id="sheet" hidden><div class="sheet-in" id="sheetIn" role="dialog" aria-modal="false"></div></div>
@@ -1045,8 +1043,6 @@ body.tod-night .psign{box-shadow:0 0 28px 6px rgba(255,214,150,.45)}
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script id="sbjs" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js" async></script>
-<script src="https://wblbeauty.com/wisland/wbl_main_hero/wbl_main_hero_data.js" async></script>
 <script>
 (function(){
 "use strict";
@@ -1110,7 +1106,7 @@ const M=(c,o)=>new THREE.MeshStandardMaterial(Object.assign({color:(o&&o.metalne
 const glow=(c,i)=>new THREE.MeshStandardMaterial({color:LC(c),emissive:LC(c),emissiveIntensity:i||1,roughness:0.4});
 const GOLD=M('#DCBD7E',{metalness:0.75,roughness:0.3});
 const loader=new THREE.TextureLoader();
-function imgTex(uri){const t=loader.load(uri);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t}
+function imgTex(uri){if(!uri)return new THREE.Texture();const t=loader.load(uri);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t}
 function dotTex(inner,outer){const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');const gr=g.createRadialGradient(32,32,0,32,32,32);gr.addColorStop(0,inner);gr.addColorStop(.35,outer);gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.fillRect(0,0,64,64);return new THREE.CanvasTexture(c)}
 function starTex(){const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');const gr=g.createRadialGradient(32,32,0,32,32,10);gr.addColorStop(0,'rgba(255,250,235,1)');gr.addColorStop(1,'rgba(255,235,200,0)');g.fillStyle=gr;g.fillRect(0,0,64,64);
   g.fillStyle='rgba(255,246,222,.95)';g.beginPath();g.moveTo(32,2);g.lineTo(34,30);g.lineTo(62,32);g.lineTo(34,34);g.lineTo(32,62);g.lineTo(30,34);g.lineTo(2,32);g.lineTo(30,30);g.closePath();g.fill();return new THREE.CanvasTexture(c)}
@@ -1223,7 +1219,7 @@ const SIGN={g:null,corners:[],slides:[],i:0,ms:4500,t:0,el:null,img:null,cap:nul
     SIGN.slides=sl;SIGN.ms=Math.max(3000,Math.min(9000,(src&&+src.autoplay_ms)||4500));SIGN.i=0;show()}
   function show(){const s=SIGN.slides[SIGN.i];if(!s)return;const img=SIGN.img;img.style.opacity=0;setTimeout(()=>{img.src=s.image;img.alt=s.alt||'';SIGN.el.href=mallLink(s.link);SIGN.cap.textContent=s.alt||'';img.onload=()=>{img.style.opacity=1}},180)}
   SIGN.show=show;SIGN.next=()=>{if(SIGN.slides.length<2)return;SIGN.i=(SIGN.i+1)%SIGN.slides.length;show()};
-  let tries=0;(function wait(){if(window.WBL_MAIN_HERO||tries++>20)load();else setTimeout(wait,150)})();
+  let tries=0;if(!SHOW)(function wait(){if(window.WBL_MAIN_HERO||tries++>20)load();else setTimeout(wait,150)})();
 })();
 /* map the 500x532 overlay onto the projected screen quad with a CSS homography */
 function quadMatrix(w,h,q){const [x0,y0]=q[0],[x1,y1]=q[1],[x2,y2]=q[2],[x3,y3]=q[3];
@@ -1843,7 +1839,7 @@ function todTick(dt,t){todAcc+=dt;const tg=todTarget(todHour());const k=TOD.cur?
 
 /* small sun/moon control (default: Korean real time, never persisted) */
 const todUI={};
-(function(){const tr=document.querySelector('.hud-top .tr');if(!tr)return;
+(function(){const tr=document.querySelector('.hud-top .tr');if(!tr||SHOW)return;
   const b=document.createElement('button');b.className='chip todbtn';b.id='todBtn';b.setAttribute('aria-haspopup','true');b.innerHTML='<span class="ic">☀</span><span class="lab">자동</span>';tr.insertBefore(b,tr.firstChild);
   todUI.ic=b.querySelector('.ic');todUI.lab=b.querySelector('.lab');
   const m=document.createElement('div');m.className='todmenu';m.hidden=true;
@@ -1944,8 +1940,8 @@ setTimeout(staticMerge,1500);
 let ROOM=null;const others=new Map();let myHeart=0;let SEND_GAP=0.9;
 const SB_URL='https://qmoyqzzdhkhyogdoyvvd.supabase.co',SB_KEY='sb_publishable_FLWglxhvJRH0b3p3h3LqRg_5z0Hnrij';
 function sendPresence(){if(!ROOM)return;ROOM.presence({x:+P.x.toFixed(2),z:+P.z.toFixed(2),r:+P.ry.toFixed(2),c:me.color,n:me.name.slice(0,10),h:myHeart,v:near?near.p.id:''}).catch(()=>{})}
-function setStatusText(t,live){$('#vis').classList.toggle('live',!!live);$('#visTxt').textContent=t}
-function setVisitors(n,live){$('#vis').classList.toggle('live',!!live);$('#visTxt').textContent=live?(n>1?`지금 ${n}명 구경 중`:'지금은 나 혼자 구경 중'):'혼자 둘러보는 중'}
+function setStatusText(t,live){if(!$('#vis'))return;$('#vis').classList.toggle('live',!!live);$('#visTxt').textContent=t}
+function setVisitors(n,live){if(!$('#vis'))return;$('#vis').classList.toggle('live',!!live);$('#visTxt').textContent=live?(n>1?`지금 ${n}명 구경 중`:'지금은 나 혼자 구경 중'):'혼자 둘러보는 중'}
 let lastCount=1,offTimer=null;
 function onPeers(ch){const seen=new Set();let count=0;
   ch.peers.forEach(p=>{const s=p.presence||{};if(s.w||typeof s.x==='number')count++;if(typeof s.x!=='number'||typeof s.z!=='number')return;if(p.sameTab)return;seen.add(p.peer);
@@ -1954,19 +1950,7 @@ function onPeers(ch){const seen=new Set();let count=0;
     o.tx=Math.max(-22,Math.min(22,s.x));o.tz=Math.max(-22,Math.min(22,s.z));o.tr=+s.r||0;o.v=STYLES.some(q=>q.id===s.v)?s.v:'';
     if(s.h&&s.h!==o.h){o.h=s.h;popHeart(o.av)}});
   others.forEach((o,k)=>{if(!seen.has(k)){scene.remove(o.av);others.delete(k)}});lastCount=Math.max(count,1);if(!offTimer)setVisitors(lastCount,true)}
-(function sbInit(){try{if(!window.supabase||!window.supabase.createClient){const sj=document.getElementById('sbjs');if(sj&&!sbInit.w){sbInit.w=1;sj.addEventListener('load',sbInit);setStatusText('실시간 연결 중…',false);return}setStatusText('혼자 보기 · 실시간 연결 안 됨',false);return}
-  window.__sbc=1;const sb=window.supabase.createClient(SB_URL,SB_KEY,{realtime:{params:{eventsPerSecond:5},worker:true,heartbeatIntervalMs:15000}});
-  const myId=(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)).slice(0,12);
-  const ch=sb.channel('jewelpatch-garden',{config:{presence:{key:myId}}});
-  ch.on('presence',{event:'sync'},()=>{const st=ch.presenceState();const peers=Object.entries(st).map(([k,arr])=>({peer:k,sameTab:k===myId,presence:arr[arr.length-1]||{}}));
-    SEND_GAP=peers.length>30?3:peers.length>12?1.6:0.9;onPeers({peers})});
-  setStatusText('실시간 연결 중…',false);
-  let downT=null;const down=()=>{if(downT)return;downT=setTimeout(()=>{downT=null;if(!ROOM)setStatusText('실시간 다시 연결 중…',false)},3000)};
-  const join=()=>ch.subscribe(st=>{if(st==='SUBSCRIBED'){clearTimeout(downT);downT=null;ROOM={presence:o=>ch.track(o)};setVisitors(lastCount,true);if(entered)sendPresence();else ch.track({w:1})}
-    else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT'||st==='CLOSED'){ROOM=null;down()}});
-  join();
-  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&!ROOM){try{ch.unsubscribe().then(()=>join())}catch(e){join()}}});
-}catch(e){}})();
+/* realtime presence removed: lighter page, no "alone" status */
 
 /* ---------- sheets ---------- */
 function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;t.style.opacity=1;clearTimeout(toast._t);toast._t=setTimeout(()=>{t.style.opacity=0;setTimeout(()=>t.hidden=true,300)},2200)}
@@ -2002,7 +1986,7 @@ function openShop(tab){if(!CUTS_READY){toast('상품 이미지를 불러오는 �
   document.querySelectorAll('[data-pc]').forEach(b=>b.onclick=()=>openProductCard(+b.dataset.pc,'list'))}
 function openProduct(id){openShop(id)}
 $('#shopBtn').onclick=()=>{$('#entry').hidden=true;openShop('best')};
-$('#heartBtn').onclick=()=>{if(!entered)return;myHeart=Date.now();popHeart(player);sendPresence()};
+if($('#heartBtn'))$('#heartBtn').onclick=()=>{if(!entered)return;myHeart=Date.now();popHeart(player);sendPresence()};
 
 /* ---------- analytics (funnel) ---------- */
 const SID=(()=>{try{/* in-app → browser handoff carries the session id so one visitor stays one session */const u=new URLSearchParams(location.search).get('sid');if(u&&/^[a-z0-9]{6,16}$/.test(u))sessionStorage.setItem('jp_sid',u);let s=sessionStorage.getItem('jp_sid');if(!s){s=Math.random().toString(36).slice(2,12);sessionStorage.setItem('jp_sid',s)}return s}catch(e){return Math.random().toString(36).slice(2,12)}})();
